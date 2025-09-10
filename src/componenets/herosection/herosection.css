@@ -1,0 +1,316 @@
+/* Hero Section Styles */
+.hero-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 70vh;
+    padding: 2rem 1rem;
+    background: linear-gradient(135deg, rgba(59, 116, 213, 0.05) 0%, rgba(93, 193, 115, 0.05) 100%);
+}
+
+.hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 800px;
+    gap: 2rem;
+}
+
+.hero-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: linear-gradient(45deg, #3B74D5, #4382E4, #4E9FC1, #54AE9E, #59B888, #5DC173);
+    background-size: 300% 300%;
+    animation: gradientShift 4s ease-in-out infinite;
+    box-shadow: 0 10px 30px rgba(59, 116, 213, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+}
+
+.hero-icon:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 15px 40px rgba(59, 116, 213, 0.4);
+    animation-duration: 2s;
+}
+
+.hero-icon .icon {
+    font-size: 3.5rem;
+    color: white;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.hero-text {
+    display: flex;
+    flex-direction: column;
+    /* gap: 1rem; */
+
+    /* width: 70rem; */
+    width: 90vw;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero-title, heading {
+    font-family: "Bebas Neue", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 6rem;
+    background: linear-gradient(45deg, #3B74D5, #4382E4, #4E9FC1, #54AE9E, #59B888, #5DC173);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 4s ease-in-out infinite;
+    text-decoration: none !important;
+}
+
+.hero-subtitle, .sub-heading {
+    font-family: "Bebas Neue", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 5rem;
+    color: #1D2530;
+
+}
+
+.hero-description, .description {
+    font-size: 1.6rem;
+    line-height: 1.6;
+    color: #8b8d8f;
+    margin: 0;
+
+    width: 70vw !important;
+}
+
+.herosection-status {
+    display: flex;
+    justify-content: space-around;
+    gap: 1rem;
+}
+
+.herosection-status .status {
+    font-size: medium;
+    color: #8b8d8f;
+}
+
+.icon1 {
+    color: orange;
+}
+
+.icon2 {
+    color: green;
+}
+
+.icon3 {
+    color: #3B74D5;
+}
+
+
+
+
+
+
+/* Hero Buttons Section */
+.herosection-btns {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    /* border: 1px solid; */
+}
+
+.btn1, .btn2 {
+    display: flex;
+}
+
+/* Hero Button Styles */
+.hero-btn {
+    
+    padding: 1rem 2rem;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-transform: capitalize;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    font-family: "Bebas Neue", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.hero-btn:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.hero-btn:hover:before {
+    left: 100%;
+}
+
+.hero-btn-primary {
+    background: linear-gradient(45deg, #3B74D5, #4382E4, #4E9FC1, #54AE9E, #59B888, #5DC173);
+    background-size: 300% 300%;
+    color: white;
+    animation: gradientShift 4s ease-in-out infinite;
+    box-shadow: 0 4px 15px rgba(59, 116, 213, 0.3);
+}
+
+.hero-btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(59, 116, 213, 0.4);
+    animation-duration: 2s;
+}
+
+.hero-btn-secondary {
+    background: white;
+    color: #4382E4;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    position: relative;
+}
+
+.hero-btn-secondary:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    margin: -2px;
+    border-radius: inherit;
+    background: linear-gradient(45deg, #3B74D5, #4382E4, #4E9FC1, #54AE9E, #59B888, #5DC173);
+    background-size: 300% 300%;
+    animation: gradientShift 4s ease-in-out infinite;
+}
+
+.hero-btn-secondary:hover {
+    color: white;
+    background: linear-gradient(45deg, #3B74D5, #4382E4, #4E9FC1, #54AE9E, #59B888, #5DC173);
+    background-size: 300% 300%;
+    animation: gradientShift 2s ease-in-out infinite;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(59, 116, 213, 0.4);
+}
+
+/* Responsive Button Styles */
+@media (max-width: 768px) {
+    .herosection-btns {
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    .hero-btn {
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .herosection-btns {
+        flex-direction: column;
+        gap: 0.8rem;
+        width: 100%;
+    }
+
+    .btn1, .btn2 {
+        width: 100%;
+    }
+
+    .hero-btn {
+        width: 100%;
+        padding: 0.8rem 1rem;
+        font-size: 0.95rem;
+    }
+}
+
+
+/* Animation keyframes - reusing from navbar */
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-section {
+        min-height: 60vh;
+        padding: 1rem;
+    }
+
+    .hero-content {
+        gap: 1.5rem;
+    }
+
+
+
+    .hero-icon .icon {
+        font-size: 3rem;
+    }
+
+    .hero-title {
+        font-size: 3rem !important;
+    }
+    
+    .hero-subtitle {
+        /* font-size: 1.5rem; */
+        font-size: 2.5rem !important;
+    }
+
+    .hero-description {
+        font-size: 1.1rem;
+        width: 22rem !important;
+        /* border: 1px solid; */
+    }
+    .herosection-status .status
+    {
+        font-size: small;
+    }
+
+
+}
+
+@media (max-width: 480px) {
+    .hero-title {
+        font-size: 2rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.3rem;
+    }
+
+    .hero-description {
+        font-size: 1rem;
+    }
+}
+

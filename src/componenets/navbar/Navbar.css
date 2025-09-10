@@ -1,0 +1,231 @@
+/* Navbar Custom Styles */
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Oswald:wght@200..700&display=swap');
+
+.navbar {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid #e0e0e0;
+    /* border: 1px solid; */
+}
+
+
+
+.container-fluid {
+
+    /* border: 1px solid; */
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.navbar-brand {
+    font-family: "Bebas Neue", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 2rem;
+    background: linear-gradient(45deg, #3B74D5, #4382E4, #4E9FC1, #54AE9E, #59B888, #5DC173);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 4s ease-in-out infinite;
+    text-decoration: none !important;
+    /* border: 1px solid; */
+
+}
+
+.navbar-brand:hover {
+    text-decoration: none !important;
+    animation-duration: 2s;
+}
+
+.sub-logo {
+    background: linear-gradient(45deg, #59B888, #5DC173, #54AE9E, #4E9FC1, #4382E4, #3B74D5);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 4s ease-in-out infinite reverse;
+}
+
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+
+
+
+/* .nav-link {
+    font-weight: 500;
+    color: #555 !important;
+    transition: color 0.3s ease;
+    -webkit-transition: color 0.3s ease;
+    -moz-transition: color 0.3s ease;
+    -ms-transition: color 0.3s ease;
+    -o-transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+    color: #007bff !important;
+}
+
+.nav-link.active {
+    color: #007bff !important;
+    font-weight: 600;
+}
+
+.dropdown-menu {
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.dropdown-item {
+    color: #555;
+    transition: background-color 0.3s ease;
+    -webkit-transition: background-color 0.3s ease;
+    -moz-transition: background-color 0.3s ease;
+    -ms-transition: background-color 0.3s ease;
+    -o-transition: background-color 0.3s ease;
+}
+
+.dropdown-item:hover {
+    background-color: #f8f9fa;
+    color: #007bff;
+} */
+
+.form-control {
+    border-radius: 20px;
+    border: 1px solid #ddd;
+    padding: 0.5rem 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-control:focus {
+    border: 2px solid transparent;
+    background: linear-gradient(white, white) padding-box,
+        linear-gradient(45deg, #59B888, #5DC173, #54AE9E, #4E9FC1, #4382E4, #3B74D5) border-box;
+    box-shadow: 0 0 0 0.2rem rgba(89, 184, 136, 0.3);
+    outline: none;
+    color: #4382E4;
+}
+
+.btn-outline-success {
+    border-radius: 10px;
+    border: 1px solid transparent;
+    background: linear-gradient(white, white) padding-box,        linear-gradient(45deg, #59B888, #5DC173, #54AE9E, #4E9FC1, #4382E4, #3B74D5) border-box;
+    background-size: 300% 300%;
+    color: #4382E4;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    animation: gradientShift 4s ease-in-out infinite;
+    transition: all 0.3s ease;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+}
+
+.btn-outline-success:hover {
+    background: linear-gradient(45deg, #59B888, #5DC173, #54AE9E, #4E9FC1, #4382E4, #3B74D5);
+    background-size: 300% 300%;
+    border: 1px solid transparent;
+    color: white;
+    animation: gradientShift 2s ease-in-out infinite;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(89, 184, 136, 0.3);
+}
+
+
+
+
+.search-bar {
+    /* border: 1px solid; */
+    width: 100%;
+}
+
+.search-bar input {
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    color: black !important;
+}
+
+.icon
+{
+    font-size: 1.2rem;
+}
+
+
+
+/* Mobile responsiveness */
+@media (max-width: 991.98px) {
+    .navbar-nav {
+        margin-top: 1rem;
+    }
+
+    .d-flex {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .navbar-nav.ms-3 {
+        margin-top: 0.5rem;
+    }
+}
+
+/* Logo container styling */
+.navbar-brand img {
+    margin-right: 0.5rem;
+}
+
+/* Search bar container */
+.d-flex {
+    min-width: 300px;
+}
+
+@media (max-width: 767.98px) {
+    .d-flex {
+        min-width: 100%;
+    }
+}
+
+/* Active state for navigation items */
+.nav-item .nav-link.active {
+    position: relative;
+}
+
+.nav-item .nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 2px;
+    background-color: #007bff;
+}
+
+/* Hover effects for better UX */
+.navbar-toggler {
+    border: none;
+    padding: 0.25rem 0.5rem;
+}
+
+.navbar-toggler:focus {
+    box-shadow: none;
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%2833, 37, 41, 0.75%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}

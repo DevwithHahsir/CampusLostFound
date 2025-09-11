@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { collection, getDocs, addDoc } from "firebase/firestore";
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  updateProfile,
-} from "firebase/auth";
-import { db } from "../firebaseConfig/firebase";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { db, auth } from "../firebaseConfig/firebase";
 import EmailService from "../services/emailService";
 import AlertCard from "../componenets/alert/Card";
 import "./Signup.css";
@@ -21,8 +17,6 @@ export default function Signup() {
   const [generatedEmailCode, setGeneratedEmailCode] = useState("");
   const [step, setStep] = useState(1); // 1: form, 2: email verification, 3: account creation
   const [alert, setAlert] = useState({ show: false, type: "", message: "" });
-
-  const auth = getAuth();
 
   // Alert helper functions
   const showAlert = (type, message) => {

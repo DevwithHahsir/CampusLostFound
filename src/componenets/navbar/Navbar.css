@@ -102,14 +102,15 @@
     color: #007bff;
 } */
 
-.form-control {
+.navbar .form-control {
     border-radius: 20px;
     border: 1px solid #ddd;
     padding: 0.5rem 1rem;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    /* height: 2rem; */
 }
 
-.form-control:focus {
+ .navbar .form-control:focus {
     border: 2px solid transparent;
     background: linear-gradient(white, white) padding-box,
         linear-gradient(45deg, #59B888, #5DC173, #54AE9E, #4E9FC1, #4382E4, #3B74D5) border-box;

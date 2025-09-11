@@ -1,8 +1,28 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 import Navbar from "./componenets/navbar/Navbar";
 import SEO from "./componenets/seo/SEO";
 import Herosection from "./componenets/herosection/Herosection";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 // import PostData from "./postData/POstData";
+
+// Component to conditionally render Navbar
+function ConditionalNavbar() {
+  const location = useLocation();
+  const hideNavbarRoutes = ["/login", "/signup"];
+
+  // Don't show navbar on login and signup pages
+  if (hideNavbarRoutes.includes(location.pathname)) {
+    return null;
+  }
+
+  return <Navbar />;
+}
 
 function App() {
   return (
@@ -77,15 +97,26 @@ function App() {
           { name: "DC.coverage", content: "Pakistan" },
         ]}
       />
-      <Navbar />
+      <ConditionalNavbar />
+
       <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
         <Route path="/" element={<Herosection />} />
-        {/* <Route path="/lost" element={<div>Lost Items Page - Coming Soon</div>} />
-        <Route path="/found" element={<div>Found Items Page - Coming Soon</div>} />
-        <Route path="/report" element={<div>Report Item Page - Coming Soon</div>} />
-        <Route path="/login" element={<div>Login Page - Coming Soon</div>} />
+        <Route
+          path="/lost"
+          element={<div>Lost Items Page - Coming Soon</div>}
+        />
+        <Route
+          path="/found"
+          element={<div>Found Items Page - Coming Soon</div>}
+        />
+        <Route
+          path="/report"
+          element={<div>Report Item Page - Coming Soon</div>}
+        />
         <Route path="/signup" element={<div>Sign Up Page - Coming Soon</div>} />
-        <Route path="*" element={<div>404 - Page Not Found</div>} /> */}
+        <Route path="*" element={<div>404 - Page Not Found</div>} />
       </Routes>
       {/* <PostData/> */}
     </Router>

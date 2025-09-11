@@ -109,7 +109,7 @@ const Navbar = () => {
           {/* User Actions */}
           <ul className="navbar-nav ms-3">
             <li className="nav-item">
-              <a className="nav-link" href="#">
+              <a className="nav-link" href="/login">
                <IoPersonAddOutline  className="icon"/>
               </a>
             </li>

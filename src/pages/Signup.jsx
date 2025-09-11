@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { collection, getDocs, addDoc } from "firebase/firestore";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  updateProfile,
+  sendEmailVerification,
+} from "firebase/auth";
 import { db, auth } from "../firebaseConfig/firebase";
-import EmailService from "../services/emailService";
 import AlertCard from "../componenets/alert/Card";
 import "./Signup.css";
 
@@ -13,10 +16,9 @@ export default function Signup() {
   const [loading, setLoading] = useState(true);
   const [campusLoading, setCampusLoading] = useState(false);
   const [signupLoading, setSignupLoading] = useState(false);
-  const [emailVerificationCode, setEmailVerificationCode] = useState("");
-  const [generatedEmailCode, setGeneratedEmailCode] = useState("");
-  const [step, setStep] = useState(1); // 1: form, 2: email verification, 3: account creation
+  const [step, setStep] = useState(1); // 1: form, 2: create account and send verification, 3: verification pending
   const [alert, setAlert] = useState({ show: false, type: "", message: "" });
+  const [createdUser, setCreatedUser] = useState(null);
 
   // Alert helper functions
   const showAlert = (type, message) => {
@@ -115,50 +117,24 @@ export default function Signup() {
     fetchCampuses();
   }, [watchUniversity, universities]);
 
-  // Generate random 6-digit verification code for email
-  const generateEmailVerificationCode = () => {
-    return EmailService.generateVerificationCode();
-  };
-
-  // Send email verification code
-  const sendEmailVerificationCode = async (email, code) => {
+  // Send Firebase email verification
+  const sendFirebaseEmailVerification = async (user) => {
     try {
-      const selectedUni = universities.find((uni) => uni.id == watchUniversity);
-      const universityName = selectedUni ? selectedUni.name : "Your University";
+      await sendEmailVerification(user, {
+        url: window.location.origin + "/login", // Redirect URL after verification
+        handleCodeInApp: false,
+      });
 
-      const result = await EmailService.sendVerificationEmail(
-        email,
-        code,
-        universityName
-      );
-
-      if (result.success) {
-        setGeneratedEmailCode(code);
-        showAlert(
-          "success",
-          `Verification code sent to ${email}. Please check your email.`
-        );
-        return true;
-      } else {
-        throw new Error(result.message);
-      }
-    } catch {
       showAlert(
-        "error",
-        "Failed to send verification email. Please try again."
+        "success",
+        "Verification email sent! Please check your inbox and click the verification link."
       );
+      return true;
+    } catch (error) {
+      console.error("Error sending email verification:", error);
+      showAlert("error", "Failed to send verification email: " + error.message);
       return false;
     }
-  };
-
-  // Verify email code
-  const verifyEmailCode = (enteredCode) => {
-    if (!enteredCode || !generatedEmailCode) {
-      return false;
-    }
-
-    const isValid = enteredCode.trim() === generatedEmailCode.trim();
-    return isValid;
   };
 
   // Store user data in Firestore
@@ -178,58 +154,72 @@ export default function Signup() {
 
   const onSubmit = async (data) => {
     if (step === 1) {
-      // Step 1: Collect form data and move to email verification
-      setStep(2);
-    } else if (step === 2) {
-      // Step 2: Send email verification code
-      const code = generateEmailVerificationCode();
+      // Step 1: Create account and send verification email
       setSignupLoading(true);
-      const emailSent = await sendEmailVerificationCode(data.email, code);
-      if (emailSent) {
-        setStep(3);
-      }
-      setSignupLoading(false);
-    } else if (step === 3) {
-      // Step 3: Verify email code and create account
-      if (!emailVerificationCode) {
-        showAlert("error", "Please enter the email verification code");
-        return;
-      }
+      try {
+        // Create email/password account
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          data.email,
+          data.password
+        );
 
-      if (verifyEmailCode(emailVerificationCode)) {
-        setSignupLoading(true);
-        try {
-          // Create email/password account
-          const userCredential = await createUserWithEmailAndPassword(
-            auth,
-            data.email,
-            data.password
+        // Update user profile
+        await updateProfile(userCredential.user, {
+          displayName: data.fullName,
+        });
+
+        // Store additional user data in Firestore
+        await storeUserData(data, userCredential.user.uid);
+
+        // Send Firebase email verification
+        const emailSent = await sendFirebaseEmailVerification(
+          userCredential.user
+        );
+
+        if (emailSent) {
+          setCreatedUser(userCredential.user);
+          setStep(2);
+          showAlert(
+            "success",
+            "Account created! Please check your email for verification link."
           );
-
-          // Update user profile
-          await updateProfile(userCredential.user, {
-            displayName: data.fullName,
-          });
-
-          // Store additional user data in Firestore
-          await storeUserData(data, userCredential.user.uid);
-
-          showAlert("success", "Account created successfully! 🎉");
-
-          // Redirect to login after showing success message
-          setTimeout(() => {
-            window.location.href = "/login";
-          }, 2000);
-        } catch (error) {
-          showAlert("error", "Error creating account: " + error.message);
-        } finally {
-          setSignupLoading(false);
         }
-      } else {
+      } catch (error) {
+        console.error("Signup error:", error);
+        showAlert("error", "Error creating account: " + error.message);
+      } finally {
+        setSignupLoading(false);
+      }
+    } else if (step === 2) {
+      // Step 2: Check email verification status
+      setSignupLoading(true);
+      try {
+        if (createdUser) {
+          await createdUser.reload(); // Refresh user data
+
+          if (createdUser.emailVerified) {
+            showAlert(
+              "success",
+              "Email verified successfully! Redirecting to login..."
+            );
+            setTimeout(() => {
+              window.location.href = "/login";
+            }, 2000);
+          } else {
+            showAlert(
+              "error",
+              "Email not verified yet. Please check your email and click the verification link."
+            );
+          }
+        }
+      } catch (error) {
         showAlert(
           "error",
-          "Invalid email verification code. Please try again."
+          "Error checking verification status: " + error.message
         );
+      } finally {
+        setSignupLoading(false);
       }
     }
   };
@@ -507,40 +497,47 @@ export default function Signup() {
             )}
           </div>
 
-          {/* Email Verification Input - Show only in step 3 */}
-          {step === 3 && (
+          {/* Email Verification Status - Show only in step 2 */}
+          {step === 2 && (
             <div className="form-group">
-              <label htmlFor="emailVerificationCode" className="form-label">
-                Email Verification Code
-              </label>
-              <input
-                id="emailVerificationCode"
-                type="text"
-                className="form-control"
-                placeholder="Enter 6-digit code from email"
-                value={emailVerificationCode}
-                onChange={(e) => setEmailVerificationCode(e.target.value)}
-                maxLength={6}
-              />
-              <div className="email-verification-hint">
-                Check your email for the 6-digit verification code
-              </div>
-              <div className="resend-code-section">
-                <p className="resend-text">Didn't receive the code?</p>
-                <button
-                  type="button"
-                  className="resend-btn"
-                  onClick={async () => {
-                    const formData = watch();
-                    const code = generateEmailVerificationCode();
-                    setSignupLoading(true);
-                    await sendEmailVerificationCode(formData.email, code);
-                    setSignupLoading(false);
-                  }}
-                  disabled={signupLoading}
-                >
-                  {signupLoading ? "Sending..." : "Resend Code"}
-                </button>
+              <div className="verification-status">
+                <h3 className="verification-title">
+                  📧 Email Verification Required
+                </h3>
+                <p className="verification-message">
+                  We've sent a verification email to your inbox. Please click
+                  the verification link in the email to complete your
+                  registration.
+                </p>
+                <div className="verification-instructions">
+                  <h4>Next Steps:</h4>
+                  <ol>
+                    <li>Check your email inbox (and spam folder)</li>
+                    <li>
+                      Click the verification link in the email from Firebase
+                    </li>
+                    <li>
+                      Return here and click "Check Email Verification" button
+                    </li>
+                  </ol>
+                </div>
+                <div className="resend-section">
+                  <p className="resend-text">Didn't receive the email?</p>
+                  <button
+                    type="button"
+                    className="resend-btn"
+                    onClick={async () => {
+                      if (createdUser) {
+                        setSignupLoading(true);
+                        await sendFirebaseEmailVerification(createdUser);
+                        setSignupLoading(false);
+                      }
+                    }}
+                    disabled={signupLoading}
+                  >
+                    {signupLoading ? "Sending..." : "Resend Verification Email"}
+                  </button>
+                </div>
               </div>
             </div>
           )}
@@ -584,20 +581,14 @@ export default function Signup() {
             {signupLoading
               ? "Processing..."
               : step === 1
-              ? "Continue to Email Verification"
-              : step === 2
-              ? "Send Email Verification Code"
-              : "Create Account"}
+              ? "Create Account & Send Verification Email"
+              : "Check Email Verification"}
           </button>
 
           {/* Step indicator */}
           <div className="step-indicator">
-            Step {step} of 3:{" "}
-            {step === 1
-              ? "Fill Details"
-              : step === 2
-              ? "Email Verification"
-              : "Account Creation"}
+            Step {step} of 2:{" "}
+            {step === 1 ? "Create Account" : "Email Verification"}
           </div>
 
           {/* Login Link */}

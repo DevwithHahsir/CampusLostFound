@@ -424,3 +424,59 @@ input[maxlength="6"] {
     cursor: not-allowed;
     transform: none;
 }
+
+/* Email Verification Status Styles */
+.verification-status {
+    background: linear-gradient(135deg, rgba(59, 116, 213, 0.05) 0%, rgba(93, 193, 115, 0.05) 100%);
+    border: 2px solid rgba(59, 116, 213, 0.2);
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    margin: 1rem 0;
+}
+
+.verification-title {
+    font-size: 1.5rem;
+    color: #3B74D5;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.verification-message {
+    color: #4b5563;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.verification-instructions {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    border-left: 4px solid #3B74D5;
+}
+
+.verification-instructions h4 {
+    color: #3B74D5;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.verification-instructions ol {
+    text-align: left;
+    color: #4b5563;
+    padding-left: 1rem;
+}
+
+.verification-instructions li {
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+}
+
+.resend-section {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(59, 116, 213, 0.2);
+}

@@ -164,3 +164,52 @@ export const basicUniversities = [
   { id: 42, name: "Hamdard University", domain: "hamdard.edu.pk" },
   { id: 43, name: "Preston University", domain: "preston.edu.pk" },
 ];
+
+// Lazy loader for full university data with campuses
+let fullUniversityData = null;
+
+export const loadFullUniversityData = async () => {
+  if (fullUniversityData) {
+    return fullUniversityData; // Return cached data
+  }
+
+  try {
+    // Dynamically import the full Universities.js file only when needed
+    const { default: UniversityData } = await import("./Universities.js");
+
+    // Convert to array format with all campus data
+    fullUniversityData = Object.entries(UniversityData.universities).map(
+      ([key, university]) => ({
+        id: university.id,
+        name: university.name,
+        domain: university.domain,
+        campuses: university.campuses, // Keep all campus data
+        docId: key,
+      })
+    );
+
+    return fullUniversityData;
+  } catch (error) {
+    console.error("Failed to load full university data:", error);
+    // Fallback to basic universities without campuses
+    return basicUniversities.map((uni) => ({ ...uni, campuses: {} }));
+  }
+};
+
+// Get campuses for a specific university (lazy loaded)
+export const getCampusesForUniversity = async (universityId) => {
+  const fullData = await loadFullUniversityData();
+  const university = fullData.find((uni) => uni.id == universityId);
+
+  if (!university || !university.campuses) {
+    return [];
+  }
+
+  // Convert campuses object to array
+  return Object.entries(university.campuses).map(([key, campus]) => ({
+    id: key,
+    campusId: campus.campusId,
+    name: campus.name,
+    ...campus,
+  }));
+};

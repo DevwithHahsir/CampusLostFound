@@ -8,7 +8,10 @@ import {
 } from "firebase/auth";
 import { db, auth } from "../firebaseConfig/firebase";
 import AlertCard from "../componenets/alert/Card";
-import { basicUniversities } from "../data/UniversityDomains";
+import {
+  basicUniversities,
+  getCampusesForUniversity,
+} from "../data/UniversityDomains";
 import { useAuth } from "../AuthContext/AuthContext";
 import SEO from "../componenets/seo/SEO";
 import "./Signup.css";
@@ -91,24 +94,29 @@ export default function Signup() {
         try {
           setCampusLoading(true);
 
-          // Use memoized lookup instead of expensive find()
-          const selectedUni = universityLookup[watchUniversity];
+          // Use lazy-loaded campus data from UniversityDomains
+          const campusData = await getCampusesForUniversity(watchUniversity);
 
-          if (selectedUni) {
-            // For now, use basic campus info - can be extended later
-            // If needed, dynamically import full campus data
-            const basicCampuses = [
-              {
-                id: "main",
-                campusId: selectedUni.id * 10 + 1,
-                name: "Main Campus",
-              },
-            ];
-            setCampuses(basicCampuses);
+          if (campusData && campusData.length > 0) {
+            setCampuses(campusData);
           } else {
-            setCampuses([]);
+            // Fallback to basic campus if no campus data found
+            const selectedUni = universityLookup[watchUniversity];
+            if (selectedUni) {
+              const basicCampuses = [
+                {
+                  id: "main",
+                  campusId: selectedUni.id * 10 + 1,
+                  name: "Main Campus",
+                },
+              ];
+              setCampuses(basicCampuses);
+            } else {
+              setCampuses([]);
+            }
           }
-        } catch {
+        } catch (error) {
+          console.error("Error loading campuses:", error);
           setCampuses([]);
         } finally {
           setCampusLoading(false);

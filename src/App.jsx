@@ -4,12 +4,31 @@ import {
   Route,
   useLocation,
 } from "react-router-dom";
+import { Suspense, lazy } from "react";
 import Navbar from "./componenets/navbar/Navbar";
 import SEO from "./componenets/seo/SEO";
 import Herosection from "./componenets/herosection/Herosection";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
-import Dashboard from "./pages/Dashboard";
+
+// Lazy load pages for better performance - load only when needed
+const Login = lazy(() => import("./pages/Login"));
+const Signup = lazy(() => import("./pages/Signup"));
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+
+// Loading component for lazy-loaded pages
+const PageLoader = () => (
+  <div
+    style={{
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      height: "50vh",
+      fontSize: "18px",
+    }}
+  >
+    Loading...
+  </div>
+);
+
 // import PostData from "./postData/POstData";
 
 // Component to conditionally render Navbar
@@ -112,25 +131,27 @@ function App() {
       />
       <ConditionalNavbar />
 
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/" element={<Herosection />} />
-        <Route
-          path="/lost"
-          element={<div>Lost Items Page - Coming Soon</div>}
-        />
-        <Route
-          path="/found"
-          element={<div>Found Items Page - Coming Soon</div>}
-        />
-        <Route
-          path="/report"
-          element={<div>Report Item Page - Coming Soon</div>}
-        />
-        <Route path="*" element={<div>404 - Page Not Found</div>} />
-      </Routes>
+      <Suspense fallback={<PageLoader />}>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/" element={<Herosection />} />
+          <Route
+            path="/lost"
+            element={<div>Lost Items Page - Coming Soon</div>}
+          />
+          <Route
+            path="/found"
+            element={<div>Found Items Page - Coming Soon</div>}
+          />
+          <Route
+            path="/report"
+            element={<div>Report Item Page - Coming Soon</div>}
+          />
+          <Route path="*" element={<div>404 - Page Not Found</div>} />
+        </Routes>
+      </Suspense>
       {/* <PostData/> */}
     </Router>
   );

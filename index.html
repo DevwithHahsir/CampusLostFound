@@ -1,13 +1,64 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Performance optimizations -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="dns-prefetch" href="https://firebase.googleapis.com">
+  <link rel="dns-prefetch" href="https://firestore.googleapis.com">
+
+  <!-- Critical CSS for immediate render -->
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, sans-serif;
+      background-color: #fff;
+      color: #333;
+    }
+
+    #root {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 50vh;
+      font-size: 18px;
+    }
+  </style>
+
+  <title>Campus Lost Found Pakistan | University Students Lost & Found Platform</title>
+</head>
+
+<body>
+  <div id="root">
+    <!-- Loading fallback for better perceived performance -->
+    <div class="loading" id="initial-loader">
+      Loading Campus Lost Found...
+    </div>
+  </div>
+  <script type="module" src="/src/main.jsx"></script>
+
+  <!-- Remove initial loader when React mounts -->
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        const loader = document.getElementById('initial-loader');
+        if (loader) loader.remove();
+      }, 100);
+    });
+  </script>
+</body>
+
 </html>

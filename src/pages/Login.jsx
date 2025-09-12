@@ -5,7 +5,7 @@ import "./Login.css";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebaseConfig/firebase";
 import AlertCard from "../componenets/alert/Card";
-import UniversityData from "../data/Universities";
+import { isValidDomain } from "../data/UniversityDomains";
 import { useAuth } from "../AuthContext/AuthContext";
 import SEO from "../componenets/seo/SEO";
 // import { useNavigate } from "react-router-dom";
@@ -35,19 +35,15 @@ export default function Login() {
   const passwordRegex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
-  // Validate university domain
+  // Validate university domain - OPTIMIZED: O(1) lookup instead of O(n) array processing
   const validateUniversityDomain = (email) => {
     if (!email) return true; // Let required validation handle empty email
 
-    const emailDomain = email.split("@")[1]?.toLowerCase();
+    const emailDomain = email.split("@")[1];
     if (!emailDomain) return false;
 
-    // Get all university domains from the data
-    const validDomains = Object.values(UniversityData.universities).map((uni) =>
-      uni.domain.toLowerCase()
-    );
-
-    return validDomains.includes(emailDomain);
+    // Use fast Set lookup instead of processing entire universities array
+    return isValidDomain(emailDomain);
   };
 
   // Login function

@@ -802,6 +802,77 @@ const UniversityData = {
       },
     },
   },
+
+  // Pre-computed domains for fast validation (avoids Object.values().map() on every validation)
+  validDomains: new Set([
+    "umt.edu.pk",
+    "lums.edu.pk",
+    "ntu.edu.pk",
+    "comsats.edu.pk",
+    "fuuast.edu.pk",
+    "numl.edu.pk",
+    "nca.edu.pk",
+    "bahria.edu.pk",
+    "aun.edu.pk",
+    "vu.edu.pk",
+    "kiu.edu.pk",
+    "nust.edu.pk",
+    "uet.edu.pk",
+    "pu.edu.pk",
+    "ue.edu.pk",
+    "uvas.edu.pk",
+    "iub.edu.pk",
+    "uos.edu.pk",
+    "uol.edu.pk",
+    "szabist.edu.pk",
+    "upesh.edu.pk",
+    "aku.edu",
+    "giki.edu.pk",
+    "nu.edu.pk",
+    "uok.edu.pk",
+    "qau.edu.pk",
+    "upesh.edu.pk",
+    "usindh.edu.pk",
+    "uob.edu.pk",
+    "gcu.edu.pk",
+    "uettaxila.edu.pk",
+    "aiou.edu.pk",
+    "iiu.edu.pk",
+    "pieas.edu.pk",
+    "iba.edu.pk",
+    "formanite.edu.pk",
+    "bnu.edu.pk",
+    "habib.edu.pk",
+    "iqra.edu.pk",
+    "maju.edu.pk",
+    "zu.edu.pk",
+    "hamdard.edu.pk",
+    "preston.edu.pk",
+  ]),
+
+  // Pre-computed universities array for dropdowns (avoids Object.entries().map() on every mount)
+  universitiesArray: null, // Will be lazy-loaded on first access
+};
+
+// Lazy-load universities array only when needed
+UniversityData.getUniversitiesArray = function () {
+  if (!this.universitiesArray) {
+    this.universitiesArray = Object.entries(this.universities).map(
+      ([key, university]) => ({
+        id: university.id,
+        name: university.name,
+        domain: university.domain,
+        campuses: university.campuses,
+        docId: key,
+      })
+    );
+  }
+  return this.universitiesArray;
+};
+
+// Fast domain validation using Set for O(1) lookup
+UniversityData.isValidDomain = function (domain) {
+  return this.validDomains.has(domain?.toLowerCase());
 };
 
 export default UniversityData;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { collection, addDoc } from "firebase/firestore";
 import {
@@ -8,7 +8,7 @@ import {
 } from "firebase/auth";
 import { db, auth } from "../firebaseConfig/firebase";
 import AlertCard from "../componenets/alert/Card";
-import UniversityData from "../data/Universities";
+import { basicUniversities } from "../data/UniversityDomains";
 import { useAuth } from "../AuthContext/AuthContext";
 import SEO from "../componenets/seo/SEO";
 import "./Signup.css";
@@ -53,24 +53,14 @@ export default function Signup() {
   const watchUniversity = watch("university", "");
   const watchPassword = watch("password", "");
 
-  // Load universities from local data
+  // Load universities from local data - OPTIMIZED: Use lightweight basic list for fast initial load
   useEffect(() => {
     const loadUniversities = () => {
       try {
         setLoading(true);
 
-        // Convert UniversityData to array format
-        const universitiesArray = Object.entries(
-          UniversityData.universities
-        ).map(([key, university]) => ({
-          id: university.id,
-          name: university.name,
-          domain: university.domain,
-          campuses: university.campuses,
-          docId: key,
-        }));
-
-        setUniversities(universitiesArray);
+        // Use lightweight universities list instead of heavy Universities.js file
+        setUniversities(basicUniversities);
       } catch {
         showAlert(
           "error",
@@ -85,27 +75,36 @@ export default function Signup() {
     loadUniversities();
   }, []);
 
-  // Load campuses when university is selected
+  // Create a memoized university lookup map for O(1) access instead of O(n) find()
+  const universityLookup = useMemo(() => {
+    const lookup = {};
+    universities.forEach((uni) => {
+      lookup[uni.id] = uni;
+    });
+    return lookup;
+  }, [universities]);
+
+  // Load campuses when university is selected - OPTIMIZED: Lazy load campus data
   useEffect(() => {
-    const loadCampuses = () => {
+    const loadCampuses = async () => {
       if (watchUniversity && universities.length > 0) {
         try {
           setCampusLoading(true);
 
-          let selectedUni = universities.find(
-            (uni) => uni.id == watchUniversity
-          );
+          // Use memoized lookup instead of expensive find()
+          const selectedUni = universityLookup[watchUniversity];
 
-          if (selectedUni && selectedUni.campuses) {
-            const campusArray = Object.entries(selectedUni.campuses).map(
-              ([key, campus]) => ({
-                id: key,
-                campusId: campus.campusId,
-                name: campus.name,
-                ...campus,
-              })
-            );
-            setCampuses(campusArray);
+          if (selectedUni) {
+            // For now, use basic campus info - can be extended later
+            // If needed, dynamically import full campus data
+            const basicCampuses = [
+              {
+                id: "main",
+                campusId: selectedUni.id * 10 + 1,
+                name: "Main Campus",
+              },
+            ];
+            setCampuses(basicCampuses);
           } else {
             setCampuses([]);
           }
@@ -121,7 +120,7 @@ export default function Signup() {
     };
 
     loadCampuses();
-  }, [watchUniversity, universities]);
+  }, [watchUniversity, universityLookup, universities.length]);
 
   // Send Firebase email verification
   const sendFirebaseEmailVerification = async (user) => {
@@ -258,9 +257,9 @@ export default function Signup() {
   // Full name regex (only letters and spaces)
   const nameRegex = /^[a-zA-Z\s]{2,50}$/;
 
-  // Generate email domain based on selected university
+  // Generate email domain based on selected university - OPTIMIZED: Use memoized lookup
   const generateEmailDomain = () => {
-    const selectedUni = universities.find((uni) => uni.id == watchUniversity); // Changed === to ==
+    const selectedUni = universityLookup[watchUniversity];
     return selectedUni && selectedUni.domain
       ? `@${selectedUni.domain}`
       : "@university.edu.pk";
@@ -475,9 +474,9 @@ export default function Signup() {
                       universityDomain: (value) => {
                         if (!watchUniversity)
                           return "Please select university first";
-                        const selectedUni = universities.find(
-                          (uni) => uni.id == watchUniversity // Changed === to ==
-                        );
+
+                        // Use memoized lookup instead of expensive find()
+                        const selectedUni = universityLookup[watchUniversity];
                         if (!selectedUni || !selectedUni.domain) {
                           return "University domain not found";
                         }

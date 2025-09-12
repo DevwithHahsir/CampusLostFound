@@ -102,12 +102,20 @@
     color: #007bff;
 } */
 
+
+.log-btn{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+
 .navbar .form-control {
-    border-radius: 20px;
+    border-radius: 10px;
     border: 1px solid #ddd;
     padding: 0.5rem 1rem;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    /* height: 2rem; */
+ 
 }
 
  .navbar .form-control:focus {

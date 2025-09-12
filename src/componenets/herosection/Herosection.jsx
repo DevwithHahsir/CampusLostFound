@@ -28,16 +28,23 @@ export default function Herosection() {
           "lost items reporting system",
           "found property university Pakistan",
           "campus lost belongings service",
-          "Pakistani universities lost found",
-          "student lost property assistance",
-          "university community support Pakistan",
-          "lost items recovery platform",
-          "campus hero lost found service",
-          "Pakistani student services online",
-          "university lost property database",
-          "campus community network Pakistan",
-          "lost items help center Pakistan",
-          "university student support system",
+        ]}
+        keySentences={[
+          "Report your lost items instantly with detailed descriptions and photos",
+          "Browse found items across Pakistani universities to recover your belongings",
+          "Community-driven platform connects students who want to help each other",
+          "University email verification ensures secure and authentic user participation",
+          "Real-time notifications alert you when matching items are reported",
+          "Advanced search filters help locate specific items quickly and efficiently",
+          "Mobile-friendly interface enables reporting from anywhere on campus",
+          "Photo upload feature improves item identification and recovery success",
+          "Location tracking helps pinpoint exact areas where items were lost",
+          "Success stories inspire continued community participation and engagement",
+          "Free service reduces financial burden of replacing lost items",
+          "24/7 availability supports students across all time zones",
+          "Privacy protection ensures student information remains secure",
+          "Easy reporting process takes less than 2 minutes to complete",
+          "Campus network coverage includes 43+ Pakistani universities nationwide",
         ]}
         url="https://campuslostfound.vercel.app/hero"
         image="/src/assets/logo.png"

@@ -327,7 +327,7 @@ const UniversityData = {
     univ_uet_lahore: {
       id: 13,
       name: "University of Engineering and Technology (UET), Lahore",
-      domain: "uet.edu.pk",
+      domain: "student.uet.edu.pk",
       campuses: {
         campus_lahore: {
           campusId: 131,

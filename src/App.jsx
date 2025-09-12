@@ -9,6 +9,7 @@ import SEO from "./componenets/seo/SEO";
 import Herosection from "./componenets/herosection/Herosection";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import Dashboard from "./pages/Dashboard";
 // import PostData from "./postData/POstData";
 
 // Component to conditionally render Navbar
@@ -46,11 +47,23 @@ function App() {
           "lost keys university Pakistan",
           "found items campus",
           "student community Pakistan",
-          "university help network",
-          "campus safety Pakistan",
-          "lost belongings recovery service",
-          "Pakistani student services",
-          "university lost and found system",
+        ]}
+        keySentences={[
+          "Pakistan's premier lost and found platform connects university students nationwide",
+          "Report lost items instantly and browse found items across 43+ Pakistani universities",
+          "Join thousands of students who successfully reunited with their belongings",
+          "University email verification ensures authentic campus community participation",
+          "Real-time notifications help students quickly recover lost items",
+          "Advanced search filters locate specific items by category, location, and date",
+          "Secure platform protects student privacy while facilitating item recovery",
+          "24/7 accessible service supports students across all Pakistani time zones",
+          "Mobile-optimized interface enables quick reporting from anywhere on campus",
+          "Community-driven approach builds trust among university students",
+          "Free service reduces financial burden of replacing lost items",
+          "GPS location tracking helps pinpoint exact areas where items were lost",
+          "Photo upload capability improves item identification accuracy",
+          "Email alerts notify users when matching items are reported",
+          "Success stories inspire continued community participation and support",
         ]}
         image="/src/assets/logo.png"
         url="https://campuslostfound.vercel.app"
@@ -102,6 +115,7 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/" element={<Herosection />} />
         <Route
           path="/lost"
@@ -115,7 +129,6 @@ function App() {
           path="/report"
           element={<div>Report Item Page - Coming Soon</div>}
         />
-        <Route path="/signup" element={<div>Sign Up Page - Coming Soon</div>} />
         <Route path="*" element={<div>404 - Page Not Found</div>} />
       </Routes>
       {/* <PostData/> */}

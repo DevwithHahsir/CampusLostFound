@@ -5,6 +5,7 @@ const SEO = ({
   title = "Campus Lost Found",
   description = "Find and report lost items across Pakistani universities and campuses",
   keywords = "lost items, found items, campus, university, Pakistan, students",
+  keySentences = [],
   image = "/src/assets/logo.png",
   url = window.location.href,
   type = "website",
@@ -13,7 +14,26 @@ const SEO = ({
   links = [],
   customMeta = [],
 }) => {
-  // Default keywords if not provided
+  // Limit keywords to maximum 15
+  const processKeywords = (keywords) => {
+    if (typeof keywords === "string") {
+      return keywords;
+    }
+    if (Array.isArray(keywords)) {
+      const limitedKeywords = keywords.slice(0, 15);
+      return limitedKeywords.join(", ");
+    }
+    return "lost items, found items, campus, university, Pakistan, students";
+  };
+
+  // Limit key sentences to maximum 15
+  const processKeySentences = (sentences) => {
+    if (!Array.isArray(sentences)) return "";
+    const limitedSentences = sentences.slice(0, 15);
+    return limitedSentences.join(". ");
+  };
+
+  // Default keywords if not provided (limited to 15)
   const defaultKeywords = [
     "lost and found",
     "campus lost items",
@@ -23,15 +43,23 @@ const SEO = ({
     "lost belongings",
     "found items",
     "campus community",
+    "university students",
+    "lost property recovery",
+    "campus safety",
+    "student help",
+    "Pakistani campuses",
+    "lost items platform",
+    "university network",
   ];
 
-  // Combine provided keywords with defaults
-  const allKeywords =
-    typeof keywords === "string"
-      ? keywords
-      : [...defaultKeywords, ...(Array.isArray(keywords) ? keywords : [])].join(
-          ", "
-        );
+  // Process final keywords
+  const finalKeywords =
+    keywords && (typeof keywords === "string" || Array.isArray(keywords))
+      ? processKeywords(keywords)
+      : processKeywords(defaultKeywords);
+
+  // Process key sentences
+  const finalKeySentences = processKeySentences(keySentences);
 
   // Default structured data
   const structuredData = {
@@ -51,8 +79,13 @@ const SEO = ({
       {/* Basic Meta Tags */}
       <title>{title}</title>
       <meta name="description" content={description} />
-      <meta name="keywords" content={allKeywords} />
+      <meta name="keywords" content={finalKeywords} />
       <meta name="author" content={author} />
+
+      {/* Key Sentences for SEO */}
+      {finalKeySentences && (
+        <meta name="key-sentences" content={finalKeySentences} />
+      )}
 
       {/* Open Graph Meta Tags */}
       <meta property="og:title" content={title} />

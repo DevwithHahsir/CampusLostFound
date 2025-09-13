@@ -1,0 +1,562 @@
+/* Import hero section styles for consistency */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue:wght@400&display=swap');
+
+.report-form-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(59, 116, 213, 0.15) 0%, rgba(93, 193, 115, 0.15) 100%);
+    backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.report-form-container {
+    background: white;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(59, 116, 213, 0.3);
+    border: 1px solid rgba(59, 116, 213, 0.1);
+    animation: slideUp 0.3s ease-out;
+}
+
+.form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    background: linear-gradient(45deg, #3B74D5, #4382E4, #4E9FC1);
+    border-radius: 12px 12px 0 0;
+    color: white;
+}
+
+.form-header h2 {
+    margin: 0;
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 1.8rem;
+    font-weight: 400;
+    letter-spacing: 1px;
+}
+
+.close-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: white;
+    padding: 8px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s;
+}
+
+.close-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+.report-form {
+    padding: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #333;
+    font-size: 1rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid #e0e7ff;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.3s;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #3B74D5;
+    box-shadow: 0 0 0 3px rgba(59, 116, 213, 0.1);
+    transform: translateY(-2px);
+}
+
+.radio-group {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.radio-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-weight: normal;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: all 0.3s;
+}
+
+.radio-option:hover {
+    background: rgba(59, 116, 213, 0.05);
+}
+
+.radio-option input[type="radio"] {
+    width: auto;
+    margin: 0;
+    padding: 0;
+    accent-color: #3B74D5;
+}
+
+.radio-option span {
+    font-size: 1rem;
+    color: #333;
+}
+
+.image-upload-section {
+    border: 2px dashed #e0e7ff;
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s;
+    background: rgba(59, 116, 213, 0.02);
+}
+
+.image-upload-section:hover {
+    border-color: #3B74D5;
+    background: rgba(59, 116, 213, 0.05);
+}
+
+.upload-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+/* Hero button styles applied to upload buttons */
+.upload-btn,
+.camera-btn {
+    padding: 1rem 2rem;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 1rem;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-transform: capitalize;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+    font-family: "Bebas Neue", sans-serif;
+    font-weight: 400;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.hero-btn-primary {
+    background: linear-gradient(45deg, #3B74D5, #4382E4, #4E9FC1, #54AE9E, #59B888, #5DC173);
+    background-size: 300% 300%;
+    color: white;
+    animation: gradientShift 4s ease-in-out infinite;
+    box-shadow: 0 4px 15px rgba(59, 116, 213, 0.3);
+}
+
+.hero-btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(59, 116, 213, 0.4);
+    animation-duration: 2s;
+}
+
+.hero-btn-secondary {
+    background: white;
+    color: #4382E4;
+    border: 2px solid #3B74D5;
+    position: relative;
+}
+
+.hero-btn-secondary:hover {
+    background: #3B74D5;
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(59, 116, 213, 0.3);
+}
+
+.contact-preferences {
+    margin-top: 1rem;
+}
+
+.contact-checkboxes {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.checkbox-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: all 0.3s;
+}
+
+.checkbox-option:hover {
+    background: rgba(59, 116, 213, 0.05);
+}
+
+.checkbox-option input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+    padding: 0;
+    accent-color: #3B74D5;
+}
+
+.upload-progress {
+    margin: 1rem 0;
+    text-align: center;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: #e0e7ff;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #3B74D5, #5DC173);
+    transition: width 0.3s ease;
+}
+
+.image-preview {
+    position: relative;
+    display: inline-block;
+    margin-top: 1rem;
+}
+
+.image-preview img {
+    max-width: 200px;
+    max-height: 150px;
+    border-radius: 10px;
+    object-fit: cover;
+    border: 2px solid #e0e7ff;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.remove-image {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+}
+
+.remove-image:hover {
+    background: #c82333;
+    transform: scale(1.1);
+}
+
+.field-hint {
+    display: block;
+    margin-top: 0.5rem;
+    color: #666;
+    font-size: 0.875rem;
+    font-style: italic;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 1.2rem 2rem;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    border: 2px solid transparent;
+    cursor: pointer;
+    text-transform: capitalize;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+    font-family: "Bebas Neue", sans-serif;
+    font-weight: 400;
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.submit-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.loading-spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Keyframes */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .report-form-container {
+        width: 95%;
+        margin: 1rem;
+        max-height: 95vh;
+    }
+
+    .form-header {
+        padding: 1rem 1.5rem;
+    }
+
+    .form-header h2 {
+        font-size: 1.5rem;
+    }
+
+    .report-form {
+        padding: 1.5rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.25rem;
+    }
+
+    .radio-group,
+    .contact-checkboxes {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .upload-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .upload-btn,
+    .camera-btn {
+        width: 100%;
+        max-width: 250px;
+    }
+
+    .image-preview img {
+        max-width: 150px;
+        max-height: 120px;
+    }
+}
+
+@media (max-width: 480px) {
+    .report-form-container {
+        width: 100%;
+        height: 100%;
+        border-radius: 0;
+        max-height: 100vh;
+    }
+
+    .form-header {
+        border-radius: 0;
+        padding: 1rem;
+    }
+
+    .form-header h2 {
+        font-size: 1.3rem;
+    }
+
+    .report-form {
+        padding: 1rem;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        padding: 0.875rem;
+        font-size: 0.9rem;
+    }
+
+    .submit-btn {
+        padding: 1rem;
+        font-size: 1rem;
+    }
+}
+
+/* Image compression info styles */
+.image-info {
+    margin-top: 0.5rem;
+}
+
+.compression-info {
+    text-align: center;
+    padding: 0.25rem;
+}
+
+.compression-info small {
+    color: #666;
+    font-size: 0.75rem;
+    background: rgba(76, 175, 80, 0.1);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+.compression-savings {
+    color: #4CAF50;
+    font-weight: 600;
+    margin-left: 0.25rem;
+}
+
+/* Storage method information */
+.storage-info {
+    color: #2196F3 !important;
+    background: rgba(33, 150, 243, 0.1) !important;
+    margin-top: 0.25rem;
+    display: block !important;
+}
+
+.storage-warning {
+    color: #FF9800;
+    font-weight: 500;
+    margin-left: 0.25rem;
+}
+
+/* Enhanced progress bar */
+.upload-progress {
+    margin: 1rem 0;
+    text-align: center;
+}
+
+.progress-bar {
+    background: #f0f0f0;
+    border-radius: 10px;
+    height: 8px;
+    margin-bottom: 0.5rem;
+    overflow: hidden;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.progress-fill {
+    background: linear-gradient(45deg, #4CAF50, #2E7D32);
+    height: 100%;
+    border-radius: 10px;
+    transition: width 0.3s ease;
+    box-shadow: 0 2px 4px rgba(76, 175, 80, 0.3);
+}
+
+.upload-progress span {
+    color: #4CAF50;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* Alert component positioning in modal */
+.report-form-overlay .alert {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1050;
+    /* Higher than modal */
+    max-width: 90%;
+    margin: 0;
+}
+
+/* Ensure alert appears above everything */
+.report-form-overlay .alert--success,
+.report-form-overlay .alert--error {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+}

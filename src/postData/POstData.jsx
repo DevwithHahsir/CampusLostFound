@@ -38,9 +38,7 @@ function PostData() {
       );
       console.log("✅ All universities uploaded successfully");
     } catch (error) {
-      console.error("❌ Error uploading universities:", error);
       setStatus(`❌ Error: ${error.message}`);
-      alert("Error :: PostUniData Failed", error);
     } finally {
       setLoading(false);
     }

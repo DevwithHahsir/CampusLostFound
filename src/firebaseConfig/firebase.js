@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
+import { getStorage } from "firebase/storage";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -50,12 +51,13 @@ if (!firebaseConfig.projectId) {
 }
 
 // Initialize Firebase
-let app, db, auth, analytics;
+let app, db, auth, analytics, storage;
 
 try {
   app = initializeApp(firebaseConfig);
   db = getFirestore(app);
   auth = getAuth(app);
+  storage = getStorage(app);
 
   try {
     analytics = getAnalytics(app);
@@ -72,4 +74,4 @@ try {
   );
 }
 
-export { db, auth, analytics };
+export { db, auth, analytics, storage };

@@ -1,12 +1,54 @@
-import React from "react";
+import React, { useState } from "react";
 import { CiHeart } from "react-icons/ci";
 import "./herosection.css";
 import { GoDotFill } from "react-icons/go";
 import { IoIosSchool } from "react-icons/io";
 import Button from "../button/Button";
 import SEO from "../seo/SEO";
+import { useAuth } from "../../AuthContext/AuthContext";
+import { useNavigate } from "react-router-dom";
+import ReportItemForm from "../reportForm/ReportItemForm";
+import { authValidationUtils } from "../../utils/authValidation";
 
 export default function Herosection() {
+  const [showReportForm, setShowReportForm] = useState(false);
+  const { user, isAuthenticated, isEmailVerified } = useAuth();
+  const navigate = useNavigate();
+
+  // Handle Report Lost Item button click
+  const handleReportItemClick = () => {
+    // Use comprehensive validation
+    const validation = authValidationUtils.validateReportAccess(
+      user,
+      isAuthenticated,
+      isEmailVerified
+    );
+
+    // Validate user access
+
+    if (!validation.canReport) {
+      // Handle different types of errors
+      validation.errors.forEach((error) => {
+        if (error.action === "redirect_login") {
+          navigate("/login");
+        }
+      });
+      return;
+    }
+
+    // All checks passed - show the report form
+    setShowReportForm(true);
+  };
+
+  const handleReportFormSubmit = () => {
+    setShowReportForm(false);
+    // Alert is now handled within ReportItemForm component
+  };
+
+  const handleReportFormClose = () => {
+    setShowReportForm(false);
+  };
+
   return (
     <>
       <SEO
@@ -109,19 +151,29 @@ export default function Herosection() {
               <Button
                 text="Report Lost Item"
                 className="hero-btn hero-btn-primary"
-                onClick={() => console.log("Navigate to report page")}
+                onClick={handleReportItemClick}
               />
             </div>
             <div className="btn2">
               <Button
                 text="Browse Found Items"
                 className="hero-btn hero-btn-secondary"
-                onClick={() => console.log("Navigate to found items page")}
+                onClick={() => {
+                  // TODO: Navigate to found items page
+                }}
               />
             </div>
           </section>
         </div>
       </main>
+
+      {/* Report Form Modal */}
+      {showReportForm && (
+        <ReportItemForm
+          onClose={handleReportFormClose}
+          onSubmit={handleReportFormSubmit}
+        />
+      )}
     </>
   );
 }

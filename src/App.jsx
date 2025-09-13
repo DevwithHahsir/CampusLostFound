@@ -4,15 +4,18 @@ import {
   Route,
   useLocation,
 } from "react-router-dom";
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useState } from "react";
 import Navbar from "./componenets/navbar/Navbar";
 import SEO from "./componenets/seo/SEO";
 import Herosection from "./componenets/herosection/Herosection";
+import ReportItemForm from "./componenets/reportForm/ReportItemForm";
 
 // Lazy load pages for better performance - load only when needed
 const Login = lazy(() => import("./pages/Login"));
 const Signup = lazy(() => import("./pages/Signup"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
+const Report = lazy(() => import("./pages/Report"));
+const ReportDemo = lazy(() => import("./pages/ReportDemo"));
 
 // Loading component for lazy-loaded pages
 const PageLoader = () => (
@@ -45,6 +48,17 @@ function ConditionalNavbar() {
 }
 
 function App() {
+  const [showReportForm, setShowReportForm] = useState(false);
+
+  const handleReportFormSubmit = () => {
+    setShowReportForm(false);
+    // You can add additional logic here like showing success message
+  };
+
+  const handleReportFormClose = () => {
+    setShowReportForm(false);
+  };
+
   return (
     <Router>
       <SEO
@@ -145,13 +159,20 @@ function App() {
             path="/found"
             element={<div>Found Items Page - Coming Soon</div>}
           />
-          <Route
-            path="/report"
-            element={<div>Report Item Page - Coming Soon</div>}
-          />
+          <Route path="/report" element={<Report />} />
+          <Route path="/demo" element={<ReportDemo />} />
           <Route path="*" element={<div>404 - Page Not Found</div>} />
         </Routes>
       </Suspense>
+
+      {/* Global Report Form */}
+      {showReportForm && (
+        <ReportItemForm
+          onClose={handleReportFormClose}
+          onSubmit={handleReportFormSubmit}
+        />
+      )}
+
       {/* <PostData/> */}
     </Router>
   );

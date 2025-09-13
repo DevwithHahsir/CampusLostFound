@@ -5,12 +5,8 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   optimizeDeps: {
-    include: [
-      "firebase/app",
-      "firebase/auth",
-      "firebase/firestore",
-      "firebase/storage",
-    ],
+    exclude: ["firebase"],
+    include: ["react", "react-dom", "react-router-dom"],
   },
   build: {
     // Optimize build for better performance

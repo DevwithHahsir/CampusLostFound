@@ -1,5 +1,5 @@
-// Core Firebase configuration - only the essentials
-// This is loaded immediately, other Firebase services are loaded lazily
+// Core Firebase configuration with production-safe initialization
+import { initializeApp } from "firebase/app";
 
 const firebaseConfig = {
   apiKey:
@@ -20,104 +20,74 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || "G-C3ZCP0CFL9",
 };
 
-// Validate Firebase configuration
-if (!firebaseConfig.projectId) {
-  console.error("Firebase configuration error: Missing projectId");
-}
+// Initialize Firebase app immediately to avoid circular dependencies
+const app = initializeApp(firebaseConfig);
 
-// Lazy loading functions for Firebase services with proper initialization order
-let app = null;
-let auth = null;
-let db = null;
-let analytics = null;
+// Cache for initialized services
+let authInstance = null;
+let dbInstance = null;
+let analyticsInstance = null;
 
-// Prevent multiple simultaneous initializations
-let appPromise = null;
-let authPromise = null;
-let dbPromise = null;
-let analyticsPromise = null;
+// Service initialization flags to prevent multiple imports
+let authImported = false;
+let dbImported = false;
+let analyticsImported = false;
 
-export const getApp = async () => {
-  if (app) return app;
-  if (appPromise) return appPromise;
-
-  appPromise = (async () => {
-    try {
-      const { initializeApp } = await import("firebase/app");
-      app = initializeApp(firebaseConfig);
-      return app;
-    } catch (error) {
-      console.error("Firebase app initialization error:", error);
-      appPromise = null; // Reset on error
-      throw error;
-    }
-  })();
-
-  return appPromise;
-};
+export const getApp = () => app;
 
 export const getAuth = async () => {
-  if (auth) return auth;
-  if (authPromise) return authPromise;
+  if (authInstance) return authInstance;
 
-  authPromise = (async () => {
+  if (!authImported) {
     try {
-      const appInstance = await getApp();
       const { getAuth: getAuthService } = await import("firebase/auth");
-      auth = getAuthService(appInstance);
-      return auth;
+      authInstance = getAuthService(app);
+      authImported = true;
     } catch (error) {
       console.error("Firebase auth initialization error:", error);
-      authPromise = null; // Reset on error
       throw error;
     }
-  })();
+  }
 
-  return authPromise;
+  return authInstance;
 };
 
 export const getFirestore = async () => {
-  if (db) return db;
-  if (dbPromise) return dbPromise;
+  if (dbInstance) return dbInstance;
 
-  dbPromise = (async () => {
+  if (!dbImported) {
     try {
-      const appInstance = await getApp();
       const { getFirestore: getFirestoreService } = await import(
         "firebase/firestore"
       );
-      db = getFirestoreService(appInstance);
-      return db;
+      dbInstance = getFirestoreService(app);
+      dbImported = true;
     } catch (error) {
       console.error("Firebase firestore initialization error:", error);
-      dbPromise = null; // Reset on error
       throw error;
     }
-  })();
+  }
 
-  return dbPromise;
+  return dbInstance;
 };
 
 export const getAnalytics = async () => {
-  if (analytics) return analytics;
-  if (analyticsPromise) return analyticsPromise;
+  if (analyticsInstance) return analyticsInstance;
 
-  analyticsPromise = (async () => {
+  if (!analyticsImported) {
     try {
-      const appInstance = await getApp();
       const { getAnalytics: getAnalyticsService } = await import(
         "firebase/analytics"
       );
-      analytics = getAnalyticsService(appInstance);
-      return analytics;
+      analyticsInstance = getAnalyticsService(app);
+      analyticsImported = true;
     } catch (error) {
       console.error("Firebase analytics initialization error:", error);
-      analyticsPromise = null; // Reset on error
       throw error;
     }
-  })();
+  }
 
-  return analyticsPromise;
+  return analyticsInstance;
 };
 
 export { firebaseConfig };

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { getFirestore } from "../firebaseConfig/firebaseCore";
+import { db } from "../firebaseConfig/firebaseCore";
 import { doc, setDoc } from "firebase/firestore";
 import UniversityData from "../data/Universities";
 
@@ -12,9 +12,6 @@ function PostData() {
     setStatus("Uploading universities data...");
 
     try {
-      // Get Firestore instance
-      const db = await getFirestore();
-
       // Post each university as a separate document for better querying
       const universities = UniversityData.universities;
       let successCount = 0;
@@ -50,9 +47,6 @@ function PostData() {
   const PostSingleUniversity = async (universityKey) => {
     setLoading(true);
     try {
-      // Get Firestore instance
-      const db = await getFirestore();
-
       const university = UniversityData.universities[universityKey];
       if (!university) {
         throw new Error(`University ${universityKey} not found`);

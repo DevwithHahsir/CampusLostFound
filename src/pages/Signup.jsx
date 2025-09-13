@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useForm } from "react-hook-form";
-import { getAuth, getFirestore } from "../firebaseConfig/firebaseCore";
+import { auth, db } from "../firebaseConfig/firebaseCore";
 import AlertCard from "../componenets/alert/Card";
 import {
   basicUniversities,
@@ -10,13 +10,13 @@ import { useAuth } from "../AuthContext/AuthContext";
 import SEO from "../componenets/seo/SEO";
 import "./Signup.css";
 
-export default function Signup() {
+const Signup = React.memo(() => {
   const [universities, setUniversities] = useState([]);
   const [campuses, setCampuses] = useState([]);
-  const [loading, setLoading] = useState(false); // Start with false since we load local data
+  const [loading, setLoading] = useState(false);
   const [campusLoading, setCampusLoading] = useState(false);
   const [signupLoading, setSignupLoading] = useState(false);
-  const [step, setStep] = useState(1); // 1: form, 2: create account & send verification email
+  const [step, setStep] = useState(1);
   const [alert, setAlert] = useState({ show: false, type: "", message: "" });
   const [createdUser, setCreatedUser] = useState(null);
 
@@ -26,18 +26,18 @@ export default function Signup() {
   // Redirect if user is already logged in and verified
   useEffect(() => {
     if (isAuthenticated && isEmailVerified) {
-      window.location.href = "/"; // or your main app route
+      window.location.href = "/";
     }
   }, [isAuthenticated, isEmailVerified]);
 
-  // Alert helper functions
-  const showAlert = (type, message) => {
+  // Memoized alert helper functions
+  const showAlert = useCallback((type, message) => {
     setAlert({ show: true, type, message });
-  };
+  }, []);
 
-  const hideAlert = () => {
+  const hideAlert = useCallback(() => {
     setAlert({ show: false, type: "", message: "" });
-  };
+  }, []);
 
   const {
     register,
@@ -52,11 +52,9 @@ export default function Signup() {
 
   // Load universities from local data - OPTIMIZED: Use lightweight basic list for fast initial load
   useEffect(() => {
-    // Since this is local data, load it immediately without async delay
     try {
-      // Use lightweight universities list instead of heavy Universities.js file
       setUniversities(basicUniversities);
-      setLoading(false); // Set loading to false immediately
+      setLoading(false);
     } catch {
       showAlert(
         "error",
@@ -65,7 +63,7 @@ export default function Signup() {
       setUniversities([]);
       setLoading(false);
     }
-  }, []);
+  }, [showAlert]);
 
   // Create a memoized university lookup map for O(1) access instead of O(n) find()
   const universityLookup = useMemo(() => {
@@ -162,15 +160,13 @@ export default function Signup() {
       setSignupLoading(true);
       try {
         // Load Firebase services lazily
-        const authInstance = await getAuth();
-        const firestoreInstance = await getFirestore();
         const { createUserWithEmailAndPassword, updateProfile } = await import(
           "firebase/auth"
         );
 
         // Create email/password account
         const userCredential = await createUserWithEmailAndPassword(
-          authInstance,
+          auth,
           data.email,
           data.password
         );
@@ -181,7 +177,7 @@ export default function Signup() {
         });
 
         // Store additional user data in Firestore
-        await storeUserData(data, userCredential.user.uid, firestoreInstance);
+        await storeUserData(data, userCredential.user.uid, db);
 
         // Send Firebase email verification
         const emailSent = await sendFirebaseEmailVerification(
@@ -691,4 +687,8 @@ export default function Signup() {
       </main>
     </>
   );
-}
+});
+
+Signup.displayName = "Signup";
+
+export default Signup;

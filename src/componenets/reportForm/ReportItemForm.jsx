@@ -1,26 +1,69 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useCallback, useMemo, useEffect } from "react";
-import { getAuth, getFirestore } from "../../firebaseConfig/firebaseCore";
+import { auth, db } from "../../firebaseConfig/firebaseCore";
 import UniversityData from "../../data/Universities";
 import { testFirebaseStorage } from "../../utils/firebaseTestUtils";
 import Card from "../alert/Card";
 import "./ReportItemForm.css";
 
-const ReportItemForm = ({ onClose, onSubmit }) => {
+// Move validation constants outside component to prevent recreation
+const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+const PHONE_REGEX = /^\+?[1-9]\d{1,14}$/;
+const SUSPICIOUS_EMAIL_PATTERNS = [
+  /\+.*\+/, // Multiple + signs
+  /\.{2,}/, // Multiple dots
+  /script/i, // Script injection attempt
+  /javascript/i, // JavaScript injection
+];
+
+// Security validation functions - moved outside to prevent recreation
+const securityValidation = {
+  sanitizeInput: (input) => {
+    if (typeof input !== "string") return input;
+    return input
+      .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+      .replace(/<[^>]*>?/gm, "")
+      .replace(/javascript:/gi, "")
+      .replace(/on\w+\s*=/gi, "")
+      .substring(0, 1000);
+  },
+
+  sanitizeForSubmission: (input) => {
+    if (typeof input !== "string") return input;
+    return input
+      .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+      .replace(/<[^>]*>?/gm, "")
+      .replace(/javascript:/gi, "")
+      .replace(/on\w+\s*=/gi, "")
+      .trim()
+      .substring(0, 1000);
+  },
+
+  validateEmail: (email) => {
+    if (!EMAIL_REGEX.test(email)) return false;
+    return !SUSPICIOUS_EMAIL_PATTERNS.some((pattern) => pattern.test(email));
+  },
+
+  validatePhone: (phone) => {
+    const cleanPhone = phone.replace(/[\s\-()]/g, "");
+    return PHONE_REGEX.test(cleanPhone);
+  },
+};
+
+const ReportItemForm = React.memo(({ onClose, onSubmit }) => {
   const [user, setUser] = useState(null);
-  const [authInstance, setAuthInstance] = useState(null);
 
   // Initialize auth lazily
   useEffect(() => {
     const initAuth = async () => {
       try {
-        const authInst = await getAuth();
         const { useAuthState } = await import("react-firebase-hooks/auth");
-        setAuthInstance(authInst);
+        // Use auth state hook directly with auth instance
+        // setAuthInstance is no longer needed
 
         // Set up auth state listener
         const { onAuthStateChanged } = await import("firebase/auth");
-        const unsubscribe = onAuthStateChanged(authInst, (currentUser) => {
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
           setUser(currentUser);
         });
 
@@ -32,22 +75,35 @@ const ReportItemForm = ({ onClose, onSubmit }) => {
 
     initAuth();
   }, []);
-  const [formData, setFormData] = useState({
-    role: "",
-    title: "",
-    description: "",
-    category: "",
-    location: "",
-    date: "",
-    email: user?.email || "",
-    phone: "",
-    contactPreference: "email", // email, phone, both
-    image: null,
-  });
+
+  // Update email when user changes
+  useEffect(() => {
+    if (user?.email) {
+      setFormData((prev) => ({ ...prev, email: user.email }));
+    }
+  }, [user?.email]);
+  // Memoized initial form data to prevent object recreation
+  const initialFormData = useMemo(
+    () => ({
+      role: "",
+      title: "",
+      description: "",
+      category: "",
+      location: "",
+      date: "",
+      email: "",
+      phone: "",
+      contactPreference: "email",
+      image: null,
+    }),
+    []
+  );
+
+  const [formData, setFormData] = useState(initialFormData);
   const [imagePreview, setImagePreview] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
-  const [imageInfo, setImageInfo] = useState(null); // Track image size info
+  const [imageInfo, setImageInfo] = useState(null);
 
   // Alert state management
   const [alert, setAlert] = useState({
@@ -864,15 +920,9 @@ const ReportItemForm = ({ onClose, onSubmit }) => {
         }
 
         // Load Firestore services lazily
-        const [firestoreInstance, { collection, addDoc }] = await Promise.all([
-          getFirestore(),
-          import("firebase/firestore"),
-        ]);
+        const { collection, addDoc } = await import("firebase/firestore");
 
-        const docRef = await addDoc(
-          collection(firestoreInstance, "items"),
-          itemData
-        );
+        const docRef = await addDoc(collection(db, "items"), itemData);
 
         showAlert("success", "Item Reported Successfully!");
 
@@ -1231,6 +1281,8 @@ const ReportItemForm = ({ onClose, onSubmit }) => {
       />
     </div>
   );
-};
+});
+
+ReportItemForm.displayName = "ReportItemForm";
 
 export default ReportItemForm;

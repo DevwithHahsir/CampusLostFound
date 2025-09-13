@@ -1,14 +1,14 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, Link } from "react-router-dom";
 import "./Login.css";
-import { getAuth } from "../firebaseConfig/firebaseCore";
+import { auth } from "../firebaseConfig/firebaseCore";
 import AlertCard from "../componenets/alert/Card";
 import { isValidDomain } from "../data/UniversityDomains";
 import { useAuth } from "../AuthContext/AuthContext";
 import SEO from "../componenets/seo/SEO";
 
-export default function Login() {
+const Login = React.memo(() => {
   const [alertType, setAlertType] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
   const [showAlertCard, setShowAlertCard] = useState(false);
@@ -25,24 +25,24 @@ export default function Login() {
     formState: { errors },
   } = useForm();
 
-  // Strong email regex pattern
-  const emailRegex =
-    /^[a-zA-Z0-9]([a-zA-Z0-9._-]*[a-zA-Z0-9])?@[a-zA-Z0-9]([a-zA-Z0-9.-]*[a-zA-Z0-9])?\.[a-zA-Z]{2,}$/;
+  // Memoized regex patterns to prevent recreation on each render
+  const validationPatterns = useMemo(
+    () => ({
+      email:
+        /^[a-zA-Z0-9]([a-zA-Z0-9._-]*[a-zA-Z0-9])?@[a-zA-Z0-9]([a-zA-Z0-9.-]*[a-zA-Z0-9])?\.[a-zA-Z]{2,}$/,
+      password:
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+    }),
+    []
+  );
 
-  // Strong password regex (8+ chars, uppercase, lowercase, number, special char)
-  const passwordRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-
-  // Validate university domain - OPTIMIZED: O(1) lookup instead of O(n) array processing
-  const validateUniversityDomain = (email) => {
-    if (!email) return true; // Let required validation handle empty email
-
+  // Memoized validation function
+  const validateUniversityDomain = useCallback((email) => {
+    if (!email) return true;
     const emailDomain = email.split("@")[1];
     if (!emailDomain) return false;
-
-    // Use fast Set lookup instead of processing entire universities array
     return isValidDomain(emailDomain);
-  };
+  }, []);
 
   // Login function
   const loginUser = useCallback(
@@ -59,11 +59,11 @@ export default function Login() {
           setShowAlertCard(true);
           return;
         }
-        const authInstance = await getAuth();
+
         const { signInWithEmailAndPassword } = await import("firebase/auth");
 
         const userCredential = await signInWithEmailAndPassword(
-          authInstance,
+          auth,
           email,
           password
         );
@@ -114,7 +114,7 @@ export default function Login() {
         setLoading(false);
       }
     },
-    [] // Removed navigate dependency since we're not using it in loginUser anymore
+    [validateUniversityDomain]
   );
 
   // Check for stored credentials on component load (but don't auto-login)
@@ -128,7 +128,6 @@ export default function Login() {
         setValue("email", storedEmail);
         setValue("password", storedPassword);
         setValue("rememberMe", true);
-        // Removed auto-login - let user click login button manually
       }
     };
 
@@ -138,7 +137,6 @@ export default function Login() {
   // Only redirect if user is successfully authenticated and email is verified
   useEffect(() => {
     if (isAuthenticated && isEmailVerified) {
-      // Add a small delay to ensure the success message is shown
       const redirectTimer = setTimeout(() => {
         navigate("/");
       }, 1500);
@@ -147,26 +145,28 @@ export default function Login() {
     }
   }, [isAuthenticated, isEmailVerified, navigate]);
 
-  const onSubmit = async (data) => {
-    try {
-      await loginUser(data.email, data.password);
+  // Memoized form submission handler
+  const onSubmit = useCallback(
+    async (data) => {
+      try {
+        await loginUser(data.email, data.password);
 
-      // Handle Remember Me functionality
-      if (data.rememberMe) {
-        // Store credentials in localStorage
-        localStorage.setItem("rememberedEmail", data.email);
-        localStorage.setItem("rememberedPassword", data.password);
-        localStorage.setItem("rememberMe", "true");
-      } else {
-        // Clear stored credentials if Remember Me is not checked
-        localStorage.removeItem("rememberedEmail");
-        localStorage.removeItem("rememberedPassword");
-        localStorage.removeItem("rememberMe");
+        // Handle Remember Me functionality
+        if (data.rememberMe) {
+          localStorage.setItem("rememberedEmail", data.email);
+          localStorage.setItem("rememberedPassword", data.password);
+          localStorage.setItem("rememberMe", "true");
+        } else {
+          localStorage.removeItem("rememberedEmail");
+          localStorage.removeItem("rememberedPassword");
+          localStorage.removeItem("rememberMe");
+        }
+      } catch (error) {
+        console.error("Login submission error:", error);
       }
-    } catch (error) {
-      console.error("Login submission error:", error);
-    }
-  };
+    },
+    [loginUser]
+  );
 
   return (
     <>
@@ -258,7 +258,7 @@ export default function Login() {
                 {...register("email", {
                   required: "Email address is required",
                   pattern: {
-                    value: emailRegex,
+                    value: validationPatterns.email,
                     message: "Please enter a valid email address",
                   },
                   validate: {
@@ -294,7 +294,7 @@ export default function Login() {
                     message: "Password must be at least 8 characters long",
                   },
                   pattern: {
-                    value: passwordRegex,
+                    value: validationPatterns.password,
                     message:
                       "Password must contain: uppercase letter, lowercase letter, number, and special character (@$!%*?&)",
                   },
@@ -341,4 +341,8 @@ export default function Login() {
       </main>
     </>
   );
-}
+});
+
+Login.displayName = "Login";
+
+export default Login;

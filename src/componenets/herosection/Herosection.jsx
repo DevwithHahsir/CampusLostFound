@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { CiHeart } from "react-icons/ci";
 import "./herosection.css";
 import { GoDotFill } from "react-icons/go";
@@ -10,24 +10,20 @@ import { useNavigate } from "react-router-dom";
 import ReportItemForm from "../reportForm/ReportItemForm";
 import { authValidationUtils } from "../../utils/authValidation";
 
-export default function Herosection() {
+const Herosection = React.memo(() => {
   const [showReportForm, setShowReportForm] = useState(false);
   const { user, isAuthenticated, isEmailVerified } = useAuth();
   const navigate = useNavigate();
 
-  // Handle Report Lost Item button click
-  const handleReportItemClick = () => {
-    // Use comprehensive validation
+  // Memoized handlers to prevent unnecessary re-renders
+  const handleReportItemClick = useCallback(() => {
     const validation = authValidationUtils.validateReportAccess(
       user,
       isAuthenticated,
       isEmailVerified
     );
 
-    // Validate user access
-
     if (!validation.canReport) {
-      // Handle different types of errors
       validation.errors.forEach((error) => {
         if (error.action === "redirect_login") {
           navigate("/login");
@@ -36,18 +32,20 @@ export default function Herosection() {
       return;
     }
 
-    // All checks passed - show the report form
     setShowReportForm(true);
-  };
+  }, [user, isAuthenticated, isEmailVerified, navigate]);
 
-  const handleReportFormSubmit = () => {
+  const handleReportFormSubmit = useCallback(() => {
     setShowReportForm(false);
-    // Alert is now handled within ReportItemForm component
-  };
+  }, []);
 
-  const handleReportFormClose = () => {
+  const handleReportFormClose = useCallback(() => {
     setShowReportForm(false);
-  };
+  }, []);
+
+  const handleBrowseFoundItems = useCallback(() => {
+    // TODO: Navigate to found items page
+  }, []);
 
   return (
     <>
@@ -158,9 +156,7 @@ export default function Herosection() {
               <Button
                 text="Browse Found Items"
                 className="hero-btn hero-btn-secondary"
-                onClick={() => {
-                  // TODO: Navigate to found items page
-                }}
+                onClick={handleBrowseFoundItems}
               />
             </div>
           </section>
@@ -176,4 +172,8 @@ export default function Herosection() {
       )}
     </>
   );
-}
+});
+
+Herosection.displayName = "Herosection";
+
+export default Herosection;

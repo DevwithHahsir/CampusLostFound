@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useEffect, useState } from "react";
-import { getAuth } from "../firebaseConfig/firebaseCore";
+import { auth } from "../firebaseConfig/firebaseCore";
 
 const AuthContext = createContext();
 
@@ -17,15 +17,13 @@ export const AuthProvider = ({ children }) => {
     // Initialize Firebase Auth lazily with error handling and faster timeout
     const initAuth = async () => {
       try {
-        const authInstance = await getAuth();
-
         if (!isMounted) return; // Component unmounted before auth loaded
 
         const { onAuthStateChanged } = await import("firebase/auth");
 
         if (!isMounted) return; // Component unmounted before listener setup
 
-        unsubscribe = onAuthStateChanged(authInstance, (currentUser) => {
+        unsubscribe = onAuthStateChanged(auth, (currentUser) => {
           if (!isMounted) return; // Component unmounted during callback
 
           if (currentUser) {
@@ -69,10 +67,9 @@ export const AuthProvider = ({ children }) => {
   // helper logout function
   const logout = async () => {
     try {
-      const authInstance = await getAuth();
       const { signOut } = await import("firebase/auth");
 
-      await signOut(authInstance);
+      await signOut(auth);
       setUser(null);
       setIsAuthenticated(false);
 

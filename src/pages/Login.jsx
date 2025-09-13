@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate, Link } from "react-router-dom";
 import "./Login.css";
 import { auth } from "../firebaseConfig/firebaseCore";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import AlertCard from "../componenets/alert/Card";
 import { isValidDomain } from "../data/UniversityDomains";
 import { useAuth } from "../AuthContext/AuthContext";
@@ -59,8 +60,6 @@ const Login = React.memo(() => {
           setShowAlertCard(true);
           return;
         }
-
-        const { signInWithEmailAndPassword } = await import("firebase/auth");
 
         const userCredential = await signInWithEmailAndPassword(
           auth,

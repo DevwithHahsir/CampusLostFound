@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { auth, db } from "../firebaseConfig/firebaseCore";
+import { createUserWithEmailAndPassword, updateProfile, sendEmailVerification } from "firebase/auth";
+import { collection, addDoc } from "firebase/firestore";
 import AlertCard from "../componenets/alert/Card";
 import {
   basicUniversities,
@@ -120,7 +122,6 @@ const Signup = React.memo(() => {
   // Send Firebase email verification
   const sendFirebaseEmailVerification = async (user) => {
     try {
-      const { sendEmailVerification } = await import("firebase/auth");
       await sendEmailVerification(user, {
         url: window.location.origin + "/login",
         handleCodeInApp: false,
@@ -140,7 +141,6 @@ const Signup = React.memo(() => {
 
   // Store user data in Firestore
   const storeUserData = async (userData, userId, firestoreInstance) => {
-    const { collection, addDoc } = await import("firebase/firestore");
     const signupUsersRef = collection(firestoreInstance, "Signup User");
     await addDoc(signupUsersRef, {
       userId: userId,
@@ -159,11 +159,6 @@ const Signup = React.memo(() => {
       // Step 1: Create account and send verification email
       setSignupLoading(true);
       try {
-        // Load Firebase services lazily
-        const { createUserWithEmailAndPassword, updateProfile } = await import(
-          "firebase/auth"
-        );
-
         // Create email/password account
         const userCredential = await createUserWithEmailAndPassword(
           auth,

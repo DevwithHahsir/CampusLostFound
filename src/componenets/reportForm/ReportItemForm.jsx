@@ -1,6 +1,8 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useCallback, useMemo, useEffect } from "react";
 import { auth, db } from "../../firebaseConfig/firebaseCore";
+import { onAuthStateChanged } from "firebase/auth";
+import { collection, addDoc } from "firebase/firestore";
 import UniversityData from "../../data/Universities";
 import { testFirebaseStorage } from "../../utils/firebaseTestUtils";
 import Card from "../alert/Card";
@@ -57,12 +59,7 @@ const ReportItemForm = React.memo(({ onClose, onSubmit }) => {
   useEffect(() => {
     const initAuth = async () => {
       try {
-        const { useAuthState } = await import("react-firebase-hooks/auth");
-        // Use auth state hook directly with auth instance
-        // setAuthInstance is no longer needed
-
         // Set up auth state listener
-        const { onAuthStateChanged } = await import("firebase/auth");
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
           setUser(currentUser);
         });
@@ -918,9 +915,6 @@ const ReportItemForm = React.memo(({ onClose, onSubmit }) => {
           setIsSubmitting(false);
           return;
         }
-
-        // Load Firestore services lazily
-        const { collection, addDoc } = await import("firebase/firestore");
 
         const docRef = await addDoc(collection(db, "items"), itemData);
 

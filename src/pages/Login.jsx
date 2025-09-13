@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import "./Login.css";
 import { getAuth } from "../firebaseConfig/firebaseCore";
 import AlertCard from "../componenets/alert/Card";
@@ -82,10 +82,8 @@ export default function Login() {
         setAlertMessage("Login successful! Redirecting...");
         setShowAlertCard(true);
 
-        // Redirect to dashboard or home page after successful login
-        setTimeout(() => {
-          navigate("/"); // Use navigate instead of window.location.href
-        }, 1500);
+        // Don't manually redirect - let AuthContext handle it
+        // The useEffect will handle redirect when auth state changes
       } catch (error) {
         console.error("Login error:", error);
 
@@ -116,12 +114,12 @@ export default function Login() {
         setLoading(false);
       }
     },
-    [navigate]
+    [] // Removed navigate dependency since we're not using it in loginUser anymore
   );
 
-  // Check for stored credentials on component load
+  // Check for stored credentials on component load (but don't auto-login)
   useEffect(() => {
-    const checkStoredCredentials = async () => {
+    const checkStoredCredentials = () => {
       const storedEmail = localStorage.getItem("rememberedEmail");
       const storedPassword = localStorage.getItem("rememberedPassword");
       const rememberMe = localStorage.getItem("rememberMe") === "true";
@@ -130,27 +128,22 @@ export default function Login() {
         setValue("email", storedEmail);
         setValue("password", storedPassword);
         setValue("rememberMe", true);
-
-        // Auto-login if credentials are stored
-        try {
-          await loginUser(storedEmail, storedPassword);
-        } catch (error) {
-          console.error("Auto-login failed:", error);
-          // Clear invalid stored credentials
-          localStorage.removeItem("rememberedEmail");
-          localStorage.removeItem("rememberedPassword");
-          localStorage.removeItem("rememberMe");
-        }
+        // Removed auto-login - let user click login button manually
       }
     };
 
     checkStoredCredentials();
-  }, [setValue, loginUser]);
+  }, [setValue]);
 
-  // Redirect if user is already logged in
+  // Only redirect if user is successfully authenticated and email is verified
   useEffect(() => {
     if (isAuthenticated && isEmailVerified) {
-      navigate("/"); // Use navigate instead of window.location.href
+      // Add a small delay to ensure the success message is shown
+      const redirectTimer = setTimeout(() => {
+        navigate("/");
+      }, 1500);
+
+      return () => clearTimeout(redirectTimer);
     }
   }, [isAuthenticated, isEmailVerified, navigate]);
 
@@ -340,7 +333,7 @@ export default function Login() {
             <div className="signup-link">
               <p>
                 Don't have an account?
-                <a href="/signup"> Create Account</a>
+                <Link to="/signup"> Create Account</Link>
               </p>
             </div>
           </form>

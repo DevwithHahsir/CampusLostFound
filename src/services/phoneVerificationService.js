@@ -4,19 +4,30 @@ import {
   linkWithCredential,
   PhoneAuthProvider,
 } from "firebase/auth";
-import { auth } from "../firebaseConfig/firebase";
+import { getAuth } from "../firebaseConfig/firebaseCore";
 
 class PhoneVerificationService {
   constructor() {
     this.recaptchaVerifier = null;
     this.confirmationResult = null;
+    this.authInstance = null;
+  }
+
+  // Get auth instance
+  async getAuthInstance() {
+    if (!this.authInstance) {
+      this.authInstance = await getAuth();
+    }
+    return this.authInstance;
   }
 
   // Setup reCAPTCHA verifier
-  setupRecaptcha(elementId = "recaptcha-container") {
+  async setupRecaptcha(elementId = "recaptcha-container") {
     if (this.recaptchaVerifier) {
       this.recaptchaVerifier.clear();
     }
+
+    const auth = await this.getAuthInstance();
 
     this.recaptchaVerifier = new RecaptchaVerifier(auth, elementId, {
       size: "invisible",
@@ -38,9 +49,10 @@ class PhoneVerificationService {
       const formattedNumber = this.formatPhoneNumber(phoneNumber);
 
       if (!this.recaptchaVerifier) {
-        this.setupRecaptcha();
+        await this.setupRecaptcha();
       }
 
+      const auth = await this.getAuthInstance();
       this.confirmationResult = await signInWithPhoneNumber(
         auth,
         formattedNumber,

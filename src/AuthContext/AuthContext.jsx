@@ -12,16 +12,22 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     let unsubscribe = () => {};
+    let isMounted = true;
 
-    // Initialize Firebase Auth lazily
+    // Initialize Firebase Auth lazily with error handling and faster timeout
     const initAuth = async () => {
       try {
-        const [authInstance, { onAuthStateChanged }] = await Promise.all([
-          getAuth(),
-          import("firebase/auth"),
-        ]);
+        const authInstance = await getAuth();
+
+        if (!isMounted) return; // Component unmounted before auth loaded
+
+        const { onAuthStateChanged } = await import("firebase/auth");
+
+        if (!isMounted) return; // Component unmounted before listener setup
 
         unsubscribe = onAuthStateChanged(authInstance, (currentUser) => {
+          if (!isMounted) return; // Component unmounted during callback
+
           if (currentUser) {
             setUser(currentUser);
             setIsAuthenticated(true);
@@ -33,21 +39,38 @@ export const AuthProvider = ({ children }) => {
         });
       } catch (error) {
         console.error("Auth initialization error:", error);
-        setLoading(false);
+        if (isMounted) {
+          setUser(null);
+          setIsAuthenticated(false);
+          setLoading(false);
+        }
       }
     };
 
+    // Add fallback timeout to ensure loading doesn't stay true indefinitely
+    const authTimeout = setTimeout(() => {
+      if (isMounted) {
+        console.warn("Auth initialization timed out, proceeding without auth");
+        setUser(null);
+        setIsAuthenticated(false);
+        setLoading(false);
+      }
+    }, 2000); // 2 second timeout for auth
+
     initAuth();
-    return () => unsubscribe();
+
+    return () => {
+      isMounted = false;
+      clearTimeout(authTimeout);
+      unsubscribe();
+    };
   }, []);
 
   // helper logout function
   const logout = async () => {
     try {
-      const [authInstance, { signOut }] = await Promise.all([
-        getAuth(),
-        import("firebase/auth"),
-      ]);
+      const authInstance = await getAuth();
+      const { signOut } = await import("firebase/auth");
 
       await signOut(authInstance);
       setUser(null);
@@ -76,11 +99,7 @@ export const AuthProvider = ({ children }) => {
     logout,
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {!loading && children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 // ✅ Custom Hook to use Auth anywhere

@@ -167,15 +167,11 @@ export default function Signup() {
       setSignupLoading(true);
       try {
         // Load Firebase services lazily
-        const [
-          authInstance,
-          firestoreInstance,
-          { createUserWithEmailAndPassword, updateProfile },
-        ] = await Promise.all([
-          getAuth(),
-          getFirestore(),
-          import("firebase/auth"),
-        ]);
+        const authInstance = await getAuth();
+        const firestoreInstance = await getFirestore();
+        const { createUserWithEmailAndPassword, updateProfile } = await import(
+          "firebase/auth"
+        );
 
         // Create email/password account
         const userCredential = await createUserWithEmailAndPassword(

@@ -14,10 +14,8 @@ const ReportItemForm = ({ onClose, onSubmit }) => {
   useEffect(() => {
     const initAuth = async () => {
       try {
-        const [authInst, { useAuthState }] = await Promise.all([
-          getAuth(),
-          import("react-firebase-hooks/auth"),
-        ]);
+        const authInst = await getAuth();
+        const { useAuthState } = await import("react-firebase-hooks/auth");
         setAuthInstance(authInst);
 
         // Set up auth state listener

@@ -59,8 +59,8 @@ export default function Login() {
           setShowAlertCard(true);
           return;
         }
-        const [authInstance, { signInWithEmailAndPassword }] =
-          await Promise.all([getAuth(), import("firebase/auth")]);
+        const authInstance = await getAuth();
+        const { signInWithEmailAndPassword } = await import("firebase/auth");
 
         const userCredential = await signInWithEmailAndPassword(
           authInstance,

@@ -4,7 +4,7 @@ import {
   Route,
   useLocation,
 } from "react-router-dom";
-import { Suspense, lazy, useState, memo, useEffect } from "react";
+import { Suspense, lazy, useState, memo } from "react";
 import MinimalLoader from "./componenets/loader/MinimalLoader";
 
 // Lazy load ALL components for better performance
@@ -37,24 +37,6 @@ const ConditionalNavbar = memo(() => {
 
 const App = memo(() => {
   const [showReportForm, setShowReportForm] = useState(false);
-  const [appLoading, setAppLoading] = useState(true);
-
-  // App-level loading that never exceeds 3 seconds
-  useEffect(() => {
-    const loadingTimer = setTimeout(() => {
-      setAppLoading(false);
-    }, 3000); // Maximum 3 seconds loading
-
-    // Also check for faster loading if components are ready
-    const quickLoadTimer = setTimeout(() => {
-      setAppLoading(false);
-    }, 1500); // Try to stop loading after 1.5 seconds if possible
-
-    return () => {
-      clearTimeout(loadingTimer);
-      clearTimeout(quickLoadTimer);
-    };
-  }, []);
 
   const handleReportFormSubmit = () => {
     setShowReportForm(false);
@@ -64,16 +46,6 @@ const App = memo(() => {
   const handleReportFormClose = () => {
     setShowReportForm(false);
   };
-
-  // Show app-level loader for maximum 3 seconds
-  if (appLoading) {
-    return (
-      <MinimalLoader
-        fullScreen={true}
-        message="Loading Campus Lost & Found..."
-      />
-    );
-  }
 
   return (
     <Router>

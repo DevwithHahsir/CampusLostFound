@@ -13,7 +13,7 @@ import "./Signup.css";
 export default function Signup() {
   const [universities, setUniversities] = useState([]);
   const [campuses, setCampuses] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Start with false since we load local data
   const [campusLoading, setCampusLoading] = useState(false);
   const [signupLoading, setSignupLoading] = useState(false);
   const [step, setStep] = useState(1); // 1: form, 2: create account & send verification email
@@ -52,24 +52,19 @@ export default function Signup() {
 
   // Load universities from local data - OPTIMIZED: Use lightweight basic list for fast initial load
   useEffect(() => {
-    const loadUniversities = () => {
-      try {
-        setLoading(true);
-
-        // Use lightweight universities list instead of heavy Universities.js file
-        setUniversities(basicUniversities);
-      } catch {
-        showAlert(
-          "error",
-          "Failed to load universities. Please refresh the page."
-        );
-        setUniversities([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadUniversities();
+    // Since this is local data, load it immediately without async delay
+    try {
+      // Use lightweight universities list instead of heavy Universities.js file
+      setUniversities(basicUniversities);
+      setLoading(false); // Set loading to false immediately
+    } catch {
+      showAlert(
+        "error",
+        "Failed to load universities. Please refresh the page."
+      );
+      setUniversities([]);
+      setLoading(false);
+    }
   }, []);
 
   // Create a memoized university lookup map for O(1) access instead of O(n) find()

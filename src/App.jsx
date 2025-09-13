@@ -4,11 +4,16 @@ import {
   Route,
   useLocation,
 } from "react-router-dom";
-import { Suspense, lazy, useState } from "react";
-import Navbar from "./componenets/navbar/Navbar";
-import SEO from "./componenets/seo/SEO";
-import Herosection from "./componenets/herosection/Herosection";
-import ReportItemForm from "./componenets/reportForm/ReportItemForm";
+import { Suspense, lazy, useState, memo } from "react";
+import MinimalLoader from "./componenets/loader/MinimalLoader";
+
+// Lazy load ALL components for better performance
+const Navbar = lazy(() => import("./componenets/navbar/Navbar"));
+const SEO = lazy(() => import("./componenets/seo/SEO"));
+const Herosection = lazy(() => import("./componenets/herosection/Herosection"));
+const ReportItemForm = lazy(() =>
+  import("./componenets/reportForm/ReportItemForm")
+);
 
 // Lazy load pages for better performance - load only when needed
 const Login = lazy(() => import("./pages/Login"));
@@ -17,37 +22,20 @@ const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Report = lazy(() => import("./pages/Report"));
 const ReportDemo = lazy(() => import("./pages/ReportDemo"));
 
-// Loading component for lazy-loaded pages
-const PageLoader = () => (
-  <div
-    style={{
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      height: "50vh",
-      fontSize: "18px",
-    }}
-  >
-    Loading...
-  </div>
-);
-
-// import PostData from "./postData/POstData";
-
-// Component to conditionally render Navbar
-function ConditionalNavbar() {
+// Optimized conditional navbar component
+const ConditionalNavbar = memo(() => {
   const location = useLocation();
-  const hideNavbarRoutes = ["/login", "/signup"];
+  const showNavbar =
+    location.pathname !== "/login" && location.pathname !== "/signup";
 
-  // Don't show navbar on login and signup pages
-  if (hideNavbarRoutes.includes(location.pathname)) {
-    return null;
-  }
+  return showNavbar ? (
+    <Suspense fallback={<MinimalLoader />}>
+      <Navbar />
+    </Suspense>
+  ) : null;
+});
 
-  return <Navbar />;
-}
-
-function App() {
+const App = memo(() => {
   const [showReportForm, setShowReportForm] = useState(false);
 
   const handleReportFormSubmit = () => {
@@ -145,7 +133,7 @@ function App() {
       />
       <ConditionalNavbar />
 
-      <Suspense fallback={<PageLoader />}>
+      <Suspense fallback={<MinimalLoader />}>
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
@@ -167,15 +155,17 @@ function App() {
 
       {/* Global Report Form */}
       {showReportForm && (
-        <ReportItemForm
-          onClose={handleReportFormClose}
-          onSubmit={handleReportFormSubmit}
-        />
+        <Suspense fallback={<MinimalLoader />}>
+          <ReportItemForm
+            onClose={handleReportFormClose}
+            onSubmit={handleReportFormSubmit}
+          />
+        </Suspense>
       )}
 
       {/* <PostData/> */}
     </Router>
   );
-}
+});
 
 export default App;

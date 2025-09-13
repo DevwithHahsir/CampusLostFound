@@ -1,15 +1,39 @@
 /* eslint-disable no-unused-vars */
-import React, { useState, useCallback, useMemo } from "react";
-import { db, auth } from "../../firebaseConfig/firebase";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { useAuthState } from "react-firebase-hooks/auth";
+import React, { useState, useCallback, useMemo, useEffect } from "react";
+import { getAuth, getFirestore } from "../../firebaseConfig/firebaseCore";
 import UniversityData from "../../data/Universities";
 import { testFirebaseStorage } from "../../utils/firebaseTestUtils";
 import Card from "../alert/Card";
 import "./ReportItemForm.css";
 
 const ReportItemForm = ({ onClose, onSubmit }) => {
-  const [user] = useAuthState(auth);
+  const [user, setUser] = useState(null);
+  const [authInstance, setAuthInstance] = useState(null);
+
+  // Initialize auth lazily
+  useEffect(() => {
+    const initAuth = async () => {
+      try {
+        const [authInst, { useAuthState }] = await Promise.all([
+          getAuth(),
+          import("react-firebase-hooks/auth"),
+        ]);
+        setAuthInstance(authInst);
+
+        // Set up auth state listener
+        const { onAuthStateChanged } = await import("firebase/auth");
+        const unsubscribe = onAuthStateChanged(authInst, (currentUser) => {
+          setUser(currentUser);
+        });
+
+        return () => unsubscribe();
+      } catch (error) {
+        console.error("Auth initialization error:", error);
+      }
+    };
+
+    initAuth();
+  }, []);
   const [formData, setFormData] = useState({
     role: "",
     title: "",
@@ -55,7 +79,7 @@ const ReportItemForm = ({ onClose, onSubmit }) => {
   // Security validation functions
   const securityValidation = useMemo(
     () => ({
-      // Sanitize user input to prevent XSS attacks
+      // Sanitize user input to prevent XSS attacks (for real-time input)
       sanitizeInput: (input) => {
         if (typeof input !== "string") return input;
         return input
@@ -63,7 +87,18 @@ const ReportItemForm = ({ onClose, onSubmit }) => {
           .replace(/<[^>]*>?/gm, "") // Remove HTML tags
           .replace(/javascript:/gi, "") // Remove javascript: protocol
           .replace(/on\w+\s*=/gi, "") // Remove event handlers
-          .trim()
+          .substring(0, 1000); // Limit length (DON'T trim here - preserves spaces for user input)
+      },
+
+      // Sanitize and trim for final submission
+      sanitizeForSubmission: (input) => {
+        if (typeof input !== "string") return input;
+        return input
+          .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "") // Remove script tags
+          .replace(/<[^>]*>?/gm, "") // Remove HTML tags
+          .replace(/javascript:/gi, "") // Remove javascript: protocol
+          .replace(/on\w+\s*=/gi, "") // Remove event handlers
+          .trim() // Only trim during submission
           .substring(0, 1000); // Limit length
       },
 
@@ -296,18 +331,252 @@ const ReportItemForm = ({ onClose, onSubmit }) => {
   // Camera capture handler
   const handleCameraCapture = async () => {
     try {
+      // Request camera access
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "environment" },
+        video: {
+          facingMode: "environment", // Use back camera on mobile
+          width: { ideal: 1280 },
+          height: { ideal: 720 },
+        },
       });
-      showAlert(
-        "error",
-        "Camera feature coming soon! Please use file upload for now."
-      );
+
+      // Create video element to show camera feed
+      const video = document.createElement("video");
+      video.srcObject = stream;
+      video.autoplay = true;
+      video.playsInline = true;
+
+      // Create modal for camera interface
+      const cameraModal = document.createElement("div");
+      cameraModal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.9);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+      `;
+
+      const cameraContainer = document.createElement("div");
+      cameraContainer.style.cssText = `
+        position: relative;
+        max-width: 90%;
+        max-height: 70%;
+        background: black;
+        border-radius: 10px;
+        overflow: hidden;
+      `;
+
+      video.style.cssText = `
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      `;
+
+      const buttonContainer = document.createElement("div");
+      buttonContainer.style.cssText = `
+        display: flex;
+        gap: 20px;
+        margin-top: 20px;
+        justify-content: center;
+      `;
+
+      const captureBtn = document.createElement("button");
+      captureBtn.innerHTML = "📸 Capture";
+      captureBtn.style.cssText = `
+        background: #4382E4;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      `;
+
+      const closeBtn = document.createElement("button");
+      closeBtn.innerHTML = "❌ Close";
+      closeBtn.style.cssText = `
+        background: #dc3545;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      `;
+
+      const switchBtn = document.createElement("button");
+      switchBtn.innerHTML = "🔄 Switch Camera";
+      switchBtn.style.cssText = `
+        background: #6c757d;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      `;
+
+      let currentFacingMode = "environment";
+
+      // Switch camera function
+      const switchCamera = async () => {
+        try {
+          // Stop current stream
+          stream.getTracks().forEach((track) => track.stop());
+
+          // Switch facing mode
+          currentFacingMode =
+            currentFacingMode === "environment" ? "user" : "environment";
+
+          // Get new stream
+          const newStream = await navigator.mediaDevices.getUserMedia({
+            video: {
+              facingMode: currentFacingMode,
+              width: { ideal: 1280 },
+              height: { ideal: 720 },
+            },
+          });
+
+          video.srcObject = newStream;
+        } catch (error) {
+          console.error("Error switching camera:", error);
+          showAlert("error", "Could not switch camera");
+        }
+      };
+
+      // Capture photo function
+      const capturePhoto = () => {
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d");
+
+        // Set canvas size to video size
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+
+        // Draw video frame to canvas
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        // Convert to blob
+        canvas.toBlob(
+          async (blob) => {
+            try {
+              // Create file from blob
+              const file = new File(
+                [blob],
+                `camera_capture_${Date.now()}.jpg`,
+                {
+                  type: "image/jpeg",
+                }
+              );
+
+              // Process the captured image same as file upload
+              securityValidation.validateImageFile(file);
+              setImagePreview(URL.createObjectURL(file));
+
+              // Compress and set the image
+              try {
+                const compressedFile = await compressImage(file);
+                const compressedSize = compressedFile.size;
+                const originalSize = file.size;
+                const compressionRatio = (
+                  ((originalSize - compressedSize) / originalSize) *
+                  100
+                ).toFixed(1);
+
+                setImageInfo({
+                  originalSize: (originalSize / 1024 / 1024).toFixed(2),
+                  compressedSize: (compressedSize / 1024 / 1024).toFixed(2),
+                  compressionRatio: compressionRatio,
+                });
+
+                setFormData((prev) => ({ ...prev, image: compressedFile }));
+              } catch (compressionError) {
+                setFormData((prev) => ({ ...prev, image: file }));
+                setImageInfo({
+                  originalSize: (file.size / 1024 / 1024).toFixed(2),
+                  compressedSize: (file.size / 1024 / 1024).toFixed(2),
+                  compressionRatio: 0,
+                });
+              }
+
+              showAlert("success", "Photo captured successfully!");
+
+              // Close camera modal
+              closeCameraModal();
+            } catch (error) {
+              showAlert("error", "Failed to capture photo: " + error.message);
+            }
+          },
+          "image/jpeg",
+          0.8
+        );
+      };
+
+      // Close camera modal function
+      const closeCameraModal = () => {
+        // Stop camera stream
+        const currentStream = video.srcObject;
+        if (currentStream) {
+          currentStream.getTracks().forEach((track) => track.stop());
+        }
+
+        // Remove modal
+        document.body.removeChild(cameraModal);
+      };
+
+      // Event listeners
+      captureBtn.addEventListener("click", capturePhoto);
+      closeBtn.addEventListener("click", closeCameraModal);
+      switchBtn.addEventListener("click", switchCamera);
+
+      // Assemble modal
+      cameraContainer.appendChild(video);
+      buttonContainer.appendChild(switchBtn);
+      buttonContainer.appendChild(captureBtn);
+      buttonContainer.appendChild(closeBtn);
+      cameraModal.appendChild(cameraContainer);
+      cameraModal.appendChild(buttonContainer);
+
+      // Add to page
+      document.body.appendChild(cameraModal);
+
+      // Wait for video to load
+      video.addEventListener("loadedmetadata", () => {
+        video.play();
+      });
     } catch (error) {
-      showAlert(
-        "error",
-        "Camera access denied. Please use file upload instead."
-      );
+      console.error("Camera access error:", error);
+
+      let errorMessage =
+        "Camera access denied. Please use file upload instead.";
+
+      if (error.name === "NotAllowedError") {
+        errorMessage =
+          "Camera permission denied. Please allow camera access and try again.";
+      } else if (error.name === "NotFoundError") {
+        errorMessage =
+          "No camera found on this device. Please use file upload.";
+      } else if (error.name === "NotSupportedError") {
+        errorMessage =
+          "Camera not supported on this device. Please use file upload.";
+      }
+
+      showAlert("error", errorMessage);
     }
   };
 
@@ -449,14 +718,16 @@ const ReportItemForm = ({ onClose, onSubmit }) => {
       try {
         // Security validation and sanitization
         const sanitizedFormData = {
-          role: securityValidation.sanitizeInput(formData.role),
-          title: securityValidation.sanitizeInput(formData.title),
-          description: securityValidation.sanitizeInput(formData.description),
-          category: securityValidation.sanitizeInput(formData.category),
-          location: securityValidation.sanitizeInput(formData.location),
+          role: securityValidation.sanitizeForSubmission(formData.role),
+          title: securityValidation.sanitizeForSubmission(formData.title),
+          description: securityValidation.sanitizeForSubmission(
+            formData.description
+          ),
+          category: securityValidation.sanitizeForSubmission(formData.category),
+          location: securityValidation.sanitizeForSubmission(formData.location),
           date: formData.date,
-          email: securityValidation.sanitizeInput(formData.email),
-          phone: securityValidation.sanitizeInput(formData.phone),
+          email: securityValidation.sanitizeForSubmission(formData.email),
+          phone: securityValidation.sanitizeForSubmission(formData.phone),
           contactPreference: formData.contactPreference,
         };
 
@@ -563,8 +834,8 @@ const ReportItemForm = ({ onClose, onSubmit }) => {
           imageUrl: imageData?.base64 || null,
 
           // Metadata with security timestamps
-          createdAt: serverTimestamp(),
-          updatedAt: serverTimestamp(),
+          createdAt: new Date(),
+          updatedAt: new Date(),
           status: "active",
 
           // Security metadata
@@ -594,7 +865,16 @@ const ReportItemForm = ({ onClose, onSubmit }) => {
           return;
         }
 
-        const docRef = await addDoc(collection(db, "items"), itemData);
+        // Load Firestore services lazily
+        const [firestoreInstance, { collection, addDoc }] = await Promise.all([
+          getFirestore(),
+          import("firebase/firestore"),
+        ]);
+
+        const docRef = await addDoc(
+          collection(firestoreInstance, "items"),
+          itemData
+        );
 
         showAlert("success", "Item Reported Successfully!");
 
@@ -711,6 +991,10 @@ const ReportItemForm = ({ onClose, onSubmit }) => {
               placeholder="Provide details: color, unique marks, brand, etc."
               rows="4"
               required
+              autoCapitalize="sentences"
+              autoComplete="off"
+              autoCorrect="on"
+              spellCheck="true"
             />
           </div>
 
@@ -743,6 +1027,10 @@ const ReportItemForm = ({ onClose, onSubmit }) => {
               value={formData.location}
               onChange={handleInputChange}
               placeholder="Where was it lost/found?"
+              autoCapitalize="words"
+              autoComplete="off"
+              autoCorrect="on"
+              spellCheck="true"
             />
           </div>
 

@@ -1,7 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useEffect, useState } from "react";
-import { onAuthStateChanged, signOut } from "firebase/auth";
-import { auth } from "../firebaseConfig/firebase"; // your firebase.js config
+import { getAuth } from "../firebaseConfig/firebaseCore";
 
 const AuthContext = createContext();
 
@@ -12,25 +11,45 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    // Listen for login/logout
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser) {
-        setUser(currentUser);
-        setIsAuthenticated(true);
-      } else {
-        setUser(null);
-        setIsAuthenticated(false);
-      }
-      setLoading(false);
-    });
+    let unsubscribe = () => {};
 
+    // Initialize Firebase Auth lazily
+    const initAuth = async () => {
+      try {
+        const [authInstance, { onAuthStateChanged }] = await Promise.all([
+          getAuth(),
+          import("firebase/auth"),
+        ]);
+
+        unsubscribe = onAuthStateChanged(authInstance, (currentUser) => {
+          if (currentUser) {
+            setUser(currentUser);
+            setIsAuthenticated(true);
+          } else {
+            setUser(null);
+            setIsAuthenticated(false);
+          }
+          setLoading(false);
+        });
+      } catch (error) {
+        console.error("Auth initialization error:", error);
+        setLoading(false);
+      }
+    };
+
+    initAuth();
     return () => unsubscribe();
   }, []);
 
   // helper logout function
   const logout = async () => {
     try {
-      await signOut(auth);
+      const [authInstance, { signOut }] = await Promise.all([
+        getAuth(),
+        import("firebase/auth"),
+      ]);
+
+      await signOut(authInstance);
       setUser(null);
       setIsAuthenticated(false);
 

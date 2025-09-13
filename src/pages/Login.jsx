@@ -2,13 +2,11 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import "./Login.css";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebaseConfig/firebase";
+import { getAuth } from "../firebaseConfig/firebaseCore";
 import AlertCard from "../componenets/alert/Card";
 import { isValidDomain } from "../data/UniversityDomains";
 import { useAuth } from "../AuthContext/AuthContext";
 import SEO from "../componenets/seo/SEO";
-// import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [alertType, setAlertType] = useState("");
@@ -61,8 +59,11 @@ export default function Login() {
           setShowAlertCard(true);
           return;
         }
+        const [authInstance, { signInWithEmailAndPassword }] =
+          await Promise.all([getAuth(), import("firebase/auth")]);
+
         const userCredential = await signInWithEmailAndPassword(
-          auth,
+          authInstance,
           email,
           password
         );

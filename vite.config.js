@@ -8,13 +8,28 @@ export default defineConfig({
     // Optimize build for better performance
     rollupOptions: {
       output: {
-        manualChunks: {
-          // Separate vendor chunks for better caching
-          vendor: ["react", "react-dom"],
-          router: ["react-router-dom"],
-          firebase: ["firebase/app", "firebase/auth", "firebase/firestore"],
-          forms: ["react-hook-form"],
-          icons: ["react-icons"],
+        manualChunks: (id) => {
+          // Firebase chunks
+          if (id.includes("firebase")) {
+            if (id.includes("firebase/auth")) return "firebase-auth";
+            if (id.includes("firebase/firestore")) return "firebase-firestore";
+            if (id.includes("firebase/app")) return "firebase-core";
+            return "firebase-other";
+          }
+
+          // React ecosystem
+          if (id.includes("react") || id.includes("React")) {
+            if (id.includes("react-router")) return "router";
+            if (id.includes("react-hook-form")) return "forms";
+            if (id.includes("react-icons")) return "icons";
+            return "react-vendor";
+          }
+
+          // Large university data
+          if (id.includes("Universities.js")) return "university-data";
+
+          // Other vendor libraries
+          if (id.includes("node_modules")) return "vendor";
         },
       },
     },

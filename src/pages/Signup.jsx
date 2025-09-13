@@ -1,12 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
-import { collection, addDoc } from "firebase/firestore";
-import {
-  createUserWithEmailAndPassword,
-  updateProfile,
-  sendEmailVerification,
-} from "firebase/auth";
-import { db, auth } from "../firebaseConfig/firebase";
+import { getAuth, getFirestore } from "../firebaseConfig/firebaseCore";
 import AlertCard from "../componenets/alert/Card";
 import {
   basicUniversities,
@@ -133,6 +127,7 @@ export default function Signup() {
   // Send Firebase email verification
   const sendFirebaseEmailVerification = async (user) => {
     try {
+      const { sendEmailVerification } = await import("firebase/auth");
       await sendEmailVerification(user, {
         url: window.location.origin + "/login",
         handleCodeInApp: false,
@@ -151,8 +146,9 @@ export default function Signup() {
   };
 
   // Store user data in Firestore
-  const storeUserData = async (userData, userId) => {
-    const signupUsersRef = collection(db, "Signup User");
+  const storeUserData = async (userData, userId, firestoreInstance) => {
+    const { collection, addDoc } = await import("firebase/firestore");
+    const signupUsersRef = collection(firestoreInstance, "Signup User");
     await addDoc(signupUsersRef, {
       userId: userId,
       fullName: userData.fullName,
@@ -170,9 +166,20 @@ export default function Signup() {
       // Step 1: Create account and send verification email
       setSignupLoading(true);
       try {
+        // Load Firebase services lazily
+        const [
+          authInstance,
+          firestoreInstance,
+          { createUserWithEmailAndPassword, updateProfile },
+        ] = await Promise.all([
+          getAuth(),
+          getFirestore(),
+          import("firebase/auth"),
+        ]);
+
         // Create email/password account
         const userCredential = await createUserWithEmailAndPassword(
-          auth,
+          authInstance,
           data.email,
           data.password
         );
@@ -183,7 +190,7 @@ export default function Signup() {
         });
 
         // Store additional user data in Firestore
-        await storeUserData(data, userCredential.user.uid);
+        await storeUserData(data, userCredential.user.uid, firestoreInstance);
 
         // Send Firebase email verification
         const emailSent = await sendFirebaseEmailVerification(

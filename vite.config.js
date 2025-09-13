@@ -6,11 +6,11 @@ export default defineConfig({
   plugins: [react()],
   optimizeDeps: {
     include: [
-      "firebase/app", 
-      "firebase/auth", 
-      "firebase/firestore", 
-      "firebase/storage"
-    ]
+      "firebase/app",
+      "firebase/auth",
+      "firebase/firestore",
+      "firebase/storage",
+    ],
   },
   build: {
     // Optimize build for better performance

@@ -226,7 +226,7 @@ const Signup = React.memo(() => {
               "Email verified successfully! Redirecting to login..."
             );
             setTimeout(() => {
-              window.location.href = "/login";
+              window.location.href = "/";
             }, 2000);
           } else {
             showAlert(

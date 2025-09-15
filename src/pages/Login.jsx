@@ -48,11 +48,14 @@ const Login = React.memo(() => {
   // Login function
   const loginUser = useCallback(
     async (email, password) => {
+      console.log("Login attempt started for:", email);
       try {
         setLoading(true);
+        setShowAlertCard(false); // Hide any previous alerts
 
         // Double-check university domain before attempting login
         if (!validateUniversityDomain(email)) {
+          console.log("University domain validation failed");
           setAlertType("error");
           setAlertMessage(
             "Please use your university email address. Only registered university domains are allowed."
@@ -61,14 +64,17 @@ const Login = React.memo(() => {
           return;
         }
 
+        console.log("Attempting Firebase authentication...");
         const userCredential = await signInWithEmailAndPassword(
           auth,
           email,
           password
         );
+        console.log("Firebase authentication successful:", userCredential.user.uid);
 
         // Check if email is verified
         if (!userCredential.user.emailVerified) {
+          console.log("Email not verified");
           setAlertType("error");
           setAlertMessage(
             "Please verify your email before logging in. Check your email inbox for the verification link."
@@ -77,14 +83,21 @@ const Login = React.memo(() => {
           return;
         }
 
+        console.log("Login successful, showing success message");
         setAlertType("success");
         setAlertMessage("Login successful! Redirecting...");
         setShowAlertCard(true);
 
-        // Don't manually redirect - let AuthContext handle it
-        // The useEffect will handle redirect when auth state changes
+        // Navigate immediately after successful login and email verification
+        console.log("Setting timeout for navigation");
+        setTimeout(() => {
+          console.log("Navigating to home page");
+          navigate("/");
+        }, 1500);
       } catch (error) {
         console.error("Login error:", error);
+        console.error("Error code:", error.code);
+        console.error("Error message:", error.message);
 
         // Handle specific Firebase auth errors with user-friendly messages
         let errorMessage = "Login failed. Please try again.";
@@ -106,6 +119,7 @@ const Login = React.memo(() => {
             "Invalid email or password. Please check your credentials and try again.";
         }
 
+        console.log("Setting error alert:", errorMessage);
         setAlertType("error");
         setAlertMessage(errorMessage);
         setShowAlertCard(true);
@@ -113,7 +127,7 @@ const Login = React.memo(() => {
         setLoading(false);
       }
     },
-    [validateUniversityDomain]
+    [validateUniversityDomain, navigate]
   );
 
   // Check for stored credentials on component load (but don't auto-login)
@@ -133,20 +147,17 @@ const Login = React.memo(() => {
     checkStoredCredentials();
   }, [setValue]);
 
-  // Only redirect if user is successfully authenticated and email is verified
+  // Redirect if already authenticated and email verified (for direct URL access)
   useEffect(() => {
     if (isAuthenticated && isEmailVerified) {
-      const redirectTimer = setTimeout(() => {
-        navigate("/");
-      }, 1500);
-
-      return () => clearTimeout(redirectTimer);
+      navigate("/");
     }
   }, [isAuthenticated, isEmailVerified, navigate]);
 
   // Memoized form submission handler
   const onSubmit = useCallback(
     async (data) => {
+      console.log("Form submitted with data:", { email: data.email, hasPassword: !!data.password });
       try {
         await loginUser(data.email, data.password);
 
@@ -162,6 +173,9 @@ const Login = React.memo(() => {
         }
       } catch (error) {
         console.error("Login submission error:", error);
+        setAlertType("error");
+        setAlertMessage("An unexpected error occurred. Please try again.");
+        setShowAlertCard(true);
       }
     },
     [loginUser]
@@ -231,6 +245,7 @@ const Login = React.memo(() => {
           <AlertCard
             type={alertType}
             message={alertMessage}
+            isVisible={showAlertCard}
             onClose={() => setShowAlertCard(false)}
           />
         )}

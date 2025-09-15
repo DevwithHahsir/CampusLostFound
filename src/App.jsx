@@ -5,6 +5,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import { Suspense, lazy, useState, memo } from "react";
+import { useAuth } from "./AuthContext/AuthContext";
 import MinimalLoader from "./componenets/loader/MinimalLoader";
 
 // Lazy load ALL components for better performance
@@ -29,26 +30,32 @@ const ConditionalNavbar = memo(() => {
     location.pathname !== "/login" && location.pathname !== "/signup";
 
   return showNavbar ? (
-    <Suspense fallback={<MinimalLoader />}>
+    <Suspense fallback={null}>
       <Navbar />
     </Suspense>
   ) : null;
 });
 
-const App = memo(() => {
+// Main App Content Component
+const AppContent = memo(() => {
   const [showReportForm, setShowReportForm] = useState(false);
+  const { loading: authLoading } = useAuth();
 
   const handleReportFormSubmit = () => {
     setShowReportForm(false);
-    // You can add additional logic here like showing success message
   };
 
   const handleReportFormClose = () => {
     setShowReportForm(false);
   };
 
+  // Show single loader while auth is initializing
+  if (authLoading) {
+    return <MinimalLoader fullScreen={true} message="Initializing..." />;
+  }
+
   return (
-    <Router>
+    <>
       <SEO
         title="Campus Lost Found Pakistan | Lost & Found Items University Students | Find Lost Belongings"
         description="Pakistan's premier lost and found platform for university students. Report, search, and recover lost items across 43+ Pakistani universities. Join thousands of students who have successfully reunited with their belongings through our campus community network."
@@ -162,8 +169,15 @@ const App = memo(() => {
           />
         </Suspense>
       )}
+    </>
+  );
+});
 
-      {/* <PostData/> */}
+// Main App Component
+const App = memo(() => {
+  return (
+    <Router>
+      <AppContent />
     </Router>
   );
 });

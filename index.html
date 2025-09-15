@@ -28,14 +28,6 @@
       display: flex;
       flex-direction: column;
     }
-
-    .loading {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 50vh;
-      font-size: 18px;
-    }
   </style>
 
   <title>Campus Lost Found Pakistan | University Students Lost & Found Platform</title>
@@ -43,22 +35,9 @@
 
 <body>
   <div id="root">
-    <!-- Loading fallback for better perceived performance -->
-    <div class="loading" id="initial-loader">
-      Loading Campus Lost Found...
-    </div>
+    <!-- No initial loader - React will handle loading states -->
   </div>
   <script type="module" src="/src/main.jsx"></script>
-
-  <!-- Remove initial loader when React mounts -->
-  <script>
-    window.addEventListener('DOMContentLoaded', () => {
-      setTimeout(() => {
-        const loader = document.getElementById('initial-loader');
-        if (loader) loader.remove();
-      }, 100);
-    });
-  </script>
 </body>
 
 </html>

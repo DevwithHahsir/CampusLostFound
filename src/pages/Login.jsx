@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import "./Login.css";
 import { auth } from "../firebaseConfig/firebaseCore";
 import { signInWithEmailAndPassword } from "firebase/auth";
@@ -18,6 +18,7 @@ const Login = React.memo(() => {
   // Use Auth Context and Navigation
   const { isAuthenticated, isEmailVerified } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const {
     register,
@@ -94,8 +95,9 @@ const Login = React.memo(() => {
         // Navigate immediately after successful login and email verification
         console.log("Setting timeout for navigation");
         setTimeout(() => {
-          console.log("Navigating to home page");
-          navigate("/");
+          const redirectTo = location.state?.redirectTo || "/";
+          console.log("Navigating to:", redirectTo);
+          navigate(redirectTo);
         }, 1500);
       } catch (error) {
         console.error("Login error:", error);
@@ -130,7 +132,7 @@ const Login = React.memo(() => {
         setLoading(false);
       }
     },
-    [validateUniversityDomain, navigate]
+    [validateUniversityDomain, navigate, location.state]
   );
 
   // Check for stored credentials on component load (but don't auto-login)
@@ -153,9 +155,19 @@ const Login = React.memo(() => {
   // Redirect if already authenticated and email verified (for direct URL access)
   useEffect(() => {
     if (isAuthenticated && isEmailVerified) {
-      navigate("/");
+      const redirectTo = location.state?.redirectTo || "/";
+      navigate(redirectTo);
     }
-  }, [isAuthenticated, isEmailVerified, navigate]);
+  }, [isAuthenticated, isEmailVerified, navigate, location.state]);
+
+  // Check for navigation state message (e.g., from Report Item redirect)
+  useEffect(() => {
+    if (location.state?.message && location.state?.from === "report-item") {
+      setAlertType("warning");
+      setAlertMessage(location.state.message);
+      setShowAlertCard(true);
+    }
+  }, [location.state]);
 
   // Memoized form submission handler
   const onSubmit = useCallback(

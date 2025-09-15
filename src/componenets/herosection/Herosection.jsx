@@ -26,7 +26,17 @@ const Herosection = React.memo(() => {
     if (!validation.canReport) {
       validation.errors.forEach((error) => {
         if (error.action === "redirect_login") {
-          navigate("/login");
+          // Navigate to login with state containing the message
+          navigate("/login", {
+            state: {
+              message: error.message,
+              from: "report-item",
+              redirectTo: "/report",
+            },
+          });
+        } else if (error.action === "show_alert") {
+          // Show alert for other errors (email verification, university domain)
+          alert(error.message);
         }
       });
       return;

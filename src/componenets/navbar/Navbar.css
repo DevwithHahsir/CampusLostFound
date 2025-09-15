@@ -105,8 +105,9 @@
 
 .log-btn {
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex-start;
     align-items: center;
+    
 }
 
 
@@ -172,6 +173,15 @@
 
 .icon {
     font-size: 1.2rem;
+}
+
+
+
+
+.active-user {
+    border: 1px solid;
+    display: flex !important;
+    justify-content: flex-end !important;
 }
 
 /* User Avatar Styles */

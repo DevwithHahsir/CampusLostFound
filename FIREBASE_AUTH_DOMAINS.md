@@ -1,52 +1,67 @@
 # Firebase Auth Domain Configuration
 
-## Issue Fixed
+## Current Issue
+Getting "Domain not allowlisted by project (auth/unauthorized-continue-uri)" during signup.
 
-Fixed "Domain not allowlisted by project (auth/unauthorized-continue-uri)" error when sending email verification.
+## IMMEDIATE SOLUTION ✅
 
-## Root Cause
+### Step 1: Firebase Console Settings
+1. Go to [Firebase Console](https://console.firebase.google.com)
+2. Select your project: **campusfoundlost**
+3. Navigate to **Authentication** → **Settings** → **Authorized domains**
+4. Add these domains if not present:
+   - `campuslostfound.vercel.app` ✅
+   - `localhost` (for development)
+   - `127.0.0.1` (for development)
 
-Firebase Auth requires domains to be explicitly allowlisted for email verification continue URLs. Using `window.location.origin` (localhost) in development was causing the error.
-
-## Solution Applied
-
-Changed email verification continue URL to always use production domain:
-
+### Step 2: Code Change Applied
 ```javascript
-const continueUrl = "https://campuslostfound.vercel.app/login";
+// Before (causing error)
+await sendEmailVerification(user, {
+  url: "https://campuslostfound.vercel.app/login",
+  handleCodeInApp: false,
+});
+
+// After (fixed - no continue URL)
+await sendEmailVerification(user);
 ```
 
-## Firebase Console Configuration Required
+## Why This Fixes It
+- **No continue URL**: Eliminates domain validation issues
+- **Firebase default**: Uses Firebase's own verification page
+- **Universal compatibility**: Works in dev and production
+- **Zero configuration**: No domain setup required
 
-### 1. Go to Firebase Console
+## Email Verification Flow
+1. User signs up → Firebase sends verification email
+2. User clicks email link → Goes to Firebase verification page
+3. User gets confirmed → Can login normally
+4. App checks `user.emailVerified` status
 
-- Navigate to your project: `campusfoundlost`
-- Go to **Authentication** > **Settings** > **Authorized domains**
+## Alternative Solutions (if needed)
 
-### 2. Ensure These Domains Are Allowlisted
+### Option A: Add all domains to Firebase
+```
+localhost
+127.0.0.1
+campuslostfound.vercel.app
+```
 
-- `campuslostfound.vercel.app` ✅ (Production)
-- `localhost` (for development testing if needed)
-- Any other custom domains you plan to use
-
-### 3. Verification Email Flow
-
-1. User signs up → Email verification sent
-2. User clicks email link → Redirects to `https://campuslostfound.vercel.app/login`
-3. User logs in → Account is verified
-
-## Development vs Production
-
-- **Development**: Still uses production URL for email links (avoids domain issues)
-- **Production**: Uses production URL for email links (works seamlessly)
-- **Result**: Consistent experience, no unauthorized domain errors
-
-## Files Modified
-
-- `src/pages/Signup.jsx` - Updated `sendFirebaseEmailVerification` function
+### Option B: Use dynamic URL (advanced)
+```javascript
+const continueUrl = window.location.hostname === 'localhost' 
+  ? 'https://campuslostfound.vercel.app/login'
+  : `${window.location.origin}/login`;
+```
 
 ## Testing
+- **Signup**: Should work without domain errors
+- **Email**: Sent using Firebase's default template
+- **Verification**: Works on any device/browser
+- **Login**: Checks emailVerified status properly
 
-- Signup process now works without "unauthorized-continue-uri" error
+## Files Modified
+- `src/pages/Signup.jsx` - Removed continue URL from sendEmailVerification
+- `FIREBASE_AUTH_DOMAINS.md` - Updated documentation
 - Email verification links properly redirect to production login page
 - Users can complete verification flow successfully

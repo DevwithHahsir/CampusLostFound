@@ -126,15 +126,9 @@ const Signup = React.memo(() => {
   // Send Firebase email verification
   const sendFirebaseEmailVerification = async (user) => {
     try {
-      // Use production URL for continue URL to avoid unauthorized domain issues
-      // Firebase Auth only allows allowlisted domains for continue URLs
-      // Always use production URL for email verification links
-      const continueUrl = "https://campuslostfound.vercel.app/login";
-
-      await sendEmailVerification(user, {
-        url: continueUrl,
-        handleCodeInApp: false,
-      });
+      // Send verification email without continue URL to avoid domain issues
+      // This will use Firebase's default verification page
+      await sendEmailVerification(user);
 
       showAlert(
         "success",

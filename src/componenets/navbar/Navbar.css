@@ -103,7 +103,7 @@
 } */
 
 
-.log-btn{
+.log-btn {
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -115,10 +115,10 @@
     border: 1px solid #ddd;
     padding: 0.5rem 1rem;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
- 
+
 }
 
- .navbar .form-control:focus {
+.navbar .form-control:focus {
     border: 2px solid transparent;
     background: linear-gradient(white, white) padding-box,
         linear-gradient(45deg, #59B888, #5DC173, #54AE9E, #4E9FC1, #4382E4, #3B74D5) border-box;
@@ -130,7 +130,7 @@
 .btn-outline-success {
     border-radius: 10px;
     border: 1px solid transparent;
-    background: linear-gradient(white, white) padding-box,        linear-gradient(45deg, #59B888, #5DC173, #54AE9E, #4E9FC1, #4382E4, #3B74D5) border-box;
+    background: linear-gradient(white, white) padding-box, linear-gradient(45deg, #59B888, #5DC173, #54AE9E, #4E9FC1, #4382E4, #3B74D5) border-box;
     background-size: 300% 300%;
     color: #4382E4;
     font-weight: 500;
@@ -170,9 +170,65 @@
     color: black !important;
 }
 
-.icon
-{
+.icon {
     font-size: 1.2rem;
+}
+
+/* User Avatar Styles */
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #4382E4, #59B888);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 14px;
+    text-transform: uppercase;
+}
+
+.user-name {
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* User Dropdown Styles */
+.dropdown-menu {
+    border-radius: 10px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    margin-top: 8px;
+    min-width: 250px;
+}
+
+.dropdown-item-text {
+    padding: 10px 16px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    margin: 8px;
+    margin-bottom: 0;
+}
+
+.dropdown-item {
+    padding: 10px 16px;
+    transition: all 0.2s ease;
+    border-radius: 6px;
+    margin: 2px 8px;
+}
+
+.dropdown-item:hover {
+    background-color: #f0f8ff;
+    color: #4382E4;
+    transform: translateX(4px);
+}
+
+.dropdown-item.text-danger:hover {
+    background-color: #fff5f5;
+    color: #dc3545;
 }
 
 

@@ -123,38 +123,74 @@ const Navbar = () => {
             {isAuthenticated ? (
               // Show user menu when authenticated
               <>
-                <li className="nav-item">
-                  <span className="nav-link">
-                    Welcome, {user?.displayName || user?.email?.split("@")[0]}
-                  </span>
-                </li>
-                {/* <li className="nav-item">
-                  <a className="nav-link" href="#">
-                    <TfiComment className="icon" />
-                  </a>
-                </li> */}
-                <li className="nav-item log-btn">
-                  <button
-                    className="btn btn-outline-danger btn-sm"
-                    onClick={handleLogout}
+                <li className="nav-item dropdown">
+                  <a
+                    className="nav-link dropdown-toggle d-flex align-items-center"
+                    href="#"
+                    id="userDropdown"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
                   >
-                    Logout
-                  </button>
+                    <div className="user-avatar me-2">
+                      {(user?.displayName || user?.email?.split("@")[0])
+                        ?.charAt(0)
+                        ?.toUpperCase()}
+                    </div>
+                    <span className="user-name">
+                      {user?.displayName || user?.email?.split("@")[0]}
+                    </span>
+                  </a>
+                  <ul
+                    className="dropdown-menu dropdown-menu-end"
+                    aria-labelledby="userDropdown"
+                  >
+                    <li>
+                      <span className="dropdown-item-text">
+                        <strong>Signed in as:</strong>
+                        <br />
+                        <small>{user?.email}</small>
+                      </span>
+                    </li>
+                    <li>
+                      <hr className="dropdown-divider" />
+                    </li>
+                    <li>
+                      <Link className="dropdown-item" to="/dashboard">
+                        <i className="bi bi-person-circle me-2"></i>Dashboard
+                      </Link>
+                    </li>
+                    <li>
+                      <Link className="dropdown-item" to="/report">
+                        <i className="bi bi-plus-circle me-2"></i>Report Item
+                      </Link>
+                    </li>
+                    <li>
+                      <hr className="dropdown-divider" />
+                    </li>
+                    <li>
+                      <button
+                        className="dropdown-item text-danger"
+                        onClick={handleLogout}
+                      >
+                        <i className="bi bi-box-arrow-right me-2"></i>Logout
+                      </button>
+                    </li>
+                  </ul>
                 </li>
               </>
             ) : (
-              // Show login/signup when not authenticated
+              // Show only icon for account creation when not authenticated
               <>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/login">
-                    <IoPersonAddOutline className="icon" />
+                  <Link
+                    className="nav-link d-flex align-items-center"
+                    to="/signup"
+                    title="Create Account"
+                  >
+                    <IoPersonAddOutline className="icon" size={24} />
                   </Link>
                 </li>
-                {/* <li className="nav-item">
-                  <Link className="nav-link" to="/signup">
-                    Sign Up
-                  </Link>
-                </li> */}
               </>
             )}
           </ul>

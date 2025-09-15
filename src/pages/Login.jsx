@@ -70,7 +70,10 @@ const Login = React.memo(() => {
           email,
           password
         );
-        console.log("Firebase authentication successful:", userCredential.user.uid);
+        console.log(
+          "Firebase authentication successful:",
+          userCredential.user.uid
+        );
 
         // Check if email is verified
         if (!userCredential.user.emailVerified) {
@@ -157,7 +160,10 @@ const Login = React.memo(() => {
   // Memoized form submission handler
   const onSubmit = useCallback(
     async (data) => {
-      console.log("Form submitted with data:", { email: data.email, hasPassword: !!data.password });
+      console.log("Form submitted with data:", {
+        email: data.email,
+        hasPassword: !!data.password,
+      });
       try {
         await loginUser(data.email, data.password);
 

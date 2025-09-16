@@ -36,6 +36,24 @@ const Signup = React.memo(() => {
     }
   }, [isAuthenticated, isEmailVerified]);
 
+  // Restore signup data from session storage if page is refreshed during verification
+  useEffect(() => {
+    const savedSignupData = sessionStorage.getItem("pendingSignupData");
+    const savedStep = sessionStorage.getItem("signupStep");
+
+    if (savedSignupData && savedStep === "2") {
+      try {
+        const parsedData = JSON.parse(savedSignupData);
+        setCreatedUser(parsedData);
+        setStep(2);
+      } catch (error) {
+        console.error("Error restoring signup data:", error);
+        sessionStorage.removeItem("pendingSignupData");
+        sessionStorage.removeItem("signupStep");
+      }
+    }
+  }, []);
+
   // Memoized alert helper functions
   const showAlert = useCallback((type, message) => {
     setAlert({ show: true, type, message });
@@ -142,7 +160,7 @@ const Signup = React.memo(() => {
     }
   };
 
-  // Store user data in Firestore
+  // Store user data in Firestore (only called after email verification)
   const storeUserData = async (userData, userId, firestoreInstance) => {
     const signupUsersRef = collection(firestoreInstance, "Signup User");
     await addDoc(signupUsersRef, {
@@ -151,9 +169,10 @@ const Signup = React.memo(() => {
       email: userData.email,
       university: userData.university,
       campus: userData.campus,
-      emailVerified: true,
+      emailVerified: true, // User is verified when this function is called
       createdAt: new Date(),
       status: "verified",
+      verifiedAt: new Date(), // Track when verification was completed
     });
   };
 
@@ -174,8 +193,20 @@ const Signup = React.memo(() => {
           displayName: data.fullName,
         });
 
-        // Store additional user data in Firestore
-        await storeUserData(data, userCredential.user.uid, db);
+        // Store user data temporarily (we'll add to DB after verification)
+        const userWithSignupData = {
+          ...userCredential.user,
+          signupData: data, // Store the form data for later use
+        };
+
+        setCreatedUser(userWithSignupData);
+
+        // Save to session storage in case user refreshes page
+        sessionStorage.setItem(
+          "pendingSignupData",
+          JSON.stringify(userWithSignupData)
+        );
+        sessionStorage.setItem("signupStep", "2");
 
         // Send Firebase email verification
         const emailSent = await sendFirebaseEmailVerification(
@@ -183,7 +214,6 @@ const Signup = React.memo(() => {
         );
 
         if (emailSent) {
-          setCreatedUser(userCredential.user);
           setStep(2);
           showAlert(
             "success",
@@ -217,13 +247,20 @@ const Signup = React.memo(() => {
       // Step 2: Check email verification status
       setSignupLoading(true);
       try {
-        if (createdUser) {
+        if (createdUser && createdUser.signupData) {
           await createdUser.reload(); // Refresh user data
 
           if (createdUser.emailVerified) {
+            // Now store user data in Firestore after email verification
+            await storeUserData(createdUser.signupData, createdUser.uid, db);
+
+            // Clean up session storage
+            sessionStorage.removeItem("pendingSignupData");
+            sessionStorage.removeItem("signupStep");
+
             showAlert(
               "success",
-              "Email verified successfully! Redirecting to login..."
+              "Email verified successfully! Account setup complete. Redirecting to login..."
             );
             setTimeout(() => {
               window.location.href = "/";
@@ -234,12 +271,16 @@ const Signup = React.memo(() => {
               "Email not verified yet. Please check your email and click the verification link."
             );
           }
+        } else {
+          showAlert(
+            "error",
+            "No user data found. Please try signing up again."
+          );
+          setStep(1);
         }
       } catch (error) {
-        showAlert(
-          "error",
-          "Error checking verification status: " + error.message
-        );
+        console.error("Error during verification:", error);
+        showAlert("error", "Error completing account setup: " + error.message);
       } finally {
         setSignupLoading(false);
       }

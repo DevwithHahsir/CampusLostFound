@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../firebaseConfig/firebaseCore";
+import { useAuth } from "../../AuthContext/AuthContext";
 import {
   CiFileOn,
   CiLocationOn,
@@ -16,14 +17,76 @@ const ItemsList = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [filter, setFilter] = useState("all"); // 'all', 'lost', 'found'
+  const { user, isAuthenticated, loading: authLoading } = useAuth();
 
-  // Fetch items from Firebase
+  // Extract university domain from user email
+  const getUserUniversityDomain = (email) => {
+    if (!email) return null;
+    const domain = email.split("@")[1];
+    return domain;
+  };
+
+  // Fetch items from Firebase with university filtering
   useEffect(() => {
+    console.log("🔄 useEffect triggered with:", {
+      authLoading,
+      isAuthenticated,
+      userEmail: user?.email,
+      timestamp: new Date().toLocaleTimeString(),
+    });
+
     const fetchItems = async () => {
       try {
+        // Debug logging
+        console.log("📦 ItemsList Auth Debug:", {
+          authLoading,
+          isAuthenticated,
+          userEmail: user?.email,
+        });
+
+        // Wait for authentication to finish loading
+        if (authLoading) {
+          console.log("⏳ Auth still loading, waiting...");
+          setLoading(true);
+          return;
+        }
+
+        // Set loading to true only when we're about to fetch
         setLoading(true);
+
+        // If user is not authenticated, show no items
+        if (!isAuthenticated || !user?.email) {
+          console.log("🚫 User not authenticated or no email - CLEARING ITEMS");
+          setItems([]);
+          setError(
+            "Please log in to view lost and found items from your university."
+          );
+          setLoading(false);
+          return;
+        }
+
+        // Clear any previous errors
+        setError(null);
+
+        const userDomain = getUserUniversityDomain(user.email);
+        console.log("🏫 User domain extracted:", userDomain);
+
+        if (!userDomain) {
+          setItems([]);
+          setError(
+            "Unable to determine your university from your email address."
+          );
+          setLoading(false);
+          return;
+        }
+
         const itemsCollection = collection(db, "items");
-        const q = query(itemsCollection, orderBy("createdAt", "desc"));
+
+        // Query items by university domain (without orderBy to avoid index requirement)
+        const q = query(
+          itemsCollection,
+          where("university.domain", "==", userDomain)
+        );
         const querySnapshot = await getDocs(q);
 
         const fetchedItems = [];
@@ -34,8 +97,23 @@ const ItemsList = () => {
           });
         });
 
-        console.log("Fetched items:", fetchedItems);
-        console.log("Sample item structure:", fetchedItems[0]);
+        // Sort the results by createdAt in JavaScript
+        fetchedItems.sort((a, b) => {
+          const dateA = a.createdAt?.toDate
+            ? a.createdAt.toDate()
+            : new Date(a.createdAt);
+          const dateB = b.createdAt?.toDate
+            ? b.createdAt.toDate()
+            : new Date(b.createdAt);
+          return dateB - dateA; // Descending order (newest first)
+        });
+
+        console.log(
+          "✅ Fetched items for university:",
+          userDomain,
+          fetchedItems
+        );
+        console.log("📊 Setting items count:", fetchedItems.length);
         setItems(fetchedItems);
         setError(null);
       } catch (err) {
@@ -46,8 +124,11 @@ const ItemsList = () => {
       }
     };
 
-    fetchItems();
-  }, []);
+    // Only fetch if we have the necessary auth state
+    if (!authLoading) {
+      fetchItems();
+    }
+  }, [isAuthenticated, user?.email, authLoading]); // Removed user?.uid to reduce re-renders
 
   // Filter items based on status
   const filteredItems = items.filter((item) => {
@@ -58,9 +139,10 @@ const ItemsList = () => {
     return item.role === filter;
   });
 
-  console.log("Total items:", items.length);
-  console.log("Filtered items:", filteredItems.length);
-  console.log("Current filter:", filter);
+  console.log("📋 Total items:", items.length);
+  console.log("🔍 Filtered items:", filteredItems.length);
+  console.log("🏷️ Current filter:", filter);
+  console.log("📊 Items array:", items.length > 0 ? "HAS ITEMS" : "EMPTY");
 
   // Format date
   const formatDate = (timestamp) => {
@@ -92,12 +174,16 @@ const ItemsList = () => {
     );
   };
 
-  if (loading) {
+  if (authLoading || loading) {
     return (
       <div className="items-list-container">
         <div className="loading">
           <div className="spinner"></div>
-          <p>Loading items...</p>
+          <p>
+            {authLoading
+              ? "Authenticating..."
+              : "Loading items from your university..."}
+          </p>
         </div>
       </div>
     );
@@ -117,7 +203,16 @@ const ItemsList = () => {
   return (
     <div className="items-list-container">
       <div className="items-header">
-        <h2>Lost & Found Items</h2>
+        <h2>
+          Lost & Found Items
+          {isAuthenticated && user?.email && (
+            <span className="university-info">
+              {" - " +
+                (getUserUniversityDomain(user.email)?.toUpperCase() ||
+                  "Your University")}
+            </span>
+          )}
+        </h2>
         <div className="filter-buttons">
           <button
             className={filter === "all" ? "active" : ""}
@@ -144,7 +239,18 @@ const ItemsList = () => {
 
       {filteredItems.length === 0 ? (
         <div className="no-items">
-          <p>No {filter === "all" ? "" : filter} items found.</p>
+          <p>
+            {!isAuthenticated
+              ? "Please log in to view lost and found items from your university."
+              : `No ${
+                  filter === "all" ? "" : filter
+                } items found from your university (${getUserUniversityDomain(
+                  user?.email
+                )}).`}
+          </p>
+          {isAuthenticated && (
+            <p className="hint">Be the first to report a lost or found item!</p>
+          )}
         </div>
       ) : (
         <div className="items-grid">
@@ -163,9 +269,7 @@ const ItemsList = () => {
               </div>
 
               <div className="item-title-container">
-                <h3 className="item-title">
-                 {item.title || "Unknown Item"}
-                </h3>
+                <h3 className="item-title">{item.title || "Unknown Item"}</h3>
               </div>
               {(item.imageUrl || (item.image && item.image.imageUrl)) && (
                 <div className="card-image">

@@ -30,6 +30,13 @@
     letter-spacing: 1px;
 }
 
+.items-header h2 .university-info {
+    font-size: 1.2rem;
+    opacity: 0.8;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+}
+
 .filter-buttons {
     display: flex;
     justify-content: center;
@@ -153,6 +160,14 @@
     padding: 3rem;
     color: #666;
     font-size: 1.2rem;
+}
+
+.no-items .hint {
+    margin-top: 1rem;
+    font-size: 1rem;
+    font-style: italic;
+    opacity: 0.8;
+    color: #4382E4;
 }
 
 /* Items Grid */
@@ -313,7 +328,7 @@
 
 .item-category {
     color: #555;
-    
+
     font-weight: 600;
     margin: 0 0 0.75rem 0;
     font-size: 0.95rem;

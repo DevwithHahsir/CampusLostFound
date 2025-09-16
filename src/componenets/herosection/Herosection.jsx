@@ -288,7 +288,7 @@ const Herosection = React.memo(() => {
       <div className="logo-loop-container">
         <div
           style={{
-            height: "200px",
+            height: "140px",
             position: "relative",
             overflow: "hidden",
             display: "flex",

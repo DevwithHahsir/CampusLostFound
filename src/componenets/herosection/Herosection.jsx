@@ -9,6 +9,78 @@ import { useAuth } from "../../AuthContext/AuthContext";
 import { useNavigate } from "react-router-dom";
 import ReportItemForm from "../reportForm/ReportItemForm";
 import { authValidationUtils } from "../../utils/authValidation";
+import ItemsList from "../items/ItemsList";
+
+import LogoLoop from "../../animation/LogoLoop";
+
+// Import university logos
+import PuLogo from "../../assets/Pu.png";
+import NustLogo from "../../assets/Nust.png";
+import FastLogo from "../../assets/Fast.png";
+import UetLogo from "../../assets/UET.png";
+import ComsatsLogo from "../../assets/Comsats.png";
+import IbaLogo from "../../assets/IBA.png";
+import QauLogo from "../../assets/QAU.png";
+import GikiLogo from "../../assets/giki.png";
+import UmtLogo from "../../assets/UMT.png";
+
+const universityLogos = [
+  {
+    src: PuLogo,
+    alt: "University of the Punjab",
+    title: "University of the Punjab",
+    href: "https://pu.edu.pk",
+  },
+  {
+    src: NustLogo,
+    alt: "NUST",
+    title: "National University of Sciences and Technology",
+    href: "https://nust.edu.pk",
+  },
+  {
+    src: FastLogo,
+    alt: "FAST-NU",
+    title: "FAST National University",
+    href: "https://nu.edu.pk",
+  },
+  {
+    src: UetLogo,
+    alt: "UET",
+    title: "University of Engineering and Technology",
+    href: "https://uet.edu.pk",
+  },
+  {
+    src: ComsatsLogo,
+    alt: "COMSATS",
+    title: "COMSATS University Islamabad",
+    href: "https://comsats.edu.pk",
+  },
+  {
+    src: IbaLogo,
+    alt: "IBA",
+    title: "Institute of Business Administration",
+    href: "https://iba.edu.pk",
+  },
+  {
+    src: QauLogo,
+    alt: "QAU",
+    title: "Quaid-i-Azam University",
+    href: "https://qau.edu.pk",
+  },
+  {
+    src: GikiLogo,
+    alt: "GIKI",
+    title: "Ghulam Ishaq Khan Institute of Engineering Sciences and Technology",
+    href: "https://giki.edu.pk",
+  },
+  {
+    src: UmtLogo,
+    alt: "UMT",
+    title: "University of Management & Technology",
+    href: "https://umt.edu.pk",
+  }
+];
+
 
 const Herosection = React.memo(() => {
   const [showReportForm, setShowReportForm] = useState(false);
@@ -17,11 +89,36 @@ const Herosection = React.memo(() => {
 
   // Memoized handlers to prevent unnecessary re-renders
   const handleReportItemClick = useCallback(() => {
+    // If form is already showing, just toggle it off
+    if (showReportForm) {
+      setShowReportForm(false);
+      return;
+    }
+
+    // Debug: Log authentication state
+    console.log("Authentication Debug:", {
+      user: user,
+      isAuthenticated: isAuthenticated,
+      isEmailVerified: isEmailVerified,
+      userUid: user?.uid,
+      userEmail: user?.email,
+      userEmailVerified: user?.emailVerified,
+    });
+
     const validation = authValidationUtils.validateReportAccess(
       user,
       isAuthenticated,
       isEmailVerified
     );
+
+    console.log("Validation Result:", validation);
+
+    // If user is clearly authenticated and email verified, show form directly
+    if (isAuthenticated && user && user.uid && isEmailVerified) {
+      console.log("User is authenticated and verified, showing form");
+      setShowReportForm(true);
+      return;
+    }
 
     if (!validation.canReport) {
       validation.errors.forEach((error) => {
@@ -31,7 +128,7 @@ const Herosection = React.memo(() => {
             state: {
               message: error.message,
               from: "report-item",
-              redirectTo: "/report",
+              redirectTo: "/",
             },
           });
         } else if (error.action === "show_alert") {
@@ -43,7 +140,7 @@ const Herosection = React.memo(() => {
     }
 
     setShowReportForm(true);
-  }, [user, isAuthenticated, isEmailVerified, navigate]);
+  }, [user, isAuthenticated, isEmailVerified, navigate, showReportForm]);
 
   const handleReportFormSubmit = useCallback(() => {
     setShowReportForm(false);
@@ -54,7 +151,14 @@ const Herosection = React.memo(() => {
   }, []);
 
   const handleBrowseFoundItems = useCallback(() => {
-    // TODO: Navigate to found items page
+    // Scroll to the ItemsList section
+    const itemsListElement = document.querySelector(".items-list-container");
+    if (itemsListElement) {
+      itemsListElement.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
   }, []);
 
   return (
@@ -157,7 +261,7 @@ const Herosection = React.memo(() => {
           <section className="herosection-btns">
             <div className="btn1">
               <Button
-                text="Report Lost Item"
+                text={showReportForm ? "Hide Report Form" : "Report Lost Item"}
                 className="hero-btn hero-btn-primary"
                 onClick={handleReportItemClick}
               />
@@ -171,15 +275,45 @@ const Herosection = React.memo(() => {
             </div>
           </section>
         </div>
+
+        {/* Inline Report Form */}
+        {showReportForm && (
+          <ReportItemForm
+            onClose={handleReportFormClose}
+            onSubmit={handleReportFormSubmit}
+          />
+        )}
       </main>
 
-      {/* Report Form Modal */}
-      {showReportForm && (
-        <ReportItemForm
-          onClose={handleReportFormClose}
-          onSubmit={handleReportFormSubmit}
-        />
-      )}
+      <div className="logo-loop-container">
+        <div
+          style={{
+            height: "200px",
+            position: "relative",
+            overflow: "hidden",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
+          }}
+        >
+          <LogoLoop
+            logos={universityLogos}
+            speed={120}
+            direction="left"
+            logoHeight={48}
+            gap={40}
+            pauseOnHover
+            scaleOnHover
+            fadeOut
+            fadeOutColor="#ffffff"
+            ariaLabel="Pakistani Universities"
+          />
+        </div>
+      </div>
+
+      {/* List Items//////item cards */}
+      <ItemsList />
     </>
   );
 });

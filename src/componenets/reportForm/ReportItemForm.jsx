@@ -969,11 +969,11 @@ const ReportItemForm = React.memo(({ onClose, onSubmit }) => {
   );
 
   return (
-    <div className="report-form-overlay">
+    <div className="report-form-inline">
       <div className="report-form-container">
         <div className="form-header">
           <h2>Report Item</h2>
-          <button onClick={onClose} className="close-btn">
+          <button onClick={onClose} className="close-btn" type="button">
             &times;
           </button>
         </div>

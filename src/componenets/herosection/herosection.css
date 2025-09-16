@@ -132,7 +132,7 @@
 
 /* Hero Button Styles */
 .hero-btn {
-    
+
     padding: 1rem 2rem;
     border-radius: 10px;
     font-weight: 600;
@@ -281,7 +281,7 @@
     .hero-title {
         font-size: 3rem !important;
     }
-    
+
     .hero-subtitle {
         /* font-size: 1.5rem; */
         font-size: 2.5rem !important;
@@ -292,8 +292,8 @@
         width: 22rem !important;
         /* border: 1px solid; */
     }
-    .herosection-status .status
-    {
+
+    .herosection-status .status {
         font-size: small;
     }
 
@@ -314,3 +314,85 @@
     }
 }
 
+/* Inline Report Form Styles within Hero Section */
+.hero-section .report-form-inline {
+    margin-top: 3rem;
+    width: 100%;
+    max-width: 100%;
+    padding: 0 1rem;
+}
+
+.hero-section .report-form-inline .report-form-container {
+    margin: 0 auto;
+    max-height: 80vh;
+    overflow-y: auto;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(59, 116, 213, 0.2);
+    max-width: 700px;
+    width: 100%;
+}
+
+/* Logo Loop Container Styles */
+.logo-loop-container {
+    width: 100%;
+    margin: 3rem 0;
+    padding: 2rem 0;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+}
+
+.logo-loop-container>div {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+/* Ensure LogoLoop is visible and centered */
+.logoloop {
+    opacity: 1;
+    visibility: visible;
+    display: flex;
+    position: relative;
+    z-index: 2;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+/* Mobile responsiveness for logo loop */
+@media (max-width: 768px) {
+    .logo-loop-container {
+        margin: 2rem 0;
+        padding: 1.5rem 0;
+        min-height: 150px;
+    }
+
+    .logo-loop-container>div {
+        padding: 0 0.5rem;
+    }
+}
+
+/* Additional centering and styling for logo loop */
+.logoloop__track {
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.logoloop__list {
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.logoloop__item {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}

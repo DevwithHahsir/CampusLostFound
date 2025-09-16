@@ -44,8 +44,15 @@ const Signup = React.memo(() => {
     if (savedSignupData && savedStep === "2") {
       try {
         const parsedData = JSON.parse(savedSignupData);
-        setCreatedUser(parsedData);
-        setStep(2);
+        // Only restore if there's a current authenticated user
+        if (auth.currentUser) {
+          setCreatedUser(parsedData);
+          setStep(2);
+        } else {
+          // Clean up if no authenticated user
+          sessionStorage.removeItem("pendingSignupData");
+          sessionStorage.removeItem("signupStep");
+        }
       } catch (error) {
         console.error("Error restoring signup data:", error);
         sessionStorage.removeItem("pendingSignupData");
@@ -248,28 +255,40 @@ const Signup = React.memo(() => {
       setSignupLoading(true);
       try {
         if (createdUser && createdUser.signupData) {
-          await createdUser.reload(); // Refresh user data
+          // Get the current authenticated user from Firebase Auth
+          const currentUser = auth.currentUser;
+          
+          if (currentUser) {
+            // Refresh the current user's data
+            await currentUser.reload();
 
-          if (createdUser.emailVerified) {
-            // Now store user data in Firestore after email verification
-            await storeUserData(createdUser.signupData, createdUser.uid, db);
+            if (currentUser.emailVerified) {
+              // Now store user data in Firestore after email verification
+              await storeUserData(createdUser.signupData, currentUser.uid, db);
 
-            // Clean up session storage
-            sessionStorage.removeItem("pendingSignupData");
-            sessionStorage.removeItem("signupStep");
+              // Clean up session storage
+              sessionStorage.removeItem("pendingSignupData");
+              sessionStorage.removeItem("signupStep");
 
-            showAlert(
-              "success",
-              "Email verified successfully! Account setup complete. Redirecting to login..."
-            );
-            setTimeout(() => {
-              window.location.href = "/";
-            }, 2000);
+              showAlert(
+                "success",
+                "Email verified successfully! Account setup complete. Redirecting to login..."
+              );
+              setTimeout(() => {
+                window.location.href = "/";
+              }, 2000);
+            } else {
+              showAlert(
+                "error",
+                "Email not verified yet. Please check your email and click the verification link."
+              );
+            }
           } else {
             showAlert(
               "error",
-              "Email not verified yet. Please check your email and click the verification link."
+              "No authenticated user found. Please try signing up again."
             );
+            setStep(1);
           }
         } else {
           showAlert(

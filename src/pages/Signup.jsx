@@ -44,15 +44,8 @@ const Signup = React.memo(() => {
     if (savedSignupData && savedStep === "2") {
       try {
         const parsedData = JSON.parse(savedSignupData);
-        // Only restore if there's a current authenticated user
-        if (auth.currentUser) {
-          setCreatedUser(parsedData);
-          setStep(2);
-        } else {
-          // Clean up if no authenticated user
-          sessionStorage.removeItem("pendingSignupData");
-          sessionStorage.removeItem("signupStep");
-        }
+        setCreatedUser(parsedData);
+        setStep(2);
       } catch (error) {
         console.error("Error restoring signup data:", error);
         sessionStorage.removeItem("pendingSignupData");
@@ -255,11 +248,11 @@ const Signup = React.memo(() => {
       setSignupLoading(true);
       try {
         if (createdUser && createdUser.signupData) {
-          // Get the current authenticated user from Firebase Auth
+          // Get the current user from Firebase Auth (not from state)
           const currentUser = auth.currentUser;
-          
+
           if (currentUser) {
-            // Refresh the current user's data
+            // Reload the user to get fresh email verification status
             await currentUser.reload();
 
             if (currentUser.emailVerified) {
@@ -286,7 +279,7 @@ const Signup = React.memo(() => {
           } else {
             showAlert(
               "error",
-              "No authenticated user found. Please try signing up again."
+              "User session not found. Please try signing up again."
             );
             setStep(1);
           }

@@ -46,46 +46,90 @@ export default function Navbar() {
 
         {/* Collapsible content */}
         <div className="collapse navbar-collapse" id="navbarContent">
-          {/* Center - Search Bar */}
-          <div className="mx-auto">
-            <form className="d-flex">
+          {/* Center - Navigation Links */}
+          <div className="navbar-nav mx-auto">
+            <Link className="nav-link" to="/about">
+              About
+            </Link>
+            <Link className="nav-link" to="/how-it-works">
+              How It Works
+            </Link>
+            <Link className="nav-link" to="/universities">
+              Universities
+            </Link>
+            <Link className="nav-link" to="/blog">
+              Blog
+            </Link>
+            <Link className="nav-link" to="/contact">
+              Contact
+            </Link>
+            {/* <Link className="nav-link" to="/report">
+              Report Item
+            </Link> */}
+            <Link className="nav-link" to="/privacy-policy">
+              Privacy Policy
+            </Link>
+            <Link className="nav-link" to="/terms-of-service">
+              Terms of Service
+            </Link>
+          </div>
+
+          {/* Right - Search Bar & User Actions */}
+          <div className="d-flex align-items-center">
+            {/* Search Bar */}
+            {/* <form className="d-flex me-3">
               <input
                 className="form-control me-2"
                 type="search"
                 placeholder="Search items..."
                 aria-label="Search"
-                style={{ width: "300px" }}
+                style={{ width: "200px" }}
               />
               <button className="btn btn-outline-success" type="submit">
                 Search
               </button>
-            </form>
-          </div>
+            </form> */}
 
-          {/* Right - User Actions */}
-          <div className="navbar-nav">
+            {/* User Actions */}
             {user ? (
-              <>
-                <span className="navbar-text me-3">Hi, {user.email}</span>
-                <div className="log-btn">
-
-                <button 
-                  onClick={handleLogout}
-                  className="btn btn-outline-danger"
-                  >
-                  Logout
-                </button>
-                  </div>
-              </>
+              <div className="nav-item dropdown">
+                <a
+                  className="nav-link dropdown-toggle"
+                  href="#"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  Account
+                </a>
+                <ul className="dropdown-menu dropdown-menu-end">
+                  <li>
+                    <span className="dropdown-item-text">{user.email}</span>
+                  </li>
+                  <li>
+                    <hr className="dropdown-divider" />
+                  </li>
+                  <li>
+                    <Link className="dropdown-item" to="/dashboard">
+                      Dashboard
+                    </Link>
+                  </li>
+                  <li>
+                    <button className="dropdown-item" onClick={handleLogout}>
+                      Logout
+                    </button>
+                  </li>
+                </ul>
+              </div>
             ) : (
-              <>
+              <div className="d-flex">
                 <Link to="/login" className="btn btn-outline-primary me-2">
                   Login
                 </Link>
                 <Link to="/signup" className="btn btn-primary">
                   Signup
                 </Link>
-              </>
+              </div>
             )}
           </div>
         </div>

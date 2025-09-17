@@ -226,7 +226,7 @@ const Herosection = React.memo(() => {
             <CiHeart className="icon" />
           </div>
 
-          <header className="hero-text">
+          <header className=" heading hero-text">
             <h1 className="hero-title heading">Lost Something?</h1>
             <h2 className="hero-subtitle sub-heading">
               Let's Find it Together

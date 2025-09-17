@@ -71,7 +71,7 @@ export default function Dashboard() {
         ]}
       />
       <div>
-        <Navbar />
+      
         <div className="container mt-5">
           <div className="row">
             <div className="col-12">

@@ -8,20 +8,30 @@ import { Suspense, lazy, useState, memo } from "react";
 import { useAuth } from "./AuthContext/AuthContext";
 import MinimalLoader from "./componenets/loader/MinimalLoader";
 
-// Lazy load ALL components for better performance
+// Lazy load essential components that don't affect routing
 const Navbar = lazy(() => import("./componenets/navbar/Navbar"));
 const SEO = lazy(() => import("./componenets/seo/SEO"));
-const Herosection = lazy(() => import("./componenets/herosection/Herosection"));
 const ReportItemForm = lazy(() =>
   import("./componenets/reportForm/ReportItemForm")
 );
 
-// Lazy load pages for better performance - load only when needed
-const Login = lazy(() => import("./pages/Login"));
-const Signup = lazy(() => import("./pages/Signup"));
-const Dashboard = lazy(() => import("./pages/Dashboard"));
-const Report = lazy(() => import("./pages/Report"));
-const ReportDemo = lazy(() => import("./pages/ReportDemo"));
+// Import components directly for testing
+import Herosection from "./componenets/herosection/Herosection";
+import Footer from "./componenets/footer/Footer";
+
+// Import pages directly for testing (remove lazy loading temporarily)
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import Dashboard from "./pages/Dashboard";
+import Report from "./pages/Report";
+import ReportDemo from "./pages/ReportDemo";
+import About from "./pages/About";
+import HowItWorks from "./pages/HowItWorks";
+import Blog from "./pages/Blog";
+import Contact from "./pages/Contact";
+import Universities from "./pages/Universities";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService";
 
 // Optimized conditional navbar component
 const ConditionalNavbar = memo(() => {
@@ -34,6 +44,15 @@ const ConditionalNavbar = memo(() => {
       <Navbar />
     </Suspense>
   ) : null;
+});
+
+// Optimized conditional footer component
+const ConditionalFooter = memo(() => {
+  const location = useLocation();
+  const showFooter =
+    location.pathname !== "/login" && location.pathname !== "/signup";
+
+  return showFooter ? <Footer /> : null;
 });
 
 // Main App Content Component
@@ -140,25 +159,34 @@ const AppContent = memo(() => {
       />
       <ConditionalNavbar />
 
-      <Suspense fallback={<MinimalLoader />}>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/" element={<Herosection />} />
-          <Route
-            path="/lost"
-            element={<div>Lost Items Page - Coming Soon</div>}
-          />
-          <Route
-            path="/found"
-            element={<div>Found Items Page - Coming Soon</div>}
-          />
-          <Route path="/report" element={<Report />} />
-          <Route path="/demo" element={<ReportDemo />} />
-          <Route path="*" element={<div>404 - Page Not Found</div>} />
-        </Routes>
-      </Suspense>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/" element={<Herosection />} />
+
+        {/* New AdSense-ready pages */}
+        <Route path="/about" element={<About />} />
+        <Route path="/how-it-works" element={<HowItWorks />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/universities" element={<Universities />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/terms-of-service" element={<TermsOfService />} />
+
+        {/* Existing routes */}
+        <Route
+          path="/lost"
+          element={<div>Lost Items Page - Coming Soon</div>}
+        />
+        <Route
+          path="/found"
+          element={<div>Found Items Page - Coming Soon</div>}
+        />
+        <Route path="/report" element={<Report />} />
+        <Route path="/demo" element={<ReportDemo />} />
+        <Route path="*" element={<div>404 - Page Not Found</div>} />
+      </Routes>
 
       {/* Global Report Form */}
       {showReportForm && (
@@ -169,6 +197,8 @@ const AppContent = memo(() => {
           />
         </Suspense>
       )}
+
+      <ConditionalFooter />
     </>
   );
 });
@@ -181,5 +211,10 @@ const App = memo(() => {
     </Router>
   );
 });
+
+AppContent.displayName = "AppContent";
+ConditionalNavbar.displayName = "ConditionalNavbar";
+ConditionalFooter.displayName = "ConditionalFooter";
+App.displayName = "App";
 
 export default App;

@@ -42,7 +42,6 @@
 .hero-icon .icon {
     font-size: 3.5rem;
     color: white;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
 .hero-text {
@@ -56,7 +55,7 @@
     align-items: center;
 }
 
-.hero-title, heading {
+.hero-title, .heading {
     font-family: "Bebas Neue", sans-serif;
     font-weight: 400;
     font-style: normal;
@@ -75,14 +74,14 @@
     font-weight: 400;
     font-style: normal;
     font-size: 5rem;
-    color: #1D2530;
+    color: #1D2530 !important;
 
 }
 
 .hero-description, .description {
     font-size: 1.6rem;
     line-height: 1.6;
-    color: #8b8d8f;
+    color: #1D2530 !important;
     margin: 0;
 
     width: 70vw !important;
@@ -96,7 +95,7 @@
 
 .herosection-status .status {
     font-size: medium;
-    color: #8b8d8f;
+    color: #1D2530 !important;
 }
 
 .icon1 {

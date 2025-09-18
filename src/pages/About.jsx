@@ -4,7 +4,7 @@ import {
   CiHeart,
   CiLock,
   CiGlobe,
- 
+//  CiUsers,
   CiTrophy,
 } from "react-icons/ci";
 import SEO from "../componenets/seo/SEO";
@@ -159,7 +159,7 @@ const About = () => {
               </div>
 
               <div className="benefit-card">
-                <CiUsers className="benefit-icon" />
+                {/* <CiUsers className="benefit-icon" /> */}
                 <h3>Community Building</h3>
                 <p>
                   Help fellow students while building a supportive campus

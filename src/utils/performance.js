@@ -26,18 +26,74 @@ export const performanceMonitor = {
   // Lazy loading observer for images
   createImageObserver: () => {
     if ("IntersectionObserver" in window) {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const img = entry.target;
-            img.src = img.dataset.src;
-            img.classList.remove("lazy");
-            observer.unobserve(img);
-          }
-        });
-      });
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const img = entry.target;
+              if (img.dataset.src) {
+                img.src = img.dataset.src;
+                img.classList.remove("lazy");
+                observer.unobserve(img);
+              }
+            }
+          });
+        },
+        { threshold: 0.1 }
+      );
       return observer;
     }
     return null;
+  },
+
+  // Debounce function to limit expensive operations
+  debounce: (func, wait) => {
+    let timeout;
+    return function executedFunction(...args) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
+  },
+
+  // Throttle function for scroll events
+  throttle: (func, limit) => {
+    let inThrottle;
+    return function (...args) {
+      if (!inThrottle) {
+        func.apply(this, args);
+        inThrottle = true;
+        setTimeout(() => (inThrottle = false), limit);
+      }
+    };
+  },
+
+  // Optimize font loading
+  optimizeFonts: () => {
+    const style = document.createElement("style");
+    style.textContent = `
+      @font-face {
+        font-family: 'Bebas Neue';
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'system-ui';
+        font-display: swap;
+      }
+    `;
+    document.head.appendChild(style);
+  },
+
+  // Preload critical resources
+  preloadResource: (href, as, type = null) => {
+    const link = document.createElement("link");
+    link.rel = "preload";
+    link.href = href;
+    link.as = as;
+    if (type) link.type = type;
+    document.head.appendChild(link);
   },
 };

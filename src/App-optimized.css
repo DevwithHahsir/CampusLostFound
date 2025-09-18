@@ -1,0 +1,6 @@
+/* Minimal App styles - most styling moved to components */
+#root {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}

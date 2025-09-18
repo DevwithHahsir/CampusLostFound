@@ -9,7 +9,7 @@ import {
   CiChat2,
   CiBadgeDollar,
   CiGlobe,
-  CiX,
+
   CiCircleCheck,
   CiCircleAlert,
 } from "react-icons/ci";

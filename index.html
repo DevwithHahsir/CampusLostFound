@@ -5,13 +5,16 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/vite.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Pakistan's premier university lost and found platform. Report lost items, browse found items, and connect with your campus community across 43+ Pakistani universities. Safe, secure, and student-focused.">
 
-  <!-- Performance optimizations -->
+  <!-- Essential preconnects only -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+
+  <!-- DNS prefetch for non-critical resources -->
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
   <link rel="dns-prefetch" href="https://firebase.googleapis.com">
-  <link rel="dns-prefetch" href="https://firestore.googleapis.com">
 
   <!-- Critical CSS for immediate render -->
   <style>
@@ -28,6 +31,16 @@
       display: flex;
       flex-direction: column;
     }
+
+    /* Critical loading styles */
+    .loading-fallback {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-size: 18px;
+      color: #666;
+    }
   </style>
 
   <title>Campus Lost Found Pakistan | University Students Lost & Found Platform</title>
@@ -35,7 +48,7 @@
 
 <body>
   <div id="root">
-    <!-- No initial loader - React will handle loading states -->
+    <div class="loading-fallback">Loading...</div>
   </div>
   <script type="module" src="/src/main.jsx"></script>
 </body>

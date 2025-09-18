@@ -23,7 +23,6 @@ import IbaLogo from "../../assets/IBA.png";
 import QauLogo from "../../assets/QAU.png";
 import GikiLogo from "../../assets/giki.png";
 import UmtLogo from "../../assets/UMT.png";
-
 const universityLogos = [
   {
     src: PuLogo,
@@ -78,9 +77,8 @@ const universityLogos = [
     alt: "UMT",
     title: "University of Management & Technology",
     href: "https://umt.edu.pk",
-  }
+  },
 ];
-
 
 const Herosection = React.memo(() => {
   const [showReportForm, setShowReportForm] = useState(false);

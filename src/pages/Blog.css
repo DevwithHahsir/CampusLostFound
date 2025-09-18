@@ -60,7 +60,7 @@
 .search-input {
     width: 100%;
     padding: 15px 20px 15px 50px;
-    border: none;
+    border: none !important;
     border-radius: 50px;
     font-size: 1.1rem;
     outline: none;
@@ -225,16 +225,16 @@
     box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
 }
 
-.featured-image {
+/* .featured-image {
     border-radius: 15px;
     overflow: hidden;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-}
+} */
 
 .featured-image img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
+    width: 10rem;
+    height: 10rem;
+    object-fit: contain;
 }
 
 /* Articles Section */
@@ -284,11 +284,13 @@
     position: relative;
     height: 200px;
     overflow: hidden;
+    display: flex;
+    justify-content: center;
 }
 
 .article-image img {
-    width: 100%;
-    height: 100%;
+    width: 10rem;
+    height: 10rem;
     object-fit: cover;
     transition: transform 0.3s ease;
 }

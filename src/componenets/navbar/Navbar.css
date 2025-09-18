@@ -28,11 +28,24 @@
     color: #4382E4;
     font-weight: 500;
     margin: 0 0.5rem;
-    transition: color 0.3s ease;
+    transition: all 0.3s ease;
+    position: relative;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
 }
 
 .navbar-nav.mx-auto .nav-link:hover {
     color: #59B888;
+    background: rgba(89, 184, 136, 0.1);
+}
+
+.navbar-nav.mx-auto .nav-link.active {
+    color: white !important;
+    background: linear-gradient(45deg, #3B74D5, #4382E4, #4E9FC1, #54AE9E, #59B888, #5DC173);
+    background-size: 300% 300%;
+    animation: gradientShift 4s ease-in-out infinite;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(59, 116, 213, 0.3);
 }
 
 .navbar-brand {
@@ -97,8 +110,13 @@
 }
 
 .nav-link.active {
-    color: #007bff !important;
+    color: white !important;
+    background: linear-gradient(45deg, #3B74D5, #4382E4, #4E9FC1, #54AE9E, #59B888, #5DC173);
+    background-size: 300% 300%;
+    animation: gradientShift 4s ease-in-out infinite;
     font-weight: 600;
+    box-shadow: 0 2px 8px rgba(59, 116, 213, 0.3);
+    border-radius: 8px;
 }
 
 .dropdown-menu {
@@ -189,11 +207,7 @@
     -o-border-radius: 10px;
     color: black !important;
 }
-.navbar input[type="submit"]
-{
-    width: 1rem !important;
-    border: 2px  yellow !important;
-}
+
 .icon {
     font-size: 1.2rem;
 }
@@ -301,17 +315,18 @@
 /* Active state for navigation items */
 .nav-item .nav-link.active {
     position: relative;
+    color: white !important;
+    background: linear-gradient(45deg, #3B74D5, #4382E4, #4E9FC1, #54AE9E, #59B888, #5DC173);
+    background-size: 300% 300%;
+    animation: gradientShift 4s ease-in-out infinite;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(59, 116, 213, 0.3);
+    border-radius: 8px;
 }
 
 .nav-item .nav-link.active::after {
-    content: '';
-    position: absolute;
-    bottom: -1px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80%;
-    height: 2px;
-    background-color: #007bff;
+    display: none;
+    /* Remove the underline since we have background */
 }
 
 /* Hover effects for better UX */
@@ -401,10 +416,10 @@
 
 
 
-.btn-outline-success
-{
+.btn-outline-success {
     width: 2rem !important;
 }
+
 @media (max-width: 991.98px) {
     .navbar .dropdown-menu {
         box-shadow: none;

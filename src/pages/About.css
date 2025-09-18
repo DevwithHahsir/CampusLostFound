@@ -6,7 +6,7 @@
 
 /* Hero Section */
 .about-hero {
-    background: linear-gradient(135deg, #3B74D5 0%, #5DC173 100%);
+    /* background: linear-gradient(135deg, #3B74D5 0%, #5DC173 100%); */
     color: white;
     padding: 4rem 2rem;
     text-align: center;
@@ -64,7 +64,7 @@
     font-size: 2.5rem;
     text-align: center;
     margin-bottom: 3rem;
-    background: linear-gradient(45deg, #3B74D5, #4382E4, #4E9FC1, #54AE9E, #59B888, #5DC173);
+    /* background: linear-gradient(45deg, #3B74D5, #4382E4, #4E9FC1, #54AE9E, #59B888, #5DC173); */
     background-size: 300% 300%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -250,7 +250,7 @@
 
 /* Statistics Section */
 .stats-section {
-    background: linear-gradient(135deg, #3B74D5 0%, #5DC173 100%);
+    /* background: linear-gradient(135deg, #3B74D5 0%, #5DC173 100%); */
     color: white;
 }
 
@@ -261,16 +261,17 @@
     text-align: center;
 }
 
+
+.stat-item , .stat-item h3
+{
+    color: black !important;
+}
 .stat-item h3 {
     font-family: "Bebas Neue", sans-serif;
+    color: black !important;
     font-size: 3rem;
     margin-bottom: 0.5rem;
-    background: linear-gradient(45deg, #ffffff, #f0f8ff);
-    background-size: 200% 200%;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    animation: gradientShift 6s ease-in-out infinite;
+
 }
 
 .stat-item p {

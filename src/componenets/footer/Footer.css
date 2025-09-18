@@ -138,6 +138,7 @@
     font-size: 1.2rem;
     color: #4382E4;
     flex-shrink: 0;
+    background-color: transparent;
 }
 
 .footer-universities {

@@ -89,7 +89,7 @@ const HowItWorks = () => {
         <section className="how-hero">
           <div className="container">
             <h1 className="hero-title">How CampusLostFound Works</h1>
-            <p className="hero-subtitle">
+            <p className="subtitle">
               Simple steps to report, find, and safely recover lost items on
               your campus
             </p>

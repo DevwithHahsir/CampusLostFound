@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import "./Navbar.css";
 
@@ -48,30 +48,30 @@ export default function Navbar() {
         <div className="collapse navbar-collapse" id="navbarContent">
           {/* Center - Navigation Links */}
           <div className="navbar-nav mx-auto">
-            <Link className="nav-link" to="/about">
+            <NavLink className="nav-link" to="/about">
               About
-            </Link>
-            <Link className="nav-link" to="/how-it-works">
+            </NavLink>
+            <NavLink className="nav-link" to="/how-it-works">
               How It Works
-            </Link>
-            <Link className="nav-link" to="/universities">
+            </NavLink>
+            <NavLink className="nav-link" to="/universities">
               Universities
-            </Link>
-            <Link className="nav-link" to="/blog">
+            </NavLink>
+            <NavLink className="nav-link" to="/blog">
               Blog
-            </Link>
-            <Link className="nav-link" to="/contact">
+            </NavLink>
+            <NavLink className="nav-link" to="/contact">
               Contact
-            </Link>
-            {/* <Link className="nav-link" to="/report">
+            </NavLink>
+            {/* <NavLink className="nav-link" to="/report">
               Report Item
-            </Link> */}
-            <Link className="nav-link" to="/privacy-policy">
+            </NavLink> */}
+            <NavLink className="nav-link" to="/privacy-policy">
               Privacy Policy
-            </Link>
-            <Link className="nav-link" to="/terms-of-service">
+            </NavLink>
+            <NavLink className="nav-link" to="/terms-of-service">
               Terms of Service
-            </Link>
+            </NavLink>
           </div>
 
           {/* Right - Search Bar & User Actions */}

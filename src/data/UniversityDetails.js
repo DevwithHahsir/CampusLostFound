@@ -1,8 +1,8 @@
-// Comprehensive university details with correct links, support information, and contact details
 const UniversityDetails = {
-  univ_umt: {
+  // --- Existing Universities (with fixes) ---
+  umt: {
     id: 1,
-    name: "University of Management & Technology (UMT)",
+    name: "University of Management and Technology",
     shortName: "UMT",
     domain: "umt.edu.pk",
     website: "https://www.umt.edu.pk",
@@ -11,633 +11,282 @@ const UniversityDetails = {
     type: "Private",
     location: "Lahore, Punjab",
     description:
-      "University of Management & Technology (UMT) is a leading private university in Pakistan, known for excellence in business, engineering, and technology education.",
+      "UMT is a top private university in Pakistan offering programs in management, technology, and sciences.",
 
     contact: {
-      phone: "+92-42-111-300-200",
+      phone: "+92-42-35212801",
       email: "info@umt.edu.pk",
-      fax: "+92-42-35212187",
-      address: "C-II, Johar Town, Lahore-54770, Pakistan",
+      address: "C-II, Johar Town, Lahore 54770, Pakistan",
     },
 
     support: {
       admissions: {
-        phone: "+92-42-111-300-200",
+        phone: "+92-42-35212801 Ext: 3412",
         email: "admissions@umt.edu.pk",
-        website: "https://www.umt.edu.pk/admissions/",
+        website: "https://admissions.umt.edu.pk",
       },
       studentServices: {
-        phone: "+92-42-111-300-200",
-        email: "studentservices@umt.edu.pk",
-        website: "https://www.umt.edu.pk/student-services/",
+        phone: "+92-42-35212801",
+        email: "student.services@umt.edu.pk",
+        website: "https://www.umt.edu.pk/Students",
       },
       helpDesk: {
-        phone: "+92-42-111-300-200",
+        phone: "+92-42-111-868-868",
         email: "helpdesk@umt.edu.pk",
-        website: "https://www.umt.edu.pk/contact/",
+        website: "https://helpdesk.umt.edu.pk",
       },
     },
 
     socialMedia: {
-      facebook: "https://www.facebook.com/UMTLahore",
-      twitter: "https://twitter.com/UMTLahore",
-      linkedin:
-        "https://www.linkedin.com/school/university-of-management-&-technology/",
-      youtube: "https://www.youtube.com/user/UMTLahore",
+      facebook: "https://www.facebook.com/UMT.edu.pk",
+      twitter: "https://twitter.com/UMT_Lahore",
+      linkedin: "https://www.linkedin.com/school/umt-lahore/",
+      youtube: "https://www.youtube.com/user/UMTChannel",
     },
 
     quickLinks: [
-      { name: "Student Portal", url: "https://portal.umt.edu.pk" },
+      { name: "Student Portal", url: "https://online.umt.edu.pk" },
+      { name: "LMS", url: "https://lms.umt.edu.pk" },
       { name: "Library", url: "https://library.umt.edu.pk" },
-      {
-        name: "Academic Calendar",
-        url: "https://www.umt.edu.pk/academic-calendar/",
-      },
-      { name: "Fee Structure", url: "https://www.umt.edu.pk/fee-structure/" },
-      { name: "Faculty Directory", url: "https://www.umt.edu.pk/faculty/" },
+      { name: "Academic Calendar", url: "https://www.umt.edu.pk/org/Academic-Calendar.aspx" },
+      { name: "Fee Structure", url: "https://admissions.umt.edu.pk/fee.aspx" },
+      { name: "Faculty Directory", url: "https://www.umt.edu.pk/faculty.aspx" },
     ],
 
     emergencyContact: {
-      security: "+92-42-111-300-200",
-      medical: "+92-42-111-300-200",
-      transport: "+92-42-111-300-200",
+      security: "+92-42-35212801",
+      medical: "+92-42-35212801",
+      transport: "+92-42-35212801",
     },
   },
 
-  univ_lums: {
-    id: 2,
-    name: "Lahore University of Management Sciences (LUMS)",
-    shortName: "LUMS",
-    domain: "lums.edu.pk",
-    website: "https://www.lums.edu.pk",
-    logo: "/src/assets/LUMS.png",
-    established: 1984,
+  // --- New Universities ---
+
+  aku: {
+    id: 17,
+    name: "Aga Khan University",
+    shortName: "AKU",
+    domain: "aku.edu",
+    website: "https://www.aku.edu",
+    logo: "/src/assets/AKU.png",
+    established: 1983,
     type: "Private",
-    location: "Lahore, Punjab",
-    description:
-      "LUMS is Pakistan's premier business school and a leading university committed to world-class teaching, learning, and research.",
-
-    contact: {
-      phone: "+92-42-3560-8000",
-      email: "info@lums.edu.pk",
-      fax: "+92-42-3572-3100",
-      address: "Opposite Sector U, DHA, Lahore Cantt., 54792, Pakistan",
-    },
-
-    support: {
-      admissions: {
-        phone: "+92-42-3560-8000",
-        email: "admissions@lums.edu.pk",
-        website: "https://admissions.lums.edu.pk",
-      },
-      studentServices: {
-        phone: "+92-42-3560-8000",
-        email: "studentlife@lums.edu.pk",
-        website: "https://www.lums.edu.pk/student-life",
-      },
-      helpDesk: {
-        phone: "+92-42-3560-8000",
-        email: "helpdesk@lums.edu.pk",
-        website: "https://www.lums.edu.pk/contact",
-      },
-    },
-
-    socialMedia: {
-      facebook: "https://www.facebook.com/LUMSOfficial",
-      twitter: "https://twitter.com/LUMSOfficial",
-      linkedin: "https://www.linkedin.com/school/lums/",
-      youtube: "https://www.youtube.com/user/LUMSOfficial",
-    },
-
-    quickLinks: [
-      { name: "Student Portal", url: "https://student.lums.edu.pk" },
-      { name: "LMS", url: "https://lms.lums.edu.pk" },
-      { name: "Library", url: "https://library.lums.edu.pk" },
-      {
-        name: "Academic Calendar",
-        url: "https://www.lums.edu.pk/academic-calendar",
-      },
-      { name: "Faculty Directory", url: "https://www.lums.edu.pk/faculty" },
-    ],
-
-    emergencyContact: {
-      security: "+92-42-3560-8000",
-      medical: "+92-42-3560-8000",
-      transport: "+92-42-3560-8000",
-    },
-  },
-
-  univ_comsats: {
-    id: 4,
-    name: "COMSATS Institute of Information Technology",
-    shortName: "COMSATS",
-    domain: "comsats.edu.pk",
-    website: "https://www.comsats.edu.pk",
-    logo: "/src/assets/Comsats.png",
-    established: 1998,
-    type: "Public",
-    location: "Multiple Campuses",
-    description:
-      "COMSATS University Islamabad is a leading public research university in Pakistan with multiple campuses offering quality education in engineering, computer science, and management.",
-
-    contact: {
-      phone: "+92-51-9247000-16",
-      email: "info@comsats.edu.pk",
-      fax: "+92-51-9247006",
-      address: "Park Road, Tarlai Kalan, Islamabad 45550, Pakistan",
-    },
-
-    support: {
-      admissions: {
-        phone: "+92-51-9049630",
-        email: "admissions@comsats.edu.pk",
-        website: "https://admissions.comsats.edu.pk",
-      },
-      studentServices: {
-        phone: "+92-51-9247000",
-        email: "studentaffairs@comsats.edu.pk",
-        website: "https://www.comsats.edu.pk/student-affairs",
-      },
-      helpDesk: {
-        phone: "+92-51-9247000",
-        email: "helpdesk@comsats.edu.pk",
-        website: "https://www.comsats.edu.pk/contact",
-      },
-    },
-
-    socialMedia: {
-      facebook: "https://www.facebook.com/COMSATS.Official",
-      twitter: "https://twitter.com/COMSATS_ATD",
-      linkedin:
-        "https://www.linkedin.com/school/comsats-institute-of-information-technology/",
-      youtube: "https://www.youtube.com/user/COMSATSOfficial",
-    },
-
-    quickLinks: [
-      { name: "Student Portal", url: "https://student.comsats.edu.pk" },
-      { name: "LMS", url: "https://lms.comsats.edu.pk" },
-      { name: "Digital Library", url: "https://library.comsats.edu.pk" },
-      {
-        name: "Academic Calendar",
-        url: "https://www.comsats.edu.pk/academic-calendar",
-      },
-      {
-        name: "Campus Information",
-        url: "https://www.comsats.edu.pk/campuses",
-      },
-    ],
-
-    emergencyContact: {
-      security: "+92-51-9247000",
-      medical: "+92-51-9247000",
-      transport: "+92-51-9247000",
-    },
-  },
-
-  univ_nust: {
-    id: 10,
-    name: "National University of Sciences and Technology (NUST)",
-    shortName: "NUST",
-    domain: "nust.edu.pk",
-    website: "https://www.nust.edu.pk",
-    logo: "/src/assets/Nust.png",
-    established: 1991,
-    type: "Public",
-    location: "Islamabad",
-    description:
-      "NUST is Pakistan's leading science and technology university, consistently ranked among the top universities in Pakistan and recognized globally for research and innovation.",
-
-    contact: {
-      phone: "+92-51-9085-2000",
-      email: "info@nust.edu.pk",
-      fax: "+92-51-9085-2382",
-      address: "H-12, Islamabad 44000, Pakistan",
-    },
-
-    support: {
-      admissions: {
-        phone: "+92-51-9085-6102",
-        email: "admissions@nust.edu.pk",
-        website: "https://admissions.nust.edu.pk",
-      },
-      studentServices: {
-        phone: "+92-51-9085-2000",
-        email: "studentaffairs@nust.edu.pk",
-        website: "https://www.nust.edu.pk/student-life",
-      },
-      helpDesk: {
-        phone: "+92-51-9085-2000",
-        email: "helpdesk@nust.edu.pk",
-        website: "https://www.nust.edu.pk/contact",
-      },
-    },
-
-    socialMedia: {
-      facebook: "https://www.facebook.com/nustpakistan",
-      twitter: "https://twitter.com/nustpakistan",
-      linkedin: "https://www.linkedin.com/school/nust/",
-      youtube: "https://www.youtube.com/user/NUSTIslamabad",
-    },
-
-    quickLinks: [
-      { name: "Student Portal", url: "https://student.nust.edu.pk" },
-      { name: "LMS", url: "https://lms.nust.edu.pk" },
-      { name: "Digital Library", url: "https://library.nust.edu.pk" },
-      {
-        name: "Academic Calendar",
-        url: "https://www.nust.edu.pk/academic-calendar",
-      },
-      { name: "Research", url: "https://www.nust.edu.pk/research" },
-    ],
-
-    emergencyContact: {
-      security: "+92-51-9085-2000",
-      medical: "+92-51-9085-2000",
-      transport: "+92-51-9085-2000",
-    },
-  },
-
-  univ_fast: {
-    id: 11,
-    name: "Foundation for Advancement of Science and Technology (FAST)",
-    shortName: "FAST-NUCES",
-    domain: "nu.edu.pk",
-    website: "https://www.nu.edu.pk",
-    logo: "/src/assets/Fast.png",
-    established: 2000,
-    type: "Private",
-    location: "Multiple Campuses",
-    description:
-      "FAST-NUCES is a leading computer science and engineering university in Pakistan, known for producing top-quality IT professionals and researchers.",
-
-    contact: {
-      phone: "+92-21-99261261-8",
-      email: "info@nu.edu.pk",
-      fax: "+92-21-99261255",
-      address: "ST-4, Sector 17-D, Shah Latif Town, Karachi 75340, Pakistan",
-    },
-
-    support: {
-      admissions: {
-        phone: "+92-21-99261261",
-        email: "admissions@nu.edu.pk",
-        website: "https://admissions.nu.edu.pk",
-      },
-      studentServices: {
-        phone: "+92-21-99261261",
-        email: "studentaffairs@nu.edu.pk",
-        website: "https://www.nu.edu.pk/student-services",
-      },
-      helpDesk: {
-        phone: "+92-21-99261261",
-        email: "helpdesk@nu.edu.pk",
-        website: "https://www.nu.edu.pk/contact",
-      },
-    },
-
-    socialMedia: {
-      facebook: "https://www.facebook.com/FASTNUCES",
-      twitter: "https://twitter.com/FASTNUCES",
-      linkedin: "https://www.linkedin.com/school/fast-nuces/",
-      youtube: "https://www.youtube.com/user/FASTNUCES",
-    },
-
-    quickLinks: [
-      { name: "Student Portal", url: "https://student.nu.edu.pk" },
-      { name: "LMS", url: "https://lms.nu.edu.pk" },
-      { name: "Digital Library", url: "https://library.nu.edu.pk" },
-      {
-        name: "Academic Calendar",
-        url: "https://www.nu.edu.pk/academic-calendar",
-      },
-      { name: "Campus Directory", url: "https://www.nu.edu.pk/campuses" },
-    ],
-
-    emergencyContact: {
-      security: "+92-21-99261261",
-      medical: "+92-21-99261261",
-      transport: "+92-21-99261261",
-    },
-  },
-
-  univ_pu: {
-    id: 12,
-    name: "University of the Punjab (PU)",
-    shortName: "Punjab University",
-    domain: "pu.edu.pk",
-    website: "https://www.pu.edu.pk",
-    logo: "/src/assets/Pu.png",
-    established: 1882,
-    type: "Public",
-    location: "Lahore, Punjab",
-    description:
-      "University of the Punjab is one of Pakistan's oldest and most prestigious universities, offering a wide range of undergraduate and postgraduate programs.",
-
-    contact: {
-      phone: "+92-42-99231581",
-      email: "info@pu.edu.pk",
-      fax: "+92-42-99230980",
-      address: "Quaid-e-Azam Campus, Lahore 54590, Pakistan",
-    },
-
-    support: {
-      admissions: {
-        phone: "+92-42-99232245",
-        email: "admissions@pu.edu.pk",
-        website: "https://admissions.pu.edu.pk",
-      },
-      studentServices: {
-        phone: "+92-42-99231581",
-        email: "studentaffairs@pu.edu.pk",
-        website: "https://www.pu.edu.pk/student-affairs",
-      },
-      helpDesk: {
-        phone: "+92-42-99231581",
-        email: "helpdesk@pu.edu.pk",
-        website: "https://www.pu.edu.pk/contact",
-      },
-    },
-
-    socialMedia: {
-      facebook: "https://www.facebook.com/PunjabUniversityLahore",
-      twitter: "https://twitter.com/PU_Official",
-      linkedin: "https://www.linkedin.com/school/university-of-the-punjab/",
-      youtube: "https://www.youtube.com/user/PunjabUniversityLHR",
-    },
-
-    quickLinks: [
-      { name: "Student Portal", url: "https://student.pu.edu.pk" },
-      { name: "LMS", url: "https://lms.pu.edu.pk" },
-      { name: "Digital Library", url: "https://library.pu.edu.pk" },
-      {
-        name: "Academic Calendar",
-        url: "https://www.pu.edu.pk/academic-calendar",
-      },
-      { name: "Departments", url: "https://www.pu.edu.pk/departments" },
-    ],
-
-    emergencyContact: {
-      security: "+92-42-99231581",
-      medical: "+92-42-99231581",
-      transport: "+92-42-99231581",
-    },
-  },
-
-  univ_uet: {
-    id: 13,
-    name: "University of Engineering and Technology (UET)",
-    shortName: "UET Lahore",
-    domain: "uet.edu.pk",
-    website: "https://www.uet.edu.pk",
-    logo: "/src/assets/UET.png",
-    established: 1921,
-    type: "Public",
-    location: "Lahore, Punjab",
-    description:
-      "UET Lahore is Pakistan's premier engineering university, known for excellence in engineering education and research with a rich history spanning over 100 years.",
-
-    contact: {
-      phone: "+92-42-99029245",
-      email: "info@uet.edu.pk",
-      fax: "+92-42-99029204",
-      address: "GT Road, Lahore 54890, Pakistan",
-    },
-
-    support: {
-      admissions: {
-        phone: "+92-42-99029202",
-        email: "admissions@uet.edu.pk",
-        website: "https://admissions.uet.edu.pk",
-      },
-      studentServices: {
-        phone: "+92-42-99029245",
-        email: "studentaffairs@uet.edu.pk",
-        website: "https://www.uet.edu.pk/student-affairs",
-      },
-      helpDesk: {
-        phone: "+92-42-99029245",
-        email: "helpdesk@uet.edu.pk",
-        website: "https://www.uet.edu.pk/contact",
-      },
-    },
-
-    socialMedia: {
-      facebook: "https://www.facebook.com/UETLahore",
-      twitter: "https://twitter.com/UETLahore",
-      linkedin:
-        "https://www.linkedin.com/school/university-of-engineering-and-technology-lahore/",
-      youtube: "https://www.youtube.com/user/UETLahore",
-    },
-
-    quickLinks: [
-      { name: "Student Portal", url: "https://student.uet.edu.pk" },
-      { name: "LMS", url: "https://lms.uet.edu.pk" },
-      { name: "Digital Library", url: "https://library.uet.edu.pk" },
-      {
-        name: "Academic Calendar",
-        url: "https://www.uet.edu.pk/academic-calendar",
-      },
-      { name: "Departments", url: "https://www.uet.edu.pk/departments" },
-    ],
-
-    emergencyContact: {
-      security: "+92-42-99029245",
-      medical: "+92-42-99029245",
-      transport: "+92-42-99029245",
-    },
-  },
-
-  univ_giki: {
-    id: 14,
-    name: "Ghulam Ishaq Khan Institute of Engineering Sciences and Technology",
-    shortName: "GIKI",
-    domain: "giki.edu.pk",
-    website: "https://www.giki.edu.pk",
-    logo: "/src/assets/giki.png",
-    established: 1993,
-    type: "Private",
-    location: "Topi, Khyber Pakhtunkhwa",
-    description:
-      "GIKI is a leading engineering and technology institute in Pakistan, known for its rigorous academic programs and research excellence.",
-
-    contact: {
-      phone: "+92-938-271858",
-      email: "info@giki.edu.pk",
-      fax: "+92-938-271934",
-      address: "Topi 23640, Swabi, Khyber Pakhtunkhwa, Pakistan",
-    },
-
-    support: {
-      admissions: {
-        phone: "+92-938-271858",
-        email: "admissions@giki.edu.pk",
-        website: "https://admissions.giki.edu.pk",
-      },
-      studentServices: {
-        phone: "+92-938-271858",
-        email: "studentaffairs@giki.edu.pk",
-        website: "https://www.giki.edu.pk/student-life",
-      },
-      helpDesk: {
-        phone: "+92-938-271858",
-        email: "helpdesk@giki.edu.pk",
-        website: "https://www.giki.edu.pk/contact",
-      },
-    },
-
-    socialMedia: {
-      facebook: "https://www.facebook.com/GIKIOfficial",
-      twitter: "https://twitter.com/GIKIOfficial",
-      linkedin: "https://www.linkedin.com/school/giki/",
-      youtube: "https://www.youtube.com/user/GIKIOfficial",
-    },
-
-    quickLinks: [
-      { name: "Student Portal", url: "https://student.giki.edu.pk" },
-      { name: "LMS", url: "https://lms.giki.edu.pk" },
-      { name: "Digital Library", url: "https://library.giki.edu.pk" },
-      {
-        name: "Academic Calendar",
-        url: "https://www.giki.edu.pk/academic-calendar",
-      },
-      { name: "Research", url: "https://www.giki.edu.pk/research" },
-    ],
-
-    emergencyContact: {
-      security: "+92-938-271858",
-      medical: "+92-938-271858",
-      transport: "+92-938-271858",
-    },
-  },
-
-  univ_iba: {
-    id: 15,
-    name: "Institute of Business Administration (IBA Karachi)",
-    shortName: "IBA Karachi",
-    domain: "iba.edu.pk",
-    website: "https://www.iba.edu.pk",
-    logo: "/src/assets/IBA.png",
-    established: 1955,
-    type: "Public",
     location: "Karachi, Sindh",
     description:
-      "IBA Karachi is Pakistan's premier business school and one of the oldest business schools in South Asia, known for excellence in business education.",
+      "Aga Khan University is an international university with a strong focus on health sciences, education, and research.",
 
     contact: {
-      phone: "+92-21-38104700",
-      email: "info@iba.edu.pk",
-      fax: "+92-21-99261508",
-      address: "University Road, Karachi 75270, Pakistan",
+      phone: "+92-21-3493-0051",
+      email: "info@aku.edu",
+      address: "Stadium Road, P.O. Box 3500, Karachi 74800, Pakistan",
     },
 
     support: {
       admissions: {
-        phone: "+92-21-38104700",
-        email: "admissions@iba.edu.pk",
-        website: "https://admissions.iba.edu.pk",
+        phone: "+92-21-3486-4410",
+        email: "admissions.pk@aku.edu",
+        website: "https://www.aku.edu/admissions",
       },
       studentServices: {
-        phone: "+92-21-38104700",
-        email: "studentaffairs@iba.edu.pk",
-        website: "https://www.iba.edu.pk/student-life",
+        phone: "+92-21-3493-0051",
+        email: "student.affairs@aku.edu",
+        website: "https://www.aku.edu/student-affairs",
       },
       helpDesk: {
-        phone: "+92-21-38104700",
-        email: "helpdesk@iba.edu.pk",
-        website: "https://www.iba.edu.pk/contact",
+        phone: "+92-21-3493-0051",
+        email: "helpdesk@aku.edu",
+        website: "https://www.aku.edu/contact",
       },
     },
 
     socialMedia: {
-      facebook: "https://www.facebook.com/IBAKarachi",
-      twitter: "https://twitter.com/IBAKarachi",
-      linkedin: "https://www.linkedin.com/school/iba-karachi/",
-      youtube: "https://www.youtube.com/user/IBAKarachi",
+      facebook: "https://www.facebook.com/agakhanuniversity",
+      twitter: "https://twitter.com/AKUGlobal",
+      linkedin: "https://www.linkedin.com/school/aga-khan-university/",
+      youtube: "https://www.youtube.com/user/agakhanuniversity",
     },
 
     quickLinks: [
-      { name: "Student Portal", url: "https://student.iba.edu.pk" },
-      { name: "LMS", url: "https://lms.iba.edu.pk" },
-      { name: "Digital Library", url: "https://library.iba.edu.pk" },
-      {
-        name: "Academic Calendar",
-        url: "https://www.iba.edu.pk/academic-calendar",
-      },
-      {
-        name: "Career Services",
-        url: "https://www.iba.edu.pk/career-services",
-      },
+      { name: "Library", url: "https://ecommons.aku.edu" },
+      { name: "Research", url: "https://www.aku.edu/research" },
+      { name: "Careers", url: "https://www.aku.edu/careers" },
     ],
 
     emergencyContact: {
-      security: "+92-21-38104700",
-      medical: "+92-21-38104700",
-      transport: "+92-21-38104700",
+      security: "+92-21-3493-0051",
+      medical: "+92-21-3493-0051",
+      transport: "+92-21-3493-0051",
     },
   },
 
-  univ_qau: {
-    id: 16,
-    name: "Quaid-i-Azam University (QAU)",
-    shortName: "QAU",
-    domain: "qau.edu.pk",
-    website: "https://www.qau.edu.pk",
-    logo: "/src/assets/QAU.png",
-    established: 1967,
-    type: "Public",
-    location: "Islamabad",
+  bahria: {
+    id: 18,
+    name: "Bahria University",
+    shortName: "BU",
+    domain: "bahria.edu.pk",
+    website: "https://www.bahria.edu.pk",
+    logo: "/src/assets/BU.png",
+    established: 2000,
+    type: "Public (Semi-Government, Pakistan Navy)",
+    location: "Islamabad, with campuses in Karachi & Lahore",
     description:
-      "Quaid-i-Azam University is a leading public research university in Pakistan, known for its beautiful campus and excellence in research and education.",
+      "Bahria University is a federally chartered public university established by Pakistan Navy, offering programs in science, engineering, and management.",
 
     contact: {
-      phone: "+92-51-9064-3046",
-      email: "info@qau.edu.pk",
-      fax: "+92-51-9643096",
-      address: "University Road, Islamabad 45320, Pakistan",
+      phone: "+92-51-9260002",
+      email: "info@bahria.edu.pk",
+      address: "Shangrilla Road, Sector E-8, Islamabad, Pakistan",
     },
 
     support: {
       admissions: {
-        phone: "+92-51-9064-3051",
-        email: "admissions@qau.edu.pk",
-        website: "https://admissions.qau.edu.pk",
+        phone: "+92-51-9260002",
+        email: "admissions@bahria.edu.pk",
+        website: "https://www.bahria.edu.pk/admissions",
       },
       studentServices: {
-        phone: "+92-51-9064-3046",
-        email: "studentaffairs@qau.edu.pk",
-        website: "https://www.qau.edu.pk/student-affairs",
+        phone: "+92-51-9260002",
+        email: "studentaffairs@bahria.edu.pk",
+        website: "https://www.bahria.edu.pk/student-services",
       },
       helpDesk: {
-        phone: "+92-51-9064-3046",
-        email: "helpdesk@qau.edu.pk",
-        website: "https://www.qau.edu.pk/contact",
+        phone: "+92-51-9260002",
+        email: "helpdesk@bahria.edu.pk",
+        website: "https://www.bahria.edu.pk/contact",
       },
     },
 
     socialMedia: {
-      facebook: "https://www.facebook.com/QAUIslamabad",
-      twitter: "https://twitter.com/QAUIslamabad",
-      linkedin: "https://www.linkedin.com/school/quaid-i-azam-university/",
-      youtube: "https://www.youtube.com/user/QAUIslamabad",
+      facebook: "https://www.facebook.com/BahriaUniversityOfficial",
+      twitter: "https://twitter.com/OfficialBahriaU",
+      linkedin: "https://www.linkedin.com/school/bahria-university/",
+      youtube: "https://www.youtube.com/c/BahriaUniversityOfficial",
     },
 
     quickLinks: [
-      { name: "Student Portal", url: "https://student.qau.edu.pk" },
-      { name: "LMS", url: "https://lms.qau.edu.pk" },
-      { name: "Digital Library", url: "https://library.qau.edu.pk" },
-      {
-        name: "Academic Calendar",
-        url: "https://www.qau.edu.pk/academic-calendar",
-      },
-      { name: "Research", url: "https://www.qau.edu.pk/research" },
+      { name: "Library", url: "https://library.bahria.edu.pk" },
+      { name: "Research", url: "https://www.bahria.edu.pk/research" },
+      { name: "Careers", url: "https://www.bahria.edu.pk/jobs" },
     ],
 
     emergencyContact: {
-      security: "+92-51-9064-3046",
-      medical: "+92-51-9064-3046",
-      transport: "+92-51-9064-3046",
+      security: "+92-51-9260002",
+      medical: "+92-51-9260002",
+      transport: "+92-51-9260002",
+    },
+  },
+
+  air: {
+    id: 19,
+    name: "Air University",
+    shortName: "AU",
+    domain: "au.edu.pk",
+    website: "https://www.au.edu.pk",
+    logo: "/src/assets/AU.png",
+    established: 2002,
+    type: "Public (Pakistan Air Force)",
+    location: "Islamabad, Pakistan",
+    description:
+      "Air University is a public university established by the Pakistan Air Force, offering programs in engineering, IT, business, and health sciences.",
+
+    contact: {
+      phone: "+92-51-9262557",
+      email: "info@au.edu.pk",
+      address: "E-9, Islamabad, Pakistan",
+    },
+
+    support: {
+      admissions: {
+        phone: "+92-51-9262557",
+        email: "admissions@au.edu.pk",
+        website: "https://www.au.edu.pk/pages/Admissions.aspx",
+      },
+      studentServices: {
+        phone: "+92-51-9262557",
+        email: "student.affairs@au.edu.pk",
+        website: "https://www.au.edu.pk/pages/StudentServices.aspx",
+      },
+      helpDesk: {
+        phone: "+92-51-9262557",
+        email: "helpdesk@au.edu.pk",
+        website: "https://www.au.edu.pk/pages/ContactUs.aspx",
+      },
+    },
+
+    socialMedia: {
+      facebook: "https://www.facebook.com/airuniversityofficial",
+      twitter: "https://twitter.com/AirUniversity_",
+      linkedin: "https://www.linkedin.com/school/air-university-pakistan/",
+      youtube: "https://www.youtube.com/c/AirUniversityOfficial",
+    },
+
+    quickLinks: [
+      { name: "LMS", url: "https://lms.au.edu.pk" },
+      { name: "Library", url: "https://library.au.edu.pk" },
+      { name: "Research", url: "https://www.au.edu.pk/pages/Research.aspx" },
+    ],
+
+    emergencyContact: {
+      security: "+92-51-9262557",
+      medical: "+92-51-9262557",
+      transport: "+92-51-9262557",
+    },
+  },
+
+  ist: {
+    id: 20,
+    name: "Institute of Space Technology",
+    shortName: "IST",
+    domain: "ist.edu.pk",
+    website: "https://www.ist.edu.pk",
+    logo: "/src/assets/IST.png",
+    established: 2002,
+    type: "Public",
+    location: "Islamabad, Pakistan",
+    description:
+      "IST is a public university specializing in space science, aerospace engineering, and related fields.",
+
+    contact: {
+      phone: "+92-51-9075100",
+      email: "info@ist.edu.pk",
+      address: "Islamabad Highway, Near Rawat Toll Plaza, Islamabad, Pakistan",
+    },
+
+    support: {
+      admissions: {
+        phone: "+92-51-9075100",
+        email: "admissions@ist.edu.pk",
+        website: "https://www.ist.edu.pk/admissions",
+      },
+      studentServices: {
+        phone: "+92-51-9075100",
+        email: "student.affairs@ist.edu.pk",
+        website: "https://www.ist.edu.pk/student-affairs",
+      },
+      helpDesk: {
+        phone: "+92-51-9075100",
+        email: "helpdesk@ist.edu.pk",
+        website: "https://www.ist.edu.pk/contact",
+      },
+    },
+
+    socialMedia: {
+      facebook: "https://www.facebook.com/ISTofficial",
+      twitter: "https://twitter.com/IST_Official",
+      linkedin: "https://www.linkedin.com/school/institute-of-space-technology/",
+      youtube: "https://www.youtube.com/c/ISTOfficial",
+    },
+
+    quickLinks: [
+      { name: "Library", url: "https://library.ist.edu.pk" },
+      { name: "Research", url: "https://www.ist.edu.pk/research" },
+      { name: "Careers", url: "https://www.ist.edu.pk/careers" },
+    ],
+
+    emergencyContact: {
+      security: "+92-51-9075100",
+      medical: "+92-51-9075100",
+      transport: "+92-51-9075100",
     },
   },
 };
-
-export default UniversityDetails;

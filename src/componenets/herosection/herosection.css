@@ -69,13 +69,17 @@
     text-decoration: none !important;
 }
 
-.hero-subtitle, .sub-heading {
+.hero-content .hero-subtitle, .sub-heading {
     font-family: "Bebas Neue", sans-serif;
     font-weight: 400;
     font-style: normal;
-    font-size: 5rem;
+    font-size: 3rem;
     color: #1D2530 !important;
-
+    border: none;
+    background: none !important;
+    -webkit-background-clip: initial !important;
+    -webkit-text-fill-color: initial !important;
+    background-clip: initial !important;
 }
 
 .hero-description, .description {
@@ -83,7 +87,10 @@
     line-height: 1.6;
     color: #1D2530 !important;
     margin: 0;
-
+    background: none !important;
+    -webkit-background-clip: initial !important;
+    -webkit-text-fill-color: initial !important;
+    background-clip: initial !important;
     width: 70vw !important;
 }
 

@@ -10,6 +10,9 @@ import {
   CiLock,
 } from "react-icons/ci";
 import SEO from "../componenets/seo/SEO";
+import NustImg from "../assets/Nust.png";
+import UmtImg from "../assets/UMT.png";
+import GikiImg from "../assets/giki.png";
 import "./Blog.css";
 
 const Blog = () => {
@@ -112,51 +115,45 @@ Prevention is always better than searching. These habits might seem like extra w
       },
       {
         id: 3,
-        title:
-          "University Life Hacks: Making the Most of Your Campus Experience",
+        title: "Campus Life at NUST Islamabad",
         excerpt:
-          "Insider tips and tricks to navigate university life more efficiently, from academic success to social connections.",
-        content: `University life can be overwhelming, but with the right strategies, you can thrive academically and socially. Here are proven hacks that successful students use.
-
-## Academic Hacks
-
-**Use the Pomodoro Technique**: Study for 25 minutes, then take a 5-minute break. This improves focus and retention.
-
-**Professor Office Hours**: These are goldmines of information. Professors often give hints about exams and provide personalized help.
-
-**Form Study Groups**: Teaching others helps you learn better. Plus, you'll catch things you missed.
-
-## Social Life Hacks
-
-**Join Clubs Early**: The best friendships often form in the first semester when everyone's looking to connect.
-
-**Attend Campus Events**: Free food, entertainment, and networking opportunities. What's not to love?
-
-**Be the Connector**: Introduce people to each other. You'll become known as someone who brings people together.
-
-## Life Management Hacks
-
-**Use Your Student ID**: Many businesses offer student discounts. Always ask, even if it's not advertised.
-
-**Master the Library**: Learn about all resources available - not just books, but printing, study rooms, and research help.
-
-**Take Advantage of Campus Services**: Counseling, career services, tutoring - these are included in your tuition.
-
-## Financial Hacks
-
-**Buy Textbooks Smart**: Check if they're available in the library, buy used, or rent them online.
-
-**Meal Plan Strategy**: Understand your plan and use it efficiently. Many allow guest meals you can use for dates or friends.
-
-**Free Campus Food**: Learn when clubs and organizations offer free meals at events.
-
-University is about more than just classes - it's about growth, connections, and experiences. These hacks help you maximize all of it while staying sane and financially responsible.`,
+          "Explore the vibrant student life, societies, and world-class facilities at NUST Islamabad. Discover why NUST is a top choice for engineering and technology in Pakistan.",
+        content: `National University of Sciences and Technology (NUST) is renowned for its academic excellence and dynamic campus life. Students enjoy modern labs, active student societies, and a beautiful green campus. Popular societies include NUST Science Society, NUST Debating Society, and NUST Adventure Club. The campus features state-of-the-art sports facilities, libraries, and regular cultural festivals. NUST's strong alumni network and industry partnerships help students launch successful careers.`,
         category: "university",
-        author: "Campus Life Team",
-        date: "2024-01-10",
-        readTime: 6,
-        tags: ["university", "hacks", "student life", "tips"],
-        image: "/api/placeholder/400/200",
+        author: "NUST Student Affairs",
+        date: "2025-09-18",
+        readTime: 5,
+        tags: ["NUST", "engineering", "student life", "Islamabad"],
+        image: NustImg,
+        website: "https://nust.edu.pk",
+      },
+      {
+        id: 8,
+        title: "Campus Life at LUMS Lahore",
+        excerpt:
+          "Experience the diverse culture, academic rigor, and social events at LUMS Lahore. Learn about student clubs, sports, and the famous LUMS Olympiad.",
+        content: `LUMS (Lahore University of Management Sciences) offers a unique blend of academic excellence and vibrant campus life. Students participate in over 50 clubs and societies, including Dramatics, Music, and Entrepreneurship. The annual LUMS Olympiad is a highlight, attracting students nationwide for competitions and performances. The campus boasts modern hostels, sports complexes, and a lively cafeteria scene. LUMS is known for its inclusive culture and strong support for student initiatives.`,
+        category: "university",
+        author: "LUMS Campus Team",
+        date: "2025-09-18",
+        readTime: 5,
+        tags: ["LUMS", "Lahore", "student life", "Olympiad"],
+        image: UmtImg,
+        website: "https://lums.edu.pk",
+      },
+      {
+        id: 9,
+        title: "Campus Life at GIKI",
+        excerpt:
+          "Discover the innovative spirit and close-knit community at GIKI. From robotics competitions to mountain hikes, GIKI offers a unique student experience.",
+        content: `Ghulam Ishaq Khan Institute (GIKI) is famous for its engineering programs and scenic campus in Topi, KPK. Students are active in technical societies like IEEE and Robotics Club, and enjoy outdoor activities such as hiking and camping. GIKI's annual All Pakistan Tech Competition draws teams from across the country. The campus culture is friendly and collaborative, with strong traditions and alumni support.`,
+        category: "university",
+        author: "GIKI Student Life",
+        date: "2025-09-18",
+        readTime: 4,
+        tags: ["GIKI", "engineering", "Topi", "student life"],
+        image: GikiImg,
+        website: "https://giki.edu.pk",
       },
       {
         id: 4,
@@ -490,7 +487,14 @@ Being prepared doesn't mean living in fear - it means being ready to handle chal
                     <CiCalendar className="date-icon" />
                     <span>{formatDate(filteredArticles[0].date)}</span>
                   </div>
-                  <button className="read-more-btn">Read Full Article</button>
+                  <a
+                    className="read-more-btn"
+                    href={filteredArticles[0].website || "#"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Visit Official Website
+                  </a>
                 </div>
                 <div className="featured-image">
                   <img
@@ -523,6 +527,16 @@ Being prepared doesn't mean living in fear - it means being ready to handle chal
                       <button className="share-btn">
                         <CiShare2 />
                       </button>
+                      {article.website && (
+                        <a
+                          className="visit-website-btn"
+                          href={article.website}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Visit Website
+                        </a>
+                      )}
                     </div>
                   </div>
 

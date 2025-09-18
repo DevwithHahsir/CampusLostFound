@@ -21,6 +21,30 @@ import {
   FaUsers,
 } from "react-icons/fa";
 import UniversityDetails from "../data/UniversityDetails";
+// Import all PNG logos from src/assets
+import UMTLogo from "../assets/UMT.png";
+import UETLogo from "../assets/UET.png";
+import QAULogo from "../assets/QAU.png";
+import PuLogo from "../assets/Pu.png";
+import NustLogo from "../assets/Nust.png";
+import IBALogo from "../assets/IBA.png";
+import GikiLogo from "../assets/giki.png";
+import FastLogo from "../assets/Fast.png";
+import ComsatsLogo from "../assets/Comsats.png";
+// Add more as needed
+
+const logoImports = {
+  "UMT.png": UMTLogo,
+  "UET.png": UETLogo,
+  "QAU.png": QAULogo,
+  "Pu.png": PuLogo,
+  "Nust.png": NustLogo,
+  "IBA.png": IBALogo,
+  "giki.png": GikiLogo,
+  "Fast.png": FastLogo,
+  "Comsats.png": ComsatsLogo,
+  // Add more as needed
+};
 import SEO from "../componenets/seo/SEO";
 import "./Universities.css";
 
@@ -47,14 +71,14 @@ const Universities = () => {
       );
     }
 
-    // Filter by type
+    // Filter by type (partial match)
     if (selectedType !== "all") {
-      filtered = filtered.filter(
-        (uni) => uni.type.toLowerCase() === selectedType
+      filtered = filtered.filter((uni) =>
+        uni.type.toLowerCase().includes(selectedType)
       );
     }
 
-    // Filter by location
+    // Filter by location (partial match)
     if (selectedLocation !== "all") {
       filtered = filtered.filter((uni) =>
         uni.location.toLowerCase().includes(selectedLocation.toLowerCase())
@@ -107,16 +131,31 @@ const Universities = () => {
       />
 
       <div className="universities-page">
+        {/* Updated hero section without background colors */}
         <div className="universities-hero">
           <div className="container">
-            <h1 className="universities-title">
+            <h1 className="page-title heading">
               Pakistani Universities Directory
             </h1>
-            <p className="universities-subtitle">
+            <p className="page-subtitle">
               Comprehensive information about universities across Pakistan with
               official links, contact details, support services, and emergency
-              contacts
+              contacts for all major educational institutions
             </p>
+            <div className="hero-stats">
+              <div className="stat-item">
+                <span className="stat-number">{universitiesArray.length}+</span>
+                <span className="stat-label">Universities</span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-number">24/7</span>
+                <span className="stat-label">Support Access</span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-number">100%</span>
+                <span className="stat-label">Verified Info</span>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -161,78 +200,93 @@ const Universities = () => {
 
           {/* Universities Grid */}
           <div className="universities-grid">
-            {filteredUniversities.map((university) => (
-              <div key={university.id} className="university-card">
-                <div className="university-header">
-                  <div className="university-logo">
-                    <img
-                      src={university.logo}
-                      alt={university.shortName}
-                      onError={(e) => {
-                        e.target.style.display = "none";
-                        e.target.nextSibling.style.display = "flex";
-                      }}
-                    />
-                    <div className="logo-fallback" style={{ display: "none" }}>
-                      <FaUniversity />
-                    </div>
-                  </div>
-                  <div className="university-info">
-                    <h3 className="university-name">{university.shortName}</h3>
-                    <p className="university-full-name">{university.name}</p>
-                    <div className="university-meta">
-                      <span
-                        className={`type-badge ${university.type.toLowerCase()}`}
+            {filteredUniversities.map((university) => {
+              // Extract filename from logo path
+              let logoSrc = university.logo;
+              if (logoSrc && logoSrc.startsWith("/src/assets/")) {
+                const fileName = logoSrc.split("/").pop();
+                if (logoImports[fileName]) {
+                  logoSrc = logoImports[fileName];
+                }
+              }
+              return (
+                <div key={university.id} className="university-card">
+                  <div className="university-header">
+                    <div className="university-logo">
+                      <img
+                        src={logoSrc}
+                        alt={university.shortName}
+                        onError={(e) => {
+                          e.target.style.display = "none";
+                          e.target.nextSibling.style.display = "flex";
+                        }}
+                      />
+                      <div
+                        className="logo-fallback"
+                        style={{ display: "none" }}
                       >
-                        {university.type}
-                      </span>
-                      <span className="location">
-                        <FaMapMarkerAlt /> {university.location}
-                      </span>
-                      <span className="established">
-                        <FaCalendarAlt /> Est. {university.established}
-                      </span>
+                        <FaUniversity />
+                      </div>
+                    </div>
+                    <div className="university-info">
+                      <h3 className="university-name">
+                        {university.shortName}
+                      </h3>
+                      <p className="university-full-name">{university.name}</p>
+                      <div className="university-meta">
+                        <span
+                          className={`type-badge ${university.type.toLowerCase()}`}
+                        >
+                          {university.type}
+                        </span>
+                        <span className="location">
+                          <FaMapMarkerAlt /> {university.location}
+                        </span>
+                        <span className="established">
+                          <FaCalendarAlt /> Est. {university.established}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <p className="university-description">
-                  {university.description}
-                </p>
+                  <p className="university-description">
+                    {university.description}
+                  </p>
 
-                <div className="university-actions">
-                  <div className="quick-links">
-                    <a
-                      href={university.website}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="action-button primary"
+                  <div className="university-actions">
+                    <div className="quick-links">
+                      <a
+                        href={university.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="action-button primary"
+                      >
+                        <FaGlobe /> Visit Website
+                      </a>
+                      <a
+                        href={`tel:${university.contact.phone}`}
+                        className="action-button secondary"
+                      >
+                        <FaPhone /> Call
+                      </a>
+                      <a
+                        href={`mailto:${university.contact.email}`}
+                        className="action-button secondary"
+                      >
+                        <FaEnvelope /> Email
+                      </a>
+                    </div>
+
+                    <button
+                      onClick={() => openUniversityDetails(university)}
+                      className="details-button"
                     >
-                      <FaGlobe /> Visit Website
-                    </a>
-                    <a
-                      href={`tel:${university.contact.phone}`}
-                      className="action-button secondary"
-                    >
-                      <FaPhone /> Call
-                    </a>
-                    <a
-                      href={`mailto:${university.contact.email}`}
-                      className="action-button secondary"
-                    >
-                      <FaEnvelope /> Email
-                    </a>
+                      View Details <FaExternalLinkAlt />
+                    </button>
                   </div>
-
-                  <button
-                    onClick={() => openUniversityDetails(university)}
-                    className="details-button"
-                  >
-                    View Details <FaExternalLinkAlt />
-                  </button>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {filteredUniversities.length === 0 && (
@@ -287,219 +341,217 @@ const Universities = () => {
                 </button>
               </div>
 
-              <div className="modal-content">
-                <div className="modal-section">
-                  <h3>
-                    <FaPhone /> Contact Information
-                  </h3>
-                  <div className="contact-grid">
-                    <div className="contact-item">
-                      <strong>Phone:</strong>
-                      <a href={`tel:${selectedUniversity.contact.phone}`}>
-                        {selectedUniversity.contact.phone}
-                      </a>
-                    </div>
-                    <div className="contact-item">
-                      <strong>Email:</strong>
-                      <a href={`mailto:${selectedUniversity.contact.email}`}>
-                        {selectedUniversity.contact.email}
-                      </a>
-                    </div>
-                    <div className="contact-item">
-                      <strong>Website:</strong>
-                      <a
-                        href={selectedUniversity.website}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {selectedUniversity.website} <FaExternalLinkAlt />
-                      </a>
-                    </div>
-                    <div className="contact-item address">
-                      <strong>Address:</strong>
-                      <span>{selectedUniversity.contact.address}</span>
-                    </div>
+              {/* <div className="modal-content"> */}
+              <div className="modal-section">
+                <h3 className="section-title">
+                  <FaPhone /> Contact Information
+                </h3>
+                <div className="contact-grid">
+                  <div className="contact-item">
+                    <strong>Phone:</strong>
+                    <a href={`tel:${selectedUniversity.contact.phone}`}>
+                      {selectedUniversity.contact.phone}
+                    </a>
                   </div>
-                </div>
-
-                <div className="modal-section">
-                  <h3>
-                    <FaUsers /> Support Services
-                  </h3>
-                  <div className="support-grid">
-                    <div className="support-item">
-                      <h4>
-                        <FaGraduationCap /> Admissions
-                      </h4>
-                      <p>
-                        Phone:{" "}
-                        <a
-                          href={`tel:${selectedUniversity.support.admissions.phone}`}
-                        >
-                          {selectedUniversity.support.admissions.phone}
-                        </a>
-                      </p>
-                      <p>
-                        Email:{" "}
-                        <a
-                          href={`mailto:${selectedUniversity.support.admissions.email}`}
-                        >
-                          {selectedUniversity.support.admissions.email}
-                        </a>
-                      </p>
-                      <a
-                        href={selectedUniversity.support.admissions.website}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        Admissions Portal <FaExternalLinkAlt />
-                      </a>
-                    </div>
-
-                    <div className="support-item">
-                      <h4>
-                        <FaBook /> Student Services
-                      </h4>
-                      <p>
-                        Phone:{" "}
-                        <a
-                          href={`tel:${selectedUniversity.support.studentServices.phone}`}
-                        >
-                          {selectedUniversity.support.studentServices.phone}
-                        </a>
-                      </p>
-                      <p>
-                        Email:{" "}
-                        <a
-                          href={`mailto:${selectedUniversity.support.studentServices.email}`}
-                        >
-                          {selectedUniversity.support.studentServices.email}
-                        </a>
-                      </p>
-                      <a
-                        href={
-                          selectedUniversity.support.studentServices.website
-                        }
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        Student Services <FaExternalLinkAlt />
-                      </a>
-                    </div>
-
-                    <div className="support-item">
-                      <h4>
-                        <FaPhone /> Help Desk
-                      </h4>
-                      <p>
-                        Phone:{" "}
-                        <a
-                          href={`tel:${selectedUniversity.support.helpDesk.phone}`}
-                        >
-                          {selectedUniversity.support.helpDesk.phone}
-                        </a>
-                      </p>
-                      <p>
-                        Email:{" "}
-                        <a
-                          href={`mailto:${selectedUniversity.support.helpDesk.email}`}
-                        >
-                          {selectedUniversity.support.helpDesk.email}
-                        </a>
-                      </p>
-                      <a
-                        href={selectedUniversity.support.helpDesk.website}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        Help Center <FaExternalLinkAlt />
-                      </a>
-                    </div>
+                  <div className="contact-item">
+                    <strong>Email:</strong>
+                    <a href={`mailto:${selectedUniversity.contact.email}`}>
+                      {selectedUniversity.contact.email}
+                    </a>
                   </div>
-                </div>
-
-                <div className="modal-section">
-                  <h3>
-                    <FaShieldAlt /> Emergency Contacts
-                  </h3>
-                  <div className="emergency-grid">
-                    <div className="emergency-item">
-                      <FaShieldAlt className="emergency-icon" />
-                      <div>
-                        <strong>Security</strong>
-                        <a
-                          href={`tel:${selectedUniversity.emergencyContact.security}`}
-                        >
-                          {selectedUniversity.emergencyContact.security}
-                        </a>
-                      </div>
-                    </div>
-                    <div className="emergency-item">
-                      <FaMedkit className="emergency-icon" />
-                      <div>
-                        <strong>Medical</strong>
-                        <a
-                          href={`tel:${selectedUniversity.emergencyContact.medical}`}
-                        >
-                          {selectedUniversity.emergencyContact.medical}
-                        </a>
-                      </div>
-                    </div>
-                    <div className="emergency-item">
-                      <FaBus className="emergency-icon" />
-                      <div>
-                        <strong>Transport</strong>
-                        <a
-                          href={`tel:${selectedUniversity.emergencyContact.transport}`}
-                        >
-                          {selectedUniversity.emergencyContact.transport}
-                        </a>
-                      </div>
-                    </div>
+                  <div className="contact-item">
+                    <strong>Website:</strong>
+                    <a
+                      href={selectedUniversity.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {selectedUniversity.website} <FaExternalLinkAlt />
+                    </a>
                   </div>
-                </div>
-
-                <div className="modal-section">
-                  <h3>
-                    <FaExternalLinkAlt /> Quick Links
-                  </h3>
-                  <div className="quick-links-grid">
-                    {selectedUniversity.quickLinks.map((link, index) => (
-                      <a
-                        key={index}
-                        href={link.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="quick-link-item"
-                      >
-                        {link.name} <FaExternalLinkAlt />
-                      </a>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="modal-section">
-                  <h3>Social Media</h3>
-                  <div className="social-links">
-                    {Object.entries(selectedUniversity.socialMedia).map(
-                      ([platform, url]) => (
-                        <a
-                          key={platform}
-                          href={url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="social-link"
-                          title={
-                            platform.charAt(0).toUpperCase() + platform.slice(1)
-                          }
-                        >
-                          {getSocialIcon(platform)}
-                        </a>
-                      )
-                    )}
+                  <div className="contact-item address">
+                    <strong>Address:</strong>
+                    <span>{selectedUniversity.contact.address}</span>
                   </div>
                 </div>
               </div>
+
+              <div className="modal-section">
+                <h3 className="section-title">
+                  <FaUsers /> Support Services
+                </h3>
+                <div className="support-grid">
+                  <div className="support-item">
+                    <h4 className="sub-heading">
+                      <FaGraduationCap /> Admissions
+                    </h4>
+                    <p>
+                      Phone:{" "}
+                      <a
+                        href={`tel:${selectedUniversity.support.admissions.phone}`}
+                      >
+                        {selectedUniversity.support.admissions.phone}
+                      </a>
+                    </p>
+                    <p>
+                      Email:{" "}
+                      <a
+                        href={`mailto:${selectedUniversity.support.admissions.email}`}
+                      >
+                        {selectedUniversity.support.admissions.email}
+                      </a>
+                    </p>
+                    <a
+                      href={selectedUniversity.support.admissions.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Admissions Portal <FaExternalLinkAlt />
+                    </a>
+                  </div>
+
+                  <div className="support-item">
+                    <h4 className="sub-heading">
+                      <FaBook /> Student Services
+                    </h4>
+                    <p>
+                      Phone:{" "}
+                      <a
+                        href={`tel:${selectedUniversity.support.studentServices.phone}`}
+                      >
+                        {selectedUniversity.support.studentServices.phone}
+                      </a>
+                    </p>
+                    <p>
+                      Email:{" "}
+                      <a
+                        href={`mailto:${selectedUniversity.support.studentServices.email}`}
+                      >
+                        {selectedUniversity.support.studentServices.email}
+                      </a>
+                    </p>
+                    <a
+                      href={selectedUniversity.support.studentServices.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Student Services <FaExternalLinkAlt />
+                    </a>
+                  </div>
+
+                  <div className="support-item">
+                    <h4 className="sub-heading">
+                      <FaPhone /> Help Desk
+                    </h4>
+                    <p>
+                      Phone:{" "}
+                      <a
+                        href={`tel:${selectedUniversity.support.helpDesk.phone}`}
+                      >
+                        {selectedUniversity.support.helpDesk.phone}
+                      </a>
+                    </p>
+                    <p>
+                      Email:{" "}
+                      <a
+                        href={`mailto:${selectedUniversity.support.helpDesk.email}`}
+                      >
+                        {selectedUniversity.support.helpDesk.email}
+                      </a>
+                    </p>
+                    <a
+                      href={selectedUniversity.support.helpDesk.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Help Center <FaExternalLinkAlt />
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <div className="modal-section">
+                <h3 className="section-title">
+                  <FaShieldAlt /> Emergency Contacts
+                </h3>
+                <div className="emergency-grid">
+                  <div className="emergency-item">
+                    <FaShieldAlt className="emergency-icon" />
+                    <div>
+                      <strong>Security</strong>
+                      <a
+                        href={`tel:${selectedUniversity.emergencyContact.security}`}
+                      >
+                        {selectedUniversity.emergencyContact.security}
+                      </a>
+                    </div>
+                  </div>
+                  <div className="emergency-item">
+                    <FaMedkit className="emergency-icon" />
+                    <div>
+                      <strong>Medical</strong>
+                      <a
+                        href={`tel:${selectedUniversity.emergencyContact.medical}`}
+                      >
+                        {selectedUniversity.emergencyContact.medical}
+                      </a>
+                    </div>
+                  </div>
+                  <div className="emergency-item">
+                    <FaBus className="emergency-icon" />
+                    <div>
+                      <strong>Transport</strong>
+                      <a
+                        href={`tel:${selectedUniversity.emergencyContact.transport}`}
+                      >
+                        {selectedUniversity.emergencyContact.transport}
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="modal-section">
+                <h3 className="section-title">
+                  <FaExternalLinkAlt /> Quick Links
+                </h3>
+                <div className="quick-links-grid">
+                  {selectedUniversity.quickLinks.map((link, index) => (
+                    <a
+                      key={index}
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="quick-link-item"
+                    >
+                      {link.name} <FaExternalLinkAlt />
+                    </a>
+                  ))}
+                </div>
+              </div>
+
+              <div className="modal-section">
+                <h3 className="section-title">Social Media</h3>
+                <div className="social-links">
+                  {Object.entries(selectedUniversity.socialMedia).map(
+                    ([platform, url]) => (
+                      <a
+                        key={platform}
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="social-link"
+                        title={
+                          platform.charAt(0).toUpperCase() + platform.slice(1)
+                        }
+                      >
+                        {getSocialIcon(platform)}
+                      </a>
+                    )
+                  )}
+                </div>
+              </div>
+              {/* </div> */}
             </div>
           </div>
         )}

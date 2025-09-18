@@ -5,6 +5,7 @@ import {
   CiLock,
   CiClock2,
   CiBadgeDollar,
+  // CiInfo
 } from "react-icons/ci";
 import SEO from "../componenets/seo/SEO";
 import "./TermsOfService.css";
@@ -49,7 +50,7 @@ const TermsOfService = () => {
     {
       id: "service-description",
       title: "3. Service Description and Availability",
-      icon: <CiInfo />,
+      // icon: <CiInfo />,
       content: {
         intro:
           "CampusLostFound provides a platform for university communities to report and recover lost items.",
@@ -153,7 +154,7 @@ const TermsOfService = () => {
     {
       id: "disclaimers",
       title: "9. Disclaimers and Limitation of Liability",
-      icon: <CiInfo />,
+      // icon: <CiInfo />,
       content: {
         intro:
           "CampusLostFound is provided 'as is' without warranties of any kind.",
@@ -188,7 +189,7 @@ const TermsOfService = () => {
     {
       id: "indemnification",
       title: "11. Indemnification",
-      icon: <CiBadgeDollar />,
+      // icon: <CiBadgeDollar />,
       content: {
         intro:
           "Users agree to indemnify and hold us harmless from certain claims and damages.",
@@ -211,7 +212,7 @@ const TermsOfService = () => {
           "These terms are governed by the laws of Pakistan and disputes will be resolved through specified procedures.",
         details: [
           "Terms governed by laws of Pakistan without conflict provisions",
-          "Courts of Karachi, Pakistan have exclusive jurisdiction",
+          "Courts of Lahore, Pakistan have exclusive jurisdiction",
           "Users agree to attempt mediation before formal legal action",
           "Arbitration may be required for certain types of disputes",
           "Class action lawsuits are waived to the extent permitted",
@@ -270,7 +271,7 @@ const TermsOfService = () => {
               </div>
 
               <div className="summary-card">
-                <CiInfo className="summary-icon" />
+                {/* <CiInfo className="summary-icon" /> */}
                 <h3>Our Service</h3>
                 <p>
                   We provide a platform for lost and found items but don't
@@ -336,20 +337,15 @@ const TermsOfService = () => {
                   <div className="contact-info">
                     <div className="contact-item">
                       <strong>Email:</strong>
-                      <span>legal@campuslostfound.pk</span>
+                      <span>campuslostfound@gmail.com</span>
                     </div>
                     <div className="contact-item">
                       <strong>General Support:</strong>
-                      <span>support@campuslostfound.pk</span>
+                      <span>campuslostfound@gmail.com</span>
                     </div>
                     <div className="contact-item">
                       <strong>Mailing Address:</strong>
-                      <span>
-                        CampusLostFound Legal Department
-                        <br />
-                        Plot 123, Clifton Block 2<br />
-                        Karachi, Sindh 75600, Pakistan
-                      </span>
+                      <span>Lahore, Pakistan</span>
                     </div>
                   </div>
                 </section>

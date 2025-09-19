@@ -308,7 +308,11 @@ const ItemsList = () => {
                   onClick={() => handleContactClick(item)}
                 >
                   <CiPhone className="button-icon" />
-                  Contact Details
+                  {item.role === "found"
+                    ? "Hey ! this is mine"
+                    : item.role === "lost"
+                    ? "Ahh ! I lost this"
+                    : "Contact Details"}
                 </button>
               </div>
             </div>

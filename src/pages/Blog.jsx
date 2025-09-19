@@ -1,4 +1,94 @@
 import React, { useState, useEffect, useMemo } from "react";
+import { saveSubscriber } from "../services/subscriberService";
+/* Newsletter subscriber component (same logic as footer) */
+const NewsletterSubscriber = () => {
+  const [subscriberEmail, setSubscriberEmail] = useState("");
+  const [selectedUniversity, setSelectedUniversity] = useState("");
+  const [subStatus, setSubStatus] = useState("");
+  const universities = ["UMT", "NUST", "FAST", "COMSATS", "UET", "PU", "QAU"];
+
+  const handleSubscribe = async (e) => {
+    e.preventDefault();
+    if (!subscriberEmail || !selectedUniversity) {
+      setSubStatus("Please enter your email and select a university.");
+      return;
+    }
+    const result = await saveSubscriber(selectedUniversity, subscriberEmail);
+    if (result.success) {
+      setSubStatus("Subscribed successfully!");
+      setSubscriberEmail("");
+    } else {
+      setSubStatus("Error: " + result.error);
+    }
+  };
+
+  return (
+    <form
+      onSubmit={handleSubscribe}
+      className="newsletter-form"
+      style={{
+        display: "flex",
+        gap: "0.5rem",
+        flexWrap: "wrap",
+        marginBottom: "1rem",
+      }}
+    >
+      <input
+        type="email"
+        placeholder="Enter your university email"
+        value={subscriberEmail}
+        onChange={(e) => setSubscriberEmail(e.target.value)}
+        required
+        style={{
+          padding: "0.5rem",
+          borderRadius: "6px",
+          border: "1px solid #ccc",
+        }}
+      />
+      <select
+        value={selectedUniversity}
+        onChange={(e) => setSelectedUniversity(e.target.value)}
+        required
+        style={{
+          padding: "0.5rem",
+          borderRadius: "6px",
+          border: "1px solid #ccc",
+        }}
+      >
+        <option value="">Select University</option>
+        {universities.map((u) => (
+          <option key={u} value={u}>
+            {u}
+          </option>
+        ))}
+      </select>
+      <button
+        type="submit"
+        className="subscribe-btn"
+        style={{
+          padding: "0.5rem 1rem",
+          borderRadius: "6px",
+          background: "#4382E4",
+          color: "#fff",
+          border: "none",
+          fontWeight: "600",
+        }}
+      >
+        Subscribe
+      </button>
+      {subStatus && (
+        <span
+          style={{
+            marginLeft: "1rem",
+            color: subStatus.includes("success") ? "#59B888" : "#dc2626",
+          }}
+        >
+          {subStatus}
+        </span>
+      )}
+    </form>
+  );
+};
 import {
   CiSearch,
   CiCalendar,
@@ -419,7 +509,7 @@ Being prepared doesn't mean living in fear - it means being ready to handle chal
         <section className="blog-hero">
           <div className="container">
             <h1 className="hero-title">Campus Life Blog</h1>
-            <p className="hero-subtitle">
+            <p className="hero-description description">
               Expert tips, safety guides, and insights to help you thrive at
               university
             </p>
@@ -595,10 +685,7 @@ Being prepared doesn't mean living in fear - it means being ready to handle chal
                 Get the latest campus safety tips and student guides delivered
                 to your inbox
               </p>
-              <div className="newsletter-form">
-                <input type="email" placeholder="Enter your university email" />
-                <button className="subscribe-btn">Subscribe</button>
-              </div>
+              <NewsletterSubscriber />
               <p className="newsletter-note">
                 <CiLock className="privacy-icon" />
                 We respect your privacy. Unsubscribe at any time.

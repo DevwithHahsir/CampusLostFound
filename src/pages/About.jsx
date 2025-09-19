@@ -4,7 +4,7 @@ import {
   CiHeart,
   CiLock,
   CiGlobe,
-//  CiUsers,
+  //  CiUsers,
   CiTrophy,
 } from "react-icons/ci";
 import SEO from "../componenets/seo/SEO";
@@ -27,7 +27,7 @@ const About = () => {
             <p className="hero-subtitle">
               Helping university students find lost items easily
             </p>
-            <p className="hero-description">
+            <p className="hero-description description">
               We're on a mission to reunite students with their lost belongings
               across Pakistani universities, making campus life easier and more
               connected.
@@ -85,6 +85,39 @@ const About = () => {
             </div>
           </div>
         </section>
+
+        {/* Developer Section */}
+        {/* <section className="developer-section">
+          <div className="container">
+            <h2 className="section-title">Meet the Developer</h2>
+            <div
+              className="developer-content"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "2rem",
+                flexWrap: "wrap",
+              }}
+            >
+              <div className="developer-info">
+                <h3>Hashir Mehboob</h3>
+                <p>
+                  <strong>University:</strong> University of Management and
+                  Technology (UMT)
+                </p>
+                <p>
+                  <strong>Degree:</strong> BS Software Engineering (BSSE)
+                </p>
+                <p>
+                  Passionate about building digital solutions for students.
+                  Experienced in full-stack web development, React, and
+                  Firebase. Dedicated to making campus life easier and more
+                  connected for everyone.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section> */}
 
         {/* Why This Platform is Needed */}
         <section className="why-needed-section">

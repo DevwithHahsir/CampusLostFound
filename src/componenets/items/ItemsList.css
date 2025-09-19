@@ -1,9 +1,40 @@
+/* Contact Button color matches badge */
+.item-card .contact-btn {
+    padding: 0.5rem 1.2rem;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: #f7f7f7;
+    color: #4382E4;
+    margin-top: 0.5rem;
+}
+
+.item-card.lost-card .contact-btn {
+    background: #fff3e6;
+    color: #ff8c42;
+    border: 1px solid #ff8c42;
+}
+
+.item-card.found-card .contact-btn {
+    background: #e6fff3;
+    color: #5dc173;
+    border: 1px solid #5dc173;
+}
+
+.item-card .contact-btn:hover {
+    filter: brightness(0.95);
+    box-shadow: 0 2px 8px rgba(59, 116, 213, 0.1);
+}
+
 /* ItemsList Component Styles */
 .items-list-container {
     /* max-width: 1400px; */
     margin: 0 auto;
     padding: 1rem;
-    background: linear-gradient(135deg, rgba(59, 116, 213, 0.05) 0%, rgba(93, 193, 115, 0.05) 100%);
+    /* background: linear-gradient(135deg, rgba(59, 116, 213, 0.05) 0%, rgba(93, 193, 115, 0.05) 100%); */
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -46,7 +77,7 @@
 
 .filter-buttons button {
     padding: 0.75rem 1.5rem;
-    border: 2px solid transparent;
+    border: 1px solid transparent;
     background: white;
     border-radius: 10px;
     cursor: pointer;
@@ -65,7 +96,7 @@
     box-shadow: 0 4px 15px rgba(59, 116, 213, 0.3);
     background: linear-gradient(45deg, #59B888, #5DC173, #54AE9E, #4E9FC1, #4382E4, #3B74D5);
     background-size: 300% 300%;
-    color: white;
+    color: white !important;
     animation: gradientShift 2s ease-in-out infinite;
 }
 
@@ -177,20 +208,26 @@
     gap: 1rem;
     margin-top: 1rem;
     justify-content: center;
+    /* border: 1px solid; */
 }
 
 /* Item Card Base */
 .item-card {
-    background: white;
+    background: rgba(255, 255, 255, 0.397);
+    backdrop-filter: blur(10px);
     border-radius: 15px;
     overflow: hidden;
     box-shadow: 0 10px 30px rgba(59, 116, 213, 0.15);
     transition: all 0.3s ease;
     border: 2px solid transparent;
     position: relative;
-    flex: 0 0 350px;
-    min-width: 350px;
-    /* height: 20rem; */
+
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -ms-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+
+    width: 25rem;
 }
 
 .item-card:hover {
@@ -226,6 +263,8 @@
     padding: 1rem 1.5rem;
     background: rgba(255, 255, 255, 0.9);
     backdrop-filter: blur(10px);
+    padding: 1rem !important;
+
 }
 
 .status-badge {
@@ -237,7 +276,12 @@
     letter-spacing: 0.5px;
     border: none;
     color: white;
-
+    border: 1px solid;
+    border-radius: 40px !important;
+    -webkit-border-radius: 40px !important;
+    -moz-border-radius: 40px !important;
+    -ms-border-radius: 40px !important;
+    -o-border-radius: 40px !important;
 }
 
 .status-badge.lost {
@@ -295,6 +339,10 @@
     -moz-border-radius: 20px !important;
     -ms-border-radius: 20px !important;
     -o-border-radius: 20px !important;
+    -webkit-transition: transform 0.3s ease;
+    -moz-transition: transform 0.3s ease;
+    -ms-transition: transform 0.3s ease;
+    -o-transition: transform 0.3s ease;
 }
 
 .item-card:hover .card-image img {
@@ -308,28 +356,30 @@
 
 .item-title-container {
 
-    padding-left: 2.5rem;
+    /* padding-left: 2.5rem; */
+    padding: 1rem;
 }
 
 .item-title {
     font-size: 1.3rem;
-    font-weight: 700;
-    background: linear-gradient(45deg, #3B74D5, #4382E4, #4E9FC1, #54AE9E, #59B888, #5DC173);
+    font-weight: 600;
+    background: #323A44;
     background-size: 300% 300%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     animation: gradientShift 6s ease-in-out infinite;
     margin: 0 0 1rem 0;
-    text-transform: uppercase;
+    text-transform: capitalize;
     letter-spacing: 0.5px;
-    /* font-family: "Bebas Neue", sans-serif; */
+
+    -webkit-animation: gradientShift 6s ease-in-out infinite;
 }
 
 .item-category {
-    color: #555;
+    color: #666 !important;
 
-    font-weight: 600;
+    font-weight: 500;
     margin: 0 0 0.75rem 0;
     font-size: 0.95rem;
     display: flex;
@@ -338,7 +388,7 @@
 }
 
 .item-description {
-    color: #555;
+    color: #666;
     margin: 0 0 1rem 0;
     line-height: 1.5;
     font-size: 0.95rem;
@@ -372,22 +422,24 @@
 }
 
 .contact-btn {
-    width: 100%;
+    width: 90%;
+    margin: 1rem;
+
     padding: 0.75rem 1.5rem;
     background: linear-gradient(45deg, #3B74D5, #4382E4, #4E9FC1, #54AE9E, #59B888, #5DC173);
     background-size: 300% 300%;
     color: white;
     border: none;
     border-radius: 10px;
-    font-weight: 600;
+    font-weight: 500;
     cursor: pointer;
     transition: all 0.3s ease;
     font-size: 0.95rem;
-    text-transform: uppercase;
+    text-transform: capitalize;
     letter-spacing: 0.5px;
     animation: gradientShift 4s ease-in-out infinite;
     box-shadow: 0 4px 15px rgba(59, 116, 213, 0.3);
-    font-family: "Bebas Neue", sans-serif;
+    /* font-family: "Bebas Neue", sans-serif; */
     font-weight: 400;
     display: flex;
     align-items: center;

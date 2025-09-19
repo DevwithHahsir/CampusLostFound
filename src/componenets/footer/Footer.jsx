@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   CiMail,
@@ -9,9 +9,30 @@ import {
 } from "react-icons/ci";
 import { FaGithub } from "react-icons/fa";
 import "./Footer.css";
+import { saveSubscriber } from "../../services/subscriberService";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const [subscriberEmail, setSubscriberEmail] = useState("");
+  const [selectedUniversity, setSelectedUniversity] = useState("");
+  const [subStatus, setSubStatus] = useState("");
+
+  const universities = ["UMT", "NUST", "FAST", "COMSATS", "UET", "PU", "QAU"];
+
+  const handleSubscribe = async (e) => {
+    e.preventDefault();
+    if (!subscriberEmail || !selectedUniversity) {
+      setSubStatus("Please enter your email and select a university.");
+      return;
+    }
+    const result = await saveSubscriber(selectedUniversity, subscriberEmail);
+    if (result.success) {
+      setSubStatus("Subscribed successfully!");
+      setSubscriberEmail("");
+    } else {
+      setSubStatus("Error: " + result.error);
+    }
+  };
 
   return (
     <footer className="footer">
@@ -136,6 +157,68 @@ const Footer = () => {
           </div>
         </div>
 
+        {/* Subscriber Input */}
+        <div className="footer-section" style={{ marginBottom: "2rem" }}>
+          <h4 className="footer-heading">Subscribe for Updates</h4>
+          <form
+            onSubmit={handleSubscribe}
+            className="footer-subscriber-form"
+            style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}
+          >
+            <input
+              type="email"
+              placeholder="Enter your email"
+              value={subscriberEmail}
+              onChange={(e) => setSubscriberEmail(e.target.value)}
+              required
+              style={{
+                padding: "0.5rem",
+                borderRadius: "6px",
+                border: "1px solid #ccc",
+              }}
+            />
+            <select
+              value={selectedUniversity}
+              onChange={(e) => setSelectedUniversity(e.target.value)}
+              required
+              style={{
+                padding: "0.5rem",
+                borderRadius: "6px",
+                border: "1px solid #ccc",
+              }}
+            >
+              <option value="">Select University</option>
+              {universities.map((u) => (
+                <option key={u} value={u}>
+                  {u}
+                </option>
+              ))}
+            </select>
+            <button
+              type="submit"
+              style={{
+                padding: "0.5rem 1rem",
+                borderRadius: "6px",
+                background: "#4382E4",
+                color: "#fff",
+                border: "none",
+                fontWeight: "600",
+              }}
+            >
+              Subscribe
+            </button>
+          </form>
+          {subStatus && (
+            <p
+              style={{
+                marginTop: "0.5rem",
+                color: subStatus.includes("success") ? "#59B888" : "#dc2626",
+              }}
+            >
+              {subStatus}
+            </p>
+          )}
+        </div>
         {/* Footer Bottom */}
         <div className="footer-bottom">
           <div className="footer-bottom-content">

@@ -19,7 +19,7 @@ const PrivacyPolicySimple = () => {
         <section className="privacy-hero">
           <div className="container">
             <h1 className="hero-title">Privacy Policy</h1>
-            <p className="hero-subtitle">
+            <p className="hero-description decsription">
               Your privacy is important to us. This policy explains how we
               collect, use, and protect your personal information when you use
               CampusLostFound.

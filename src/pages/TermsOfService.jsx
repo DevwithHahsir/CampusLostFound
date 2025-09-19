@@ -235,7 +235,7 @@ const TermsOfService = () => {
         <section className="terms-hero">
           <div className="container">
             <h1 className="hero-title">Terms of Service</h1>
-            <p className="hero-subtitle">
+            <p className="hero-description decsription">
               Please read these terms carefully. They govern your use of
               CampusLostFound and outline both your rights and responsibilities
               as a user.

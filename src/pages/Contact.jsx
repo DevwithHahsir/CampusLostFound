@@ -9,7 +9,6 @@ import {
   CiChat2,
   CiBadgeDollar,
   CiGlobe,
-
   CiCircleCheck,
   CiCircleAlert,
 } from "react-icons/ci";
@@ -32,7 +31,7 @@ const Contact = () => {
   });
 
   const [showPartnershipModal, setShowPartnershipModal] = useState(false);
-  
+
   // Debug: Log modal state changes
   useEffect(() => {
     console.log("Partnership modal state changed:", showPartnershipModal);
@@ -173,7 +172,7 @@ const Contact = () => {
         <section className="contact-hero">
           <div className="container">
             <h1 className="hero-title">Get in Touch</h1>
-            <p className="hero-subtitle">
+            <p className="hero-description description">
               We're here to help you make the most of CampusLostFound. Reach out
               for support, partnerships, or just to say hello!
             </p>
@@ -427,16 +426,6 @@ const Contact = () => {
                     <span>Priority support for your students</span>
                   </div>
                 </div>
-
-                <button
-                  onClick={() => {
-                    console.log("Partnership button clicked");
-                    setShowPartnershipModal(true);
-                  }}
-                  className="partnership-btn"
-                >
-                  Request Partnership Info
-                </button>
               </div>
 
               <div className="partnership-stats">
@@ -547,7 +536,7 @@ const Contact = () => {
         <div
           className="modal-overlay"
           onClick={() => setShowPartnershipModal(false)}
-          style={{ zIndex: 9999, backgroundColor: 'rgba(0, 0, 0, 0.8)' }}
+          style={{ zIndex: 9999, backgroundColor: "rgba(0, 0, 0, 0.8)" }}
         >
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">

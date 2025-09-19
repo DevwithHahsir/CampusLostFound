@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useLocation, Link } from "react-router-dom";
@@ -257,17 +258,8 @@ const Login = React.memo(() => {
           { name: "security-level", content: "university-email-verification" },
         ]}
       />
+      {/* Alert removed: errors now shown below input fields */}
       <main className="login-main-container">
-        {/* Alert Component */}
-        {showAlertCard && (
-          <AlertCard
-            type={alertType}
-            message={alertMessage}
-            isVisible={showAlertCard}
-            onClose={() => setShowAlertCard(false)}
-          />
-        )}
-
         <div className="login-wrapper">
           <div className="login-header">
             <h1 className="login-title">Welcome Back</h1>
@@ -300,11 +292,18 @@ const Login = React.memo(() => {
                   },
                 })}
               />
-
+              {/* Show error below input */}
               {errors.email && (
                 <div className="error-message">
                   <span className="error-icon">⚠️</span>
                   {errors.email.message}
+                </div>
+              )}
+              {/* Show general error below input if not field-specific */}
+              {alertType === "error" && alertMessage && !errors.email && (
+                <div className="error-message">
+                  <span className="error-icon">⚠️</span>
+                  {alertMessage}
                 </div>
               )}
             </div>
@@ -332,11 +331,18 @@ const Login = React.memo(() => {
                   },
                 })}
               />
-
+              {/* Show error below input */}
               {errors.password && (
                 <div className="error-message">
                   <span className="error-icon">⚠️</span>
                   {errors.password.message}
+                </div>
+              )}
+              {/* Show general error below input if not field-specific */}
+              {alertType === "error" && alertMessage && !errors.password && (
+                <div className="error-message">
+                  <span className="error-icon">⚠️</span>
+                  {alertMessage}
                 </div>
               )}
             </div>

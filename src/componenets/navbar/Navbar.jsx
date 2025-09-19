@@ -48,6 +48,9 @@ export default function Navbar() {
         <div className="collapse navbar-collapse" id="navbarContent">
           {/* Center - Navigation Links */}
           <div className="navbar-nav mx-auto">
+            <NavLink className="nav-link" to="/">
+              Home
+            </NavLink>
             <NavLink className="nav-link" to="/about">
               About
             </NavLink>
@@ -66,12 +69,6 @@ export default function Navbar() {
             {/* <NavLink className="nav-link" to="/report">
               Report Item
             </NavLink> */}
-            <NavLink className="nav-link" to="/privacy-policy">
-              Privacy Policy
-            </NavLink>
-            <NavLink className="nav-link" to="/terms-of-service">
-              Terms of Service
-            </NavLink>
           </div>
 
           {/* Right - Search Bar & User Actions */}
@@ -113,6 +110,17 @@ export default function Navbar() {
                     <Link className="dropdown-item" to="/dashboard">
                       Dashboard
                     </Link>
+                  </li>
+                  <li>
+                    <NavLink className="nav-link" to="/privacy-policy">
+                      Privacy Policy
+                    </NavLink>
+                  </li>
+
+                  <li>
+                    <NavLink className="nav-link" to="/terms-of-service">
+                      Terms of Service
+                    </NavLink>
                   </li>
                   <li>
                     <button className="dropdown-item" onClick={handleLogout}>

@@ -31,6 +31,11 @@ import IBALogo from "../assets/IBA.png";
 import GikiLogo from "../assets/giki.png";
 import FastLogo from "../assets/Fast.png";
 import ComsatsLogo from "../assets/Comsats.png";
+import AKULogo from "../assets/AKU.png";
+import AULogo from "../assets/AIR.png";
+import BULogo from "../assets/BU.png";
+import ISTLogo from "../assets/IST.png";
+import LumsLogo from "../assets/LUMS.png";
 // Add more as needed
 
 const logoImports = {
@@ -43,6 +48,11 @@ const logoImports = {
   "giki.png": GikiLogo,
   "Fast.png": FastLogo,
   "Comsats.png": ComsatsLogo,
+  "AKU.png": AKULogo,
+  "AIR.png": AULogo,                                                                                                          
+  "BU.png": BULogo,
+  "IST.png": ISTLogo,
+  "LUMS.png": LumsLogo,
   // Add more as needed
 };
 import SEO from "../componenets/seo/SEO";
@@ -59,34 +69,9 @@ const Universities = () => {
   const universitiesArray = Object.values(UniversityDetails);
 
   useEffect(() => {
-    let filtered = universitiesArray;
-
-    // Filter by search term
-    if (searchTerm) {
-      filtered = filtered.filter(
-        (uni) =>
-          uni.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          uni.shortName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          uni.location.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-
-    // Filter by type (partial match)
-    if (selectedType !== "all") {
-      filtered = filtered.filter((uni) =>
-        uni.type.toLowerCase().includes(selectedType)
-      );
-    }
-
-    // Filter by location (partial match)
-    if (selectedLocation !== "all") {
-      filtered = filtered.filter((uni) =>
-        uni.location.toLowerCase().includes(selectedLocation.toLowerCase())
-      );
-    }
-
-    setFilteredUniversities(filtered);
-  }, [searchTerm, selectedType, selectedLocation]);
+    // Always show all universities from UniversityDetails.js
+    setFilteredUniversities(universitiesArray);
+  }, [universitiesArray]);
 
   const getSocialIcon = (platform) => {
     switch (platform) {
@@ -134,6 +119,46 @@ const Universities = () => {
         {/* Updated hero section without background colors */}
         <div className="universities-hero">
           <div className="container">
+            {/* Dropdown for Privacy Policy and Terms of Service */}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                marginBottom: "1rem",
+              }}
+            >
+              <div className="dropdown">
+                <button
+                  className="dropdown-toggle"
+                  style={{
+                    padding: "0.5rem 1rem",
+                    borderRadius: "4px",
+                    border: "1px solid #ccc",
+                    background: "#fff",
+                    cursor: "pointer",
+                  }}
+                >
+                  More
+                </button>
+                <div
+                  className="dropdown-menu"
+                  style={{
+                    display: "none",
+                    position: "absolute",
+                    right: 0,
+                    minWidth: "180px",
+                    zIndex: 10,
+                  }}
+                >
+                  <a href="/privacy-policy" className="nav-link">
+                    Privacy Policy
+                  </a>
+                  <a href="/terms-of-service" className="nav-link">
+                    Terms of Service
+                  </a>
+                </div>
+              </div>
+            </div>
             <h1 className="page-title heading">
               Pakistani Universities Directory
             </h1>

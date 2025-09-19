@@ -732,13 +732,14 @@
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
 
-.contact-item, .support-item {
+.universities-page  .contact-item,.universities-page .support-item {
     background: #f8f9fa;
     padding: 20px;
     border-radius: 15px;
     border-left: 4px solid #4158d0;
     /* border: 1px solid; */
     width: 25rem;
+    
     
 }
 

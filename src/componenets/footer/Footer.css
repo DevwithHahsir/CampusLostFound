@@ -125,13 +125,20 @@
     margin-bottom: 1.5rem;
 }
 
-.contact-item {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-    margin-bottom: 1rem;
-    color: #cccccc;
-    font-size: 0.95rem;
+
+.contact-item 
+{
+    /* border: 1px solid; */
+    display: flex !important;
+
+
+    gap: 1rem;
+}
+
+.footer-section .contact-item {
+
+
+    
 }
 
 .contact-icon {
@@ -236,6 +243,12 @@
 
     .footer-bottom-links {
         justify-content: center;
+    }
+    .contact-item
+    {
+        /* border: 1px solid; */
+        display: flex !important;
+
     }
 }
 

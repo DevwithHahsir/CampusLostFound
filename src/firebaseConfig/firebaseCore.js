@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // Firebase Core Configuration - Stable v11.0.2 setup
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
@@ -19,7 +20,6 @@ let app;
 try {
   app = initializeApp(firebaseConfig);
 } catch (error) {
-  console.error("Firebase initialization error:", error);
   // Fallback initialization
   app = initializeApp(firebaseConfig);
 }

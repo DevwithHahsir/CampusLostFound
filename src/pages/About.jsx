@@ -23,7 +23,7 @@ const About = () => {
         {/* Hero Section */}
         <section className="about-hero">
           <div className="hero-content">
-            <h1 className="hero-title">About CampusLostFound</h1>
+            <h1 className="campus-hero-title">About CampusLostFound</h1>
             <p className="hero-subtitle">
               Helping university students find lost items easily
             </p>

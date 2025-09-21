@@ -4,6 +4,9 @@ import "./alertCard.css";
 const Card = ({ type = "error", message = "", onClose, isVisible = false }) => {
   if (!isVisible) return null;
 
+  // Render overlay behind alert
+  const overlay = <div className="alert-overlay" />;
+
   const getIcon = () => {
     if (type === "success") {
       return (
@@ -38,27 +41,30 @@ const Card = ({ type = "error", message = "", onClose, isVisible = false }) => {
   };
 
   return (
-    <div
-      className={`alert ${
-        type === "success" ? "alert--success" : "alert--error"
-      }`}
-    >
-      <div className="alert__icon">{getIcon()}</div>
-      <div className="alert__title">{message}</div>
-      <div className="alert__close" onClick={onClose}>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width={20}
-          viewBox="0 0 20 20"
-          height={20}
-        >
-          <path
-            fill="#fff"
-            d="m15.8333 5.34166-1.175-1.175-4.6583 4.65834-4.65833-4.65834-1.175 1.175 4.65833 4.65834-4.65833 4.6583 1.175 1.175 4.65833-4.6583 4.6583 4.6583 1.175-1.175-4.6583-4.6583z"
-          />
-        </svg>
+    <>
+      {overlay}
+      <div
+        className={`alert ${
+          type === "success" ? "alert--success" : "alert--error"
+        }`}
+      >
+        <div className="alert__icon">{getIcon()}</div>
+        <div className="alert__title">{message}</div>
+        <div className="alert__close" onClick={onClose}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width={20}
+            viewBox="0 0 20 20"
+            height={20}
+          >
+            <path
+              fill="#fff"
+              d="m15.8333 5.34166-1.175-1.175-4.6583 4.65834-4.65833-4.65834-1.175 1.175 4.65833 4.65834-4.65833 4.6583 1.175 1.175 4.65833-4.6583 4.6583 4.6583 1.175-1.175-4.6583-4.6583z"
+            />
+          </svg>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

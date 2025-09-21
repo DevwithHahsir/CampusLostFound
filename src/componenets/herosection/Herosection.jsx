@@ -93,42 +93,33 @@ const Herosection = React.memo(() => {
       return;
     }
 
-    // Debug: Log authentication state
-    console.log("Authentication Debug:", {
-      user: user,
-      isAuthenticated: isAuthenticated,
-      isEmailVerified: isEmailVerified,
-      userUid: user?.uid,
-      userEmail: user?.email,
-      userEmailVerified: user?.emailVerified,
-    });
-
+    // Validate report access
     const validation = authValidationUtils.validateReportAccess(
       user,
       isAuthenticated,
       isEmailVerified
     );
 
-    console.log("Validation Result:", validation);
-
-    // If user is clearly authenticated and email verified, show form directly
+    // If user is authenticated and verified, show form
     if (isAuthenticated && user && user.uid && isEmailVerified) {
-      console.log("User is authenticated and verified, showing form");
       setShowReportForm(true);
       return;
     }
 
+    // If not allowed, handle errors
     if (!validation.canReport) {
       validation.errors.forEach((error) => {
         if (error.action === "redirect_login") {
-          // Navigate to login with state containing the message
-          navigate("/login", {
-            state: {
-              message: error.message,
-              from: "report-item",
-              redirectTo: "/",
-            },
-          });
+          // Only navigate to login if user is NOT authenticated
+          if (!isAuthenticated) {
+            navigate("/login", {
+              state: {
+                message: error.message,
+                from: "report-item",
+                redirectTo: "/",
+              },
+            });
+          }
         } else if (error.action === "show_alert") {
           // Show alert for other errors (email verification, university domain)
           alert(error.message);
@@ -225,7 +216,7 @@ const Herosection = React.memo(() => {
           </div>
 
           <header className=" heading hero-text">
-            <h1 className="hero-title heading">Lost Something?</h1>
+            <h1 className="campus-hero-title">Lost Something?</h1>
             <h2 className="hero-subtitle sub-heading">
               Let's Find it Together
             </h2>

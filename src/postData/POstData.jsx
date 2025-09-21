@@ -62,9 +62,7 @@ function PostData() {
       });
 
       setStatus(`✅ Successfully uploaded ${university.name}!`);
-      console.log(`✅ Uploaded: ${university.name}`);
     } catch (error) {
-      console.error("❌ Error uploading university:", error);
       setStatus(`❌ Error: ${error.message}`);
     } finally {
       setLoading(false);

@@ -1,22 +1,24 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useCallback, useMemo } from "react";
+
+// import  {  useEffect, useCallback, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import "./Login.css";
 import { auth } from "../firebaseConfig/firebaseCore";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import AlertCard from "../componenets/alert/Card";
+import {
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+} from "firebase/auth";
 import { isValidDomain } from "../data/UniversityDomains";
 import { useAuth } from "../AuthContext/AuthContext";
 import SEO from "../componenets/seo/SEO";
 
 const Login = React.memo(() => {
-  const [alertType, setAlertType] = useState("");
-  const [alertMessage, setAlertMessage] = useState("");
-  const [showAlertCard, setShowAlertCard] = useState(false);
+  // ...existing code...
   const [loading, setLoading] = useState(false);
+  const [formError, setFormError] = useState("");
 
-  // Use Auth Context and Navigation
   const { isAuthenticated, isEmailVerified } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -28,7 +30,6 @@ const Login = React.memo(() => {
     formState: { errors },
   } = useForm();
 
-  // Memoized regex patterns to prevent recreation on each render
   const validationPatterns = useMemo(
     () => ({
       email:
@@ -39,7 +40,6 @@ const Login = React.memo(() => {
     []
   );
 
-  // Memoized validation function
   const validateUniversityDomain = useCallback((email) => {
     if (!email) return true;
     const emailDomain = email.split("@")[1];
@@ -47,88 +47,29 @@ const Login = React.memo(() => {
     return isValidDomain(emailDomain);
   }, []);
 
-  // Login function
   const loginUser = useCallback(
     async (email, password) => {
-      console.log("Login attempt started for:", email);
       try {
         setLoading(true);
-        setShowAlertCard(false); // Hide any previous alerts
-
-        // Double-check university domain before attempting login
         if (!validateUniversityDomain(email)) {
-          console.log("University domain validation failed");
-          setAlertType("error");
-          setAlertMessage(
+          throw new Error(
             "Please use your university email address. Only registered university domains are allowed."
           );
-          setShowAlertCard(true);
-          return;
         }
-
-        console.log("Attempting Firebase authentication...");
         const userCredential = await signInWithEmailAndPassword(
           auth,
           email,
           password
         );
-        console.log(
-          "Firebase authentication successful:",
-          userCredential.user.uid
-        );
-
-        // Check if email is verified
         if (!userCredential.user.emailVerified) {
-          console.log("Email not verified");
-          setAlertType("error");
-          setAlertMessage(
+          throw new Error(
             "Please verify your email before logging in. Check your email inbox for the verification link."
           );
-          setShowAlertCard(true);
-          return;
         }
-
-        console.log("Login successful, showing success message");
-        setAlertType("success");
-        setAlertMessage("Login successful! Redirecting...");
-        setShowAlertCard(true);
-
-        // Navigate immediately after successful login and email verification
-        console.log("Setting timeout for navigation");
         setTimeout(() => {
           const redirectTo = location.state?.redirectTo || "/";
-          console.log("Navigating to:", redirectTo);
           navigate(redirectTo);
         }, 1500);
-      } catch (error) {
-        console.error("Login error:", error);
-        console.error("Error code:", error.code);
-        console.error("Error message:", error.message);
-
-        // Handle specific Firebase auth errors with user-friendly messages
-        let errorMessage = "Login failed. Please try again.";
-
-        if (error.code === "auth/user-not-found") {
-          errorMessage =
-            "No account found with this email address. Please sign up first.";
-        } else if (error.code === "auth/wrong-password") {
-          errorMessage = "Incorrect password. Please try again.";
-        } else if (error.code === "auth/invalid-email") {
-          errorMessage = "Please enter a valid email address.";
-        } else if (error.code === "auth/user-disabled") {
-          errorMessage =
-            "This account has been disabled. Please contact support.";
-        } else if (error.code === "auth/too-many-requests") {
-          errorMessage = "Too many failed attempts. Please try again later.";
-        } else if (error.code === "auth/invalid-credential") {
-          errorMessage =
-            "Invalid email or password. Please check your credentials and try again.";
-        }
-
-        console.log("Setting error alert:", errorMessage);
-        setAlertType("error");
-        setAlertMessage(errorMessage);
-        setShowAlertCard(true);
       } finally {
         setLoading(false);
       }
@@ -136,24 +77,20 @@ const Login = React.memo(() => {
     [validateUniversityDomain, navigate, location.state]
   );
 
-  // Check for stored credentials on component load (but don't auto-login)
   useEffect(() => {
     const checkStoredCredentials = () => {
       const storedEmail = localStorage.getItem("rememberedEmail");
       const storedPassword = localStorage.getItem("rememberedPassword");
       const rememberMe = localStorage.getItem("rememberMe") === "true";
-
       if (storedEmail && storedPassword && rememberMe) {
         setValue("email", storedEmail);
         setValue("password", storedPassword);
         setValue("rememberMe", true);
       }
     };
-
     checkStoredCredentials();
   }, [setValue]);
 
-  // Redirect if already authenticated and email verified (for direct URL access)
   useEffect(() => {
     if (isAuthenticated && isEmailVerified) {
       const redirectTo = location.state?.redirectTo || "/";
@@ -161,26 +98,11 @@ const Login = React.memo(() => {
     }
   }, [isAuthenticated, isEmailVerified, navigate, location.state]);
 
-  // Check for navigation state message (e.g., from Report Item redirect)
-  useEffect(() => {
-    if (location.state?.message && location.state?.from === "report-item") {
-      setAlertType("warning");
-      setAlertMessage(location.state.message);
-      setShowAlertCard(true);
-    }
-  }, [location.state]);
-
-  // Memoized form submission handler
   const onSubmit = useCallback(
     async (data) => {
-      console.log("Form submitted with data:", {
-        email: data.email,
-        hasPassword: !!data.password,
-      });
+      setFormError("");
       try {
         await loginUser(data.email, data.password);
-
-        // Handle Remember Me functionality
         if (data.rememberMe) {
           localStorage.setItem("rememberedEmail", data.email);
           localStorage.setItem("rememberedPassword", data.password);
@@ -191,14 +113,15 @@ const Login = React.memo(() => {
           localStorage.removeItem("rememberMe");
         }
       } catch (error) {
-        console.error("Login submission error:", error);
-        setAlertType("error");
-        setAlertMessage("An unexpected error occurred. Please try again.");
-        setShowAlertCard(true);
+        setFormError(
+          error.message || "An unexpected error occurred. Please try again."
+        );
       }
     },
     [loginUser]
   );
+
+  // ...existing code...
 
   return (
     <>
@@ -258,7 +181,6 @@ const Login = React.memo(() => {
           { name: "security-level", content: "university-email-verification" },
         ]}
       />
-      {/* Alert removed: errors now shown below input fields */}
       <main className="login-main-container">
         <div className="login-wrapper">
           <div className="login-header">
@@ -292,22 +214,19 @@ const Login = React.memo(() => {
                   },
                 })}
               />
-              {/* Show error below input */}
               {errors.email && (
                 <div className="error-message">
                   <span className="error-icon">⚠️</span>
                   {errors.email.message}
                 </div>
               )}
-              {/* Show general error below input if not field-specific */}
-              {alertType === "error" && alertMessage && !errors.email && (
+              {formError && !errors.email && (
                 <div className="error-message">
                   <span className="error-icon">⚠️</span>
-                  {alertMessage}
+                  {formError}
                 </div>
               )}
             </div>
-
             {/* Password Input */}
             <div className="form-group">
               <label htmlFor="password" className="form-label">
@@ -331,22 +250,19 @@ const Login = React.memo(() => {
                   },
                 })}
               />
-              {/* Show error below input */}
               {errors.password && (
                 <div className="error-message">
                   <span className="error-icon">⚠️</span>
                   {errors.password.message}
                 </div>
               )}
-              {/* Show general error below input if not field-specific */}
-              {alertType === "error" && alertMessage && !errors.password && (
+              {formError && !errors.password && (
                 <div className="error-message">
                   <span className="error-icon">⚠️</span>
-                  {alertMessage}
+                  {formError}
                 </div>
               )}
             </div>
-
             {/* Remember Me & Forgot Password */}
             <div className="form-options">
               <div className="remember-me">
@@ -357,16 +273,26 @@ const Login = React.memo(() => {
                 />
                 <label htmlFor="rememberMe">Remember me</label>
               </div>
-              <a href="#" className="forgot-password">
+              <Link
+                to="/forgot-password"
+                className="forgot-password"
+                style={{
+                  color: "#007bff",
+                  cursor: "pointer",
+                  padding: 0,
+                  textDecoration: "underline",
+                  background: "none",
+                  border: "none",
+                }}
+              >
                 Forgot Password?
-              </a>
+              </Link>
             </div>
-
+           
             {/* Submit Button */}
             <button type="submit" className="login-btn" disabled={loading}>
               {loading ? "Signing In..." : "Sign In"}
             </button>
-
             {/* Sign Up Link */}
             <div className="signup-link">
               <p>

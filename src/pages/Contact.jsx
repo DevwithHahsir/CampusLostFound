@@ -171,7 +171,7 @@ const Contact = () => {
         {/* Hero Section */}
         <section className="contact-hero">
           <div className="container">
-            <h1 className="hero-title">Get in Touch</h1>
+            <h1 className="campus-hero-title">Get in Touch</h1>
             <p className="hero-description description">
               We're here to help you make the most of CampusLostFound. Reach out
               for support, partnerships, or just to say hello!

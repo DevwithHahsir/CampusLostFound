@@ -1,4 +1,11 @@
 import { useEffect, useState } from "react";
+// Collapse navbar on link click (for mobile)
+const closeNavbar = () => {
+  const navbarCollapse = document.getElementById("navbarContent");
+  if (navbarCollapse && navbarCollapse.classList.contains("show")) {
+    navbarCollapse.classList.remove("show");
+  }
+};
 import { Link, NavLink } from "react-router-dom";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import "./Navbar.css";
@@ -48,22 +55,30 @@ export default function Navbar() {
         <div className="collapse navbar-collapse" id="navbarContent">
           {/* Center - Navigation Links */}
           <div className="navbar-nav mx-auto">
-            <NavLink className="nav-link" to="/">
+            <NavLink className="nav-link" to="/" onClick={closeNavbar}>
               Home
             </NavLink>
-            <NavLink className="nav-link" to="/about">
+            <NavLink className="nav-link" to="/about" onClick={closeNavbar}>
               About
             </NavLink>
-            <NavLink className="nav-link" to="/how-it-works">
+            <NavLink
+              className="nav-link"
+              to="/how-it-works"
+              onClick={closeNavbar}
+            >
               How It Works
             </NavLink>
-            <NavLink className="nav-link" to="/universities">
+            <NavLink
+              className="nav-link"
+              to="/universities"
+              onClick={closeNavbar}
+            >
               Universities
             </NavLink>
-            <NavLink className="nav-link" to="/blog">
+            <NavLink className="nav-link" to="/blog" onClick={closeNavbar}>
               Blog
             </NavLink>
-            <NavLink className="nav-link" to="/contact">
+            <NavLink className="nav-link" to="/contact" onClick={closeNavbar}>
               Contact
             </NavLink>
             {/* <NavLink className="nav-link" to="/report">
@@ -73,6 +88,18 @@ export default function Navbar() {
 
           {/* Right - Search Bar & User Actions */}
           <div className="d-flex align-items-center">
+            <Link
+              to="/report"
+              className="btn btn-primary me-3"
+              style={{
+                fontWeight: 600,
+                letterSpacing: 0.5,
+                borderRadius: "8px",
+              }}
+              onClick={closeNavbar}
+            >
+              Report Item
+            </Link>
             {/* Search Bar */}
             {/* <form className="d-flex me-3">
               <input
@@ -107,18 +134,30 @@ export default function Navbar() {
                     <hr className="dropdown-divider" />
                   </li>
                   <li>
-                    <Link className="dropdown-item" to="/dashboard">
+                    <Link
+                      className="dropdown-item"
+                      to="/dashboard"
+                      onClick={closeNavbar}
+                    >
                       Dashboard
                     </Link>
                   </li>
                   <li>
-                    <NavLink className="nav-link" to="/privacy-policy">
+                    <NavLink
+                      className="nav-link"
+                      to="/privacy-policy"
+                      onClick={closeNavbar}
+                    >
                       Privacy Policy
                     </NavLink>
                   </li>
 
                   <li>
-                    <NavLink className="nav-link" to="/terms-of-service">
+                    <NavLink
+                      className="nav-link"
+                      to="/terms-of-service"
+                      onClick={closeNavbar}
+                    >
                       Terms of Service
                     </NavLink>
                   </li>
@@ -130,11 +169,19 @@ export default function Navbar() {
                 </ul>
               </div>
             ) : (
-              <div className="d-flex">
-                <Link to="/login" className="btn btn-outline-primary me-2">
+              <div className="d-flex authenticate-user">
+                <Link
+                  to="/login"
+                  className="btn btn-outline-primary me-2"
+                  onClick={closeNavbar}
+                >
                   Login
                 </Link>
-                <Link to="/signup" className="btn btn-primary">
+                <Link
+                  to="/signup"
+                  className="btn btn-primary"
+                  onClick={closeNavbar}
+                >
                   Signup
                 </Link>
               </div>

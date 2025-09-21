@@ -338,7 +338,19 @@
 @media (max-width: 767.98px) {
     .d-flex {
         min-width: 100%;
+        display: flex;
+        /* flex-wrap: wrap; */
+        justify-content: center;
     }
+    .authenticate-user a 
+    {
+        border: 1px solid;
+        width: 5rem;
+
+    }
+
+    
+
 }
 
 /* Active state for navigation items */

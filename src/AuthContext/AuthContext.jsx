@@ -15,15 +15,13 @@ export const AuthProvider = ({ children }) => {
     let unsubscribe = () => {};
     let isMounted = true;
 
-    // Initialize Firebase Auth lazily with error handling and faster timeout
+    // Initialize Firebase Auth lazily with error handling
     const initAuth = async () => {
       try {
-        if (!isMounted) return; // Component unmounted before auth loaded
-
-        if (!isMounted) return; // Component unmounted before listener setup
+        if (!isMounted) return;
 
         unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-          if (!isMounted) return; // Component unmounted during callback
+          if (!isMounted) return;
 
           if (currentUser) {
             setUser(currentUser);
@@ -44,21 +42,10 @@ export const AuthProvider = ({ children }) => {
       }
     };
 
-    // Add fallback timeout to ensure loading doesn't stay true indefinitely
-    const authTimeout = setTimeout(() => {
-      if (isMounted) {
-        console.warn("Auth initialization timed out, proceeding without auth");
-        setUser(null);
-        setIsAuthenticated(false);
-        setLoading(false);
-      }
-    }, 2000); // 2 second timeout for auth
-
     initAuth();
 
     return () => {
       isMounted = false;
-      clearTimeout(authTimeout);
       unsubscribe();
     };
   }, []);

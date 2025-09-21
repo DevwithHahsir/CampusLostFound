@@ -508,7 +508,7 @@ Being prepared doesn't mean living in fear - it means being ready to handle chal
         {/* Hero Section */}
         <section className="blog-hero">
           <div className="container">
-            <h1 className="hero-title">Campus Life Blog</h1>
+            <h1 className="campus-hero-title">Campus Life Blog</h1>
             <p className="hero-description description">
               Expert tips, safety guides, and insights to help you thrive at
               university

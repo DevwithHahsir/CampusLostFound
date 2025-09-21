@@ -144,7 +144,8 @@
 }
 
 .featured-article {
-    display: grid;
+    font-size: 2.5rem;
+    /* Adjusted for mobile responsiveness */
     grid-template-columns: 1fr 300px;
     gap: 40px;
     align-items: center;
@@ -155,6 +156,22 @@
     border: 1px solid #e8ecf4;
 }
 
+/* New campus-hero-title class for hero headings */
+.campus-hero-title {
+    font-family: "Bebas Neue", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 4vw;
+    background: linear-gradient(45deg, #3B74D5, #4382E4, #4E9FC1, #54AE9E, #59B888, #5DC173);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 4s ease-in-out infinite;
+    margin-bottom: 1rem;
+}
+
+/* Featured meta and related styles */
 .featured-meta {
     display: flex;
     align-items: center;
@@ -226,9 +243,9 @@
 }
 
 /* .featured-image {
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+border-radius: 15px;
+overflow: hidden;
+box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
 } */
 
 .featured-image img {
@@ -547,4 +564,5 @@
         font-size: 1rem;
         padding: 12px 20px 12px 45px;
     }
+
 }

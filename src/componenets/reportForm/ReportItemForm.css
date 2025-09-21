@@ -2,17 +2,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue:wght@400&display=swap');
 
 .report-form-inline {
-    width: 100%;
-    max-width: 700px;
-    margin: 2rem auto;
-    padding: 0 1rem;
+    width: 100vw;
+    height: 100vh;
+    padding: 0;
     animation: slideInDown 0.4s ease-out;
     display: flex;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
     position: fixed;
-    top: 2%;
-    left: 1%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+
 }
 
 .report-form-container {
@@ -20,7 +22,7 @@
     border-radius: 12px;
     width: 100%;
     max-width: 600px;
-    max-height: 80vh;
+
     overflow-y: auto;
     box-shadow: 0 20px 60px rgba(59, 116, 213, 0.3);
     border: 1px solid rgba(59, 116, 213, 0.1);
@@ -61,6 +63,10 @@
     justify-content: center;
     border-radius: 50%;
     transition: all 0.3s;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
 }
 
 .close-btn:hover {
@@ -396,6 +402,13 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
+
+    .report-form-inline {
+        position: fixed;
+        left: 0%;
+    }
+
+
     .report-form-container {
         width: 95%;
         margin: 1rem;
@@ -596,6 +609,9 @@
         margin: 1rem auto;
         padding: 0 0.5rem;
         max-width: 100%;
+
+        position: fixed;
+        left: 50%;
     }
 
     .report-form-container {

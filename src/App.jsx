@@ -32,6 +32,7 @@ import Contact from "./pages/Contact";
 import Universities from "./pages/Universities";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
+import ForgotPassword from "./pages/ForgotPassword";
 
 // Optimized conditional navbar component
 const ConditionalNavbar = memo(() => {
@@ -163,6 +164,7 @@ const AppContent = memo(() => {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/" element={<Herosection />} />
 
         {/* New AdSense-ready pages */}

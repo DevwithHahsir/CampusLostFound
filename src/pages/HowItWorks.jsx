@@ -88,7 +88,7 @@ const HowItWorks = () => {
         {/* Hero Section */}
         <section className="how-hero">
           <div className="container">
-            <h1 className="hero-title">How CampusLostFound Works</h1>
+            <h1 className="campus-hero-title">How CampusLostFound Works</h1>
             <p className="hero-description description">
               Simple steps to report, find, and safely recover lost items on
               your campus

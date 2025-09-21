@@ -49,7 +49,7 @@ const logoImports = {
   "Fast.png": FastLogo,
   "Comsats.png": ComsatsLogo,
   "AKU.png": AKULogo,
-  "AIR.png": AULogo,                                                                                                          
+  "AIR.png": AULogo,
   "BU.png": BULogo,
   "IST.png": ISTLogo,
   "LUMS.png": LumsLogo,
@@ -69,9 +69,30 @@ const Universities = () => {
   const universitiesArray = Object.values(UniversityDetails);
 
   useEffect(() => {
-    // Always show all universities from UniversityDetails.js
-    setFilteredUniversities(universitiesArray);
-  }, [universitiesArray]);
+    // Filter universities based on search term, type, and location
+    let filtered = universitiesArray;
+    if (searchTerm.trim()) {
+      const term = searchTerm.toLowerCase();
+      filtered = filtered.filter(
+        (uni) =>
+          uni.name.toLowerCase().includes(term) ||
+          (uni.location && uni.location.toLowerCase().includes(term))
+      );
+    }
+    if (selectedType !== "all") {
+      filtered = filtered.filter((uni) =>
+        uni.type ? uni.type.toLowerCase() === selectedType : false
+      );
+    }
+    if (selectedLocation !== "all") {
+      filtered = filtered.filter((uni) =>
+        uni.location
+          ? uni.location.toLowerCase().includes(selectedLocation)
+          : false
+      );
+    }
+    setFilteredUniversities(filtered);
+  }, [universitiesArray, searchTerm, selectedType, selectedLocation]);
 
   const getSocialIcon = (platform) => {
     switch (platform) {
@@ -119,46 +140,6 @@ const Universities = () => {
         {/* Updated hero section without background colors */}
         <div className="universities-hero">
           <div className="container">
-            {/* Dropdown for Privacy Policy and Terms of Service */}
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "flex-end",
-                marginBottom: "1rem",
-              }}
-            >
-              <div className="dropdown">
-                <button
-                  className="dropdown-toggle"
-                  style={{
-                    padding: "0.5rem 1rem",
-                    borderRadius: "4px",
-                    border: "1px solid #ccc",
-                    background: "#fff",
-                    cursor: "pointer",
-                  }}
-                >
-                  More
-                </button>
-                <div
-                  className="dropdown-menu"
-                  style={{
-                    display: "none",
-                    position: "absolute",
-                    right: 0,
-                    minWidth: "180px",
-                    zIndex: 10,
-                  }}
-                >
-                  <a href="/privacy-policy" className="nav-link">
-                    Privacy Policy
-                  </a>
-                  <a href="/terms-of-service" className="nav-link">
-                    Terms of Service
-                  </a>
-                </div>
-              </div>
-            </div>
             <h1 className="page-title heading">
               Pakistani Universities Directory
             </h1>

@@ -7,7 +7,6 @@ import {
   sendEmailVerification,
 } from "firebase/auth";
 import { collection, addDoc } from "firebase/firestore";
-import AlertCard from "../componenets/alert/Card";
 import {
   basicUniversities,
   getCampusesForUniversity,
@@ -17,14 +16,17 @@ import SEO from "../componenets/seo/SEO";
 import "./Signup.css";
 
 const Signup = React.memo(() => {
+  // Forgot Password states
+ 
   const [universities, setUniversities] = useState([]);
   const [campuses, setCampuses] = useState([]);
   const [loading, setLoading] = useState(false);
   const [campusLoading, setCampusLoading] = useState(false);
   const [signupLoading, setSignupLoading] = useState(false);
   const [step, setStep] = useState(1);
-  const [alert, setAlert] = useState({ show: false, type: "", message: "" });
+  const [formError, setFormError] = useState("");
   const [createdUser, setCreatedUser] = useState(null);
+  const [verificationSent, setVerificationSent] = useState(false);
 
   // Use Auth Context
   const { isAuthenticated, isEmailVerified } = useAuth();
@@ -54,13 +56,9 @@ const Signup = React.memo(() => {
     }
   }, []);
 
-  // Memoized alert helper functions
-  const showAlert = useCallback((type, message) => {
-    setAlert({ show: true, type, message });
-  }, []);
-
-  const hideAlert = useCallback(() => {
-    setAlert({ show: false, type: "", message: "" });
+  // Memoized error helper function
+  const showFormError = useCallback((message) => {
+    setFormError(message);
   }, []);
 
   const {
@@ -80,14 +78,11 @@ const Signup = React.memo(() => {
       setUniversities(basicUniversities);
       setLoading(false);
     } catch {
-      showAlert(
-        "error",
-        "Failed to load universities. Please refresh the page."
-      );
+      showFormError("Failed to load universities. Please refresh the page.");
       setUniversities([]);
       setLoading(false);
     }
-  }, [showAlert]);
+  }, [showFormError]);
 
   // Create a memoized university lookup map for O(1) access instead of O(n) find()
   const universityLookup = useMemo(() => {
@@ -148,14 +143,15 @@ const Signup = React.memo(() => {
       // This will use Firebase's default verification page
       await sendEmailVerification(user);
 
-      showAlert(
-        "success",
+      alert(
         "Verification email sent! Please check your inbox and click the verification link."
       );
+      setVerificationSent(true);
       return true;
     } catch (error) {
       console.error("Error sending email verification:", error);
-      showAlert("error", "Failed to send verification email: " + error.message);
+      showFormError("Failed to send verification email: " + error.message);
+      setVerificationSent(false);
       return false;
     }
   };
@@ -169,7 +165,7 @@ const Signup = React.memo(() => {
       email: userData.email,
       university: userData.university,
       campus: userData.campus,
-      emailVerified: true, // User is verified when this function is called
+      emailVerified: true, // User is verified when this function       npm ls reactis called
       createdAt: new Date(),
       status: "verified",
       verifiedAt: new Date(), // Track when verification was completed
@@ -187,45 +183,31 @@ const Signup = React.memo(() => {
           data.email,
           data.password
         );
+        const user = userCredential.user;
 
         // Update user profile
-        await updateProfile(userCredential.user, {
-          displayName: data.fullName,
+        await updateProfile(user, { displayName: data.fullName });
+
+        // Send Firebase email verification (do NOT create Firestore user yet)
+        await sendEmailVerification(user, {
+          url: "https://campuslostfound.vercel.app/",
+          handleCodeInApp: true,
         });
 
-        // Store user data temporarily (we'll add to DB after verification)
-        const userWithSignupData = {
-          ...userCredential.user,
-          signupData: data, // Store the form data for later use
-        };
-
-        setCreatedUser(userWithSignupData);
-
-        // Save to session storage in case user refreshes page
+        setCreatedUser({ ...user, signupData: data });
         sessionStorage.setItem(
           "pendingSignupData",
-          JSON.stringify(userWithSignupData)
+          JSON.stringify({ ...user, signupData: data })
         );
         sessionStorage.setItem("signupStep", "2");
 
-        // Send Firebase email verification
-        const emailSent = await sendFirebaseEmailVerification(
-          userCredential.user
+        setStep(2);
+        showFormError(
+          "Verification email sent! Please check your inbox and click the verification link."
         );
-
-        if (emailSent) {
-          setStep(2);
-          showAlert(
-            "success",
-            "Account created! Please check your email for verification link."
-          );
-        }
       } catch (error) {
         console.error("Signup error:", error);
-
-        // Handle specific Firebase auth errors with user-friendly messages
         let errorMessage = "Failed to create account. Please try again.";
-
         if (error.code === "auth/email-already-in-use") {
           errorMessage =
             "An account with this email already exists. Please try logging in instead.";
@@ -238,8 +220,7 @@ const Signup = React.memo(() => {
           errorMessage =
             "Email/password accounts are not enabled. Please contact support.";
         }
-
-        showAlert("error", errorMessage);
+        showFormError(errorMessage);
       } finally {
         setSignupLoading(false);
       }
@@ -247,52 +228,37 @@ const Signup = React.memo(() => {
       // Step 2: Check email verification status
       setSignupLoading(true);
       try {
-        if (createdUser && createdUser.signupData) {
-          // Get the current user from Firebase Auth (not from state)
-          const currentUser = auth.currentUser;
-
-          if (currentUser) {
-            // Reload the user to get fresh email verification status
-            await currentUser.reload();
-
-            if (currentUser.emailVerified) {
-              // Now store user data in Firestore after email verification
+        const currentUser = auth.currentUser;
+        if (currentUser) {
+          await currentUser.reload();
+          if (currentUser.emailVerified) {
+            // Only now create Firestore user
+            if (createdUser && createdUser.signupData) {
               await storeUserData(createdUser.signupData, currentUser.uid, db);
-
-              // Clean up session storage
               sessionStorage.removeItem("pendingSignupData");
               sessionStorage.removeItem("signupStep");
-
-              showAlert(
-                "success",
+              showFormError(
                 "Email verified successfully! Account setup complete. Redirecting to login..."
               );
               setTimeout(() => {
                 window.location.href = "/";
               }, 2000);
             } else {
-              showAlert(
-                "error",
-                "Email not verified yet. Please check your email and click the verification link."
-              );
+              showFormError("No user data found. Please try signing up again.");
+              setStep(1);
             }
           } else {
-            showAlert(
-              "error",
-              "User session not found. Please try signing up again."
+            showFormError(
+              "Email not verified yet. Please check your email and click the verification link."
             );
-            setStep(1);
           }
         } else {
-          showAlert(
-            "error",
-            "No user data found. Please try signing up again."
-          );
+          showFormError("User session not found. Please try signing up again.");
           setStep(1);
         }
       } catch (error) {
         console.error("Error during verification:", error);
-        showAlert("error", "Error completing account setup: " + error.message);
+        showFormError("Error completing account setup: " + error.message);
       } finally {
         setSignupLoading(false);
       }
@@ -377,15 +343,7 @@ const Signup = React.memo(() => {
         ]}
       />
       <main className="signup-main-container">
-        {/* Alert Component */}
-        {alert.show && (
-          <AlertCard
-            type={alert.type}
-            message={alert.message}
-            onClose={hideAlert}
-            isVisible={alert.show}
-          />
-        )}
+        {/* Alert overlay removed. Errors now shown inline below input fields. */}
 
         <div className="signup-wrapper">
           <div className="signup-header">
@@ -420,6 +378,12 @@ const Signup = React.memo(() => {
                 <div className="error-message">
                   <span className="error-icon">⚠️</span>
                   {errors.fullName.message}
+                </div>
+              )}
+              {formError && (
+                <div className="error-message">
+                  <span className="error-icon">⚠️</span>
+                  {formError}
                 </div>
               )}
             </div>
@@ -672,6 +636,18 @@ const Signup = React.memo(() => {
                         ? "Sending..."
                         : "Resend Verification Email"}
                     </button>
+                    {verificationSent && (
+                      <div
+                        className="sent-message"
+                        style={{
+                          marginTop: "8px",
+                          color: "green",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        Sent
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../firebaseConfig/firebaseCore";
@@ -28,12 +29,11 @@ const ItemsList = () => {
 
   // Fetch items from Firebase with university filtering
   useEffect(() => {
-    console.log("🔄 useEffect triggered with:", {
-      authLoading,
-      isAuthenticated,
-      userEmail: user?.email,
-      timestamp: new Date().toLocaleTimeString(),
-    });
+    // Always refetch items when user logs in or auth finishes
+    if (authLoading) {
+      setLoading(true);
+      return;
+    }
 
     const fetchItems = async () => {
       try {
@@ -44,22 +44,18 @@ const ItemsList = () => {
           userEmail: user?.email,
         });
 
-        // Wait for authentication to finish loading
-        if (authLoading) {
-          console.log("⏳ Auth still loading, waiting...");
-          setLoading(true);
-          return;
-        }
-
-        // Set loading to true only when we're about to fetch
-        setLoading(true);
-
         // If user is not authenticated, show no items
         if (!isAuthenticated || !user?.email) {
           console.log("🚫 User not authenticated or no email - CLEARING ITEMS");
+          console.log("Debug Auth State:", {
+            isAuthenticated,
+            user,
+            userEmail: user?.email,
+            authLoading,
+          });
           setItems([]);
           setError(
-            "Please log in to view lost and found items from your university."
+            "Please log in to view lost and found items from your university.\nTry Again"
           );
           setLoading(false);
           return;
@@ -81,8 +77,6 @@ const ItemsList = () => {
         }
 
         const itemsCollection = collection(db, "items");
-
-        // Query items by university domain (without orderBy to avoid index requirement)
         const q = query(
           itemsCollection,
           where("university.domain", "==", userDomain)
@@ -91,10 +85,7 @@ const ItemsList = () => {
 
         const fetchedItems = [];
         querySnapshot.forEach((doc) => {
-          fetchedItems.push({
-            id: doc.id,
-            ...doc.data(),
-          });
+          fetchedItems.push({ id: doc.id, ...doc.data() });
         });
 
         // Sort the results by createdAt in JavaScript
@@ -105,30 +96,22 @@ const ItemsList = () => {
           const dateB = b.createdAt?.toDate
             ? b.createdAt.toDate()
             : new Date(b.createdAt);
-          return dateB - dateA; // Descending order (newest first)
+          return dateB - dateA;
         });
 
-        console.log(
-          "✅ Fetched items for university:",
-          userDomain,
-          fetchedItems
-        );
-        console.log("📊 Setting items count:", fetchedItems.length);
+        // ...existing code...
         setItems(fetchedItems);
         setError(null);
       } catch (err) {
-        console.error("Error fetching items:", err);
+        // ...existing code...
         setError("Failed to load items. Please try again later.");
       } finally {
         setLoading(false);
       }
     };
 
-    // Only fetch if we have the necessary auth state
-    if (!authLoading) {
-      fetchItems();
-    }
-  }, [isAuthenticated, user?.email, authLoading]); // Removed user?.uid to reduce re-renders
+    fetchItems();
+  }, [isAuthenticated, user?.email, authLoading]);
 
   // Filter items based on status
   const filteredItems = items.filter((item) => {
@@ -139,10 +122,7 @@ const ItemsList = () => {
     return item.role === filter;
   });
 
-  console.log("📋 Total items:", items.length);
-  console.log("🔍 Filtered items:", filteredItems.length);
-  console.log("🏷️ Current filter:", filter);
-  console.log("📊 Items array:", items.length > 0 ? "HAS ITEMS" : "EMPTY");
+  // ...existing code...
 
   // Format date
   const formatDate = (timestamp) => {
@@ -271,14 +251,20 @@ const ItemsList = () => {
               <div className="item-title-container">
                 <h3 className="item-title">{item.title || "Unknown Item"}</h3>
               </div>
-              {(item.imageUrl || (item.image && item.image.imageUrl)) && (
+              {item.imageUrl || (item.image && item.image.imageUrl) ? (
                 <div className="card-image">
                   <img
                     src={item.imageUrl || item.image.imageUrl}
                     alt={item.title}
                   />
                 </div>
-              )}
+              ) : item.role === "lost" ? (
+                <div className="card-image no-image">
+                  <span className="no-image-text">
+                    No picture uploaded for this lost item
+                  </span>
+                </div>
+              ) : null}
 
               <div className="card-content">
                 <p className="item-category">

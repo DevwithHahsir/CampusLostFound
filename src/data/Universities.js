@@ -461,7 +461,7 @@ const UniversityData = {
     univ_lahore: {
       id: 19,
       name: "University of Lahore",
-      domain: "uol.edu.pk",
+      domain: "student.uol.edu.pk",
       campuses: {
         campus_lahore: {
           campusId: 191,
@@ -823,7 +823,7 @@ const UniversityData = {
     "uvas.edu.pk",
     "iub.edu.pk",
     "uos.edu.pk",
-    "uol.edu.pk",
+    "student.uol.edu.pk",
     "szabist.edu.pk",
     "upesh.edu.pk",
     "aku.edu",

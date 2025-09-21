@@ -342,14 +342,14 @@
         /* flex-wrap: wrap; */
         justify-content: center;
     }
-    .authenticate-user a 
-    {
+
+    .authenticate-user a {
         border: 1px solid;
         width: 5rem;
 
     }
 
-    
+
 
 }
 
@@ -386,13 +386,13 @@
 
 /* Dropdown Styles */
 .navbar .dropdown-menu {
-    background-color: white;
-    border: 1px solid #e0e0e0;
+ 
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     padding: 0.5rem 0;
     min-width: 160px;
     margin-top: 0.5rem;
+    z-index: 1000;
 }
 
 .navbar .dropdown-item {

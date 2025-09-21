@@ -18,7 +18,7 @@ export const validDomains = new Set([
   "uvas.edu.pk",
   "iub.edu.pk",
   "uos.edu.pk",
-  "uol.edu.pk",
+  "student.uol.edu.pk",
   "szabist.edu.pk",
   "suit.edu.pk",
   "aku.edu",
@@ -106,7 +106,7 @@ export const basicUniversities = [
   },
   { id: 17, name: "Islamia University, Bahawalpur", domain: "iub.edu.pk" },
   { id: 18, name: "University of Sargodha", domain: "uos.edu.pk" },
-  { id: 19, name: "University of Lahore", domain: "uol.edu.pk" },
+  { id: 19, name: "University of Lahore", domain: "student.uol.edu.pk" },
   { id: 20, name: "SZABIST", domain: "szabist.edu.pk" },
   {
     id: 21,

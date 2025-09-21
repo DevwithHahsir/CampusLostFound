@@ -15,6 +15,8 @@ import { useAuth } from "../AuthContext/AuthContext";
 import SEO from "../componenets/seo/SEO";
 
 const Login = React.memo(() => {
+  // Password visibility toggle
+  const [showPassword, setShowPassword] = useState(false);
   // ...existing code...
   const [loading, setLoading] = useState(false);
   const [formError, setFormError] = useState("");
@@ -232,24 +234,62 @@ const Login = React.memo(() => {
               <label htmlFor="password" className="form-label">
                 Password
               </label>
-              <input
-                id="password"
-                type="password"
-                className={`form-control ${errors.password ? "error" : ""}`}
-                placeholder="Enter your password"
-                {...register("password", {
-                  required: "Password is required",
-                  minLength: {
-                    value: 8,
-                    message: "Password must be at least 8 characters long",
-                  },
-                  pattern: {
-                    value: validationPatterns.password,
-                    message:
-                      "Password must contain: uppercase letter, lowercase letter, number, and special character (@$!%*?&)",
-                  },
-                })}
-              />
+              <div style={{ position: "relative" }}>
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  className={`form-control ${errors.password ? "error" : ""}`}
+                  placeholder="Enter your password"
+                  style={{ paddingRight: "36px" }}
+                  {...register("password", {
+                    required: "Password is required",
+                    minLength: {
+                      value: 8,
+                      message: "Password must be at least 8 characters long",
+                    },
+                    pattern: {
+                      value: validationPatterns.password,
+                      message:
+                        "Password must contain: uppercase letter, lowercase letter, number, and special character (@$!%*?&)",
+                    },
+                  })}
+                />
+                <span
+                  style={{
+                    position: "absolute",
+                    right: "8px",
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    cursor: "pointer",
+                    zIndex: 2,
+                    width: "24px",
+                    height: "24px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {/* Sketchy eye icon SVG (not filled) */}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#555"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    style={{ opacity: 0.7 }}
+                  >
+                    <ellipse cx="12" cy="12" rx="8" ry="5" />
+                    <circle cx="12" cy="12" r="2.5" />
+                    <path d="M2 12c2-4 6-7 10-7s8 3 10 7" />
+                  </svg>
+                </span>
+              </div>
               {errors.password && (
                 <div className="error-message">
                   <span className="error-icon">⚠️</span>
@@ -288,7 +328,7 @@ const Login = React.memo(() => {
                 Forgot Password?
               </Link>
             </div>
-           
+
             {/* Submit Button */}
             <button type="submit" className="login-btn" disabled={loading}>
               {loading ? "Signing In..." : "Sign In"}

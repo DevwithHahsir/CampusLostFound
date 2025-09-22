@@ -12,6 +12,10 @@ import "./Footer.css";
 import { saveSubscriber } from "../../services/subscriberService";
 
 const Footer = () => {
+  // Scroll to top on navigation
+  const handleScrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
   const currentYear = new Date().getFullYear();
   const [subscriberEmail, setSubscriberEmail] = useState("");
   const [selectedUniversity, setSelectedUniversity] = useState("");
@@ -50,13 +54,13 @@ const Footer = () => {
               found platform.
             </p>
             <div className="footer-social">
-              <a href="#" className="social-link" aria-label="GitHub">
+              <a href="https://github.com/DevwithHahsir" className="social-link" aria-label="GitHub">
                 <FaGithub />
               </a>
-              <a href="#" className="social-link" aria-label="Twitter">
+              <a href="https://findmyai.org/" className="social-link" aria-label="Twitter">
                 <CiTwitter />
               </a>
-              <a href="#" className="social-link" aria-label="LinkedIn">
+              <a href="https://www.linkedin.com/in/hashirmehboob/" className="social-link" aria-label="LinkedIn">
                 <CiLinkedin />
               </a>
             </div>
@@ -114,19 +118,34 @@ const Footer = () => {
             <h4 className="footer-heading">Legal</h4>
             <ul className="footer-links">
               <li>
-                <Link to="/privacy-policy">Privacy Policy</Link>
+               
+                <Link to="/privacy-policy" onClick={handleScrollToTop}>
+                  Privacy Policy
+                </Link>
               </li>
               <li>
-                <Link to="/terms-of-service">Terms of Service</Link>
+                
+                <Link to="/terms-of-service" onClick={handleScrollToTop}>
+                  Terms of Service
+                </Link>
               </li>
               <li>
-                <Link to="/contact">Report Issues</Link>
+              
+                <Link to="/contact" onClick={handleScrollToTop}>
+                  Report Issues
+                </Link>
               </li>
               <li>
-                <Link to="/contact">Data Protection</Link>
+              
+                <Link to="/contact" onClick={handleScrollToTop}>
+                  Data Protection
+                </Link>
               </li>
               <li>
-                <Link to="/contact">Cookie Policy</Link>
+                
+                <Link to="/contact" onClick={handleScrollToTop}>
+                  Cookie Policy
+                </Link>
               </li>
             </ul>
           </div>
@@ -228,9 +247,18 @@ const Footer = () => {
               </p>
             </div>
             <div className="footer-bottom-links">
-              <Link to="/privacy-policy">Privacy</Link>
-              <Link to="/terms-of-service">Terms</Link>
-              <Link to="/contact">Support</Link>
+            
+              <Link to="/privacy-policy" onClick={handleScrollToTop}>
+                Privacy
+              </Link>
+            
+              <Link to="/terms-of-service" onClick={handleScrollToTop}>
+                Terms
+              </Link>
+             
+              <Link to="/contact" onClick={handleScrollToTop}>
+                Support
+              </Link>
             </div>
           </div>
         </div>

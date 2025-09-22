@@ -298,20 +298,26 @@
     font-weight: 500;
 }
 
-/* Consistent Button Styles */
-.btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 10px 16px;
-    border-radius: 8px;
-    font-size: 0.875rem;
-    font-weight: 500;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    border: 2px solid transparent;
-    cursor: pointer;
+ .quick-links 
+
+ {
+    display:flex;
+    justify-content: center;
+ }
+
+ .quick-links a{
+       border: 1px solid;
+       padding: 0.2rem;
+       border-radius: 10px;
+       -webkit-border-radius: 10px;
+       -moz-border-radius: 10px;
+       -ms-border-radius: 10px;
+       -o-border-radius: 10px;
+       text-decoration:none ;
+    
 }
+
+/* Consistent Button Styles */
 
 .btn-primary {
     background: #2563eb;

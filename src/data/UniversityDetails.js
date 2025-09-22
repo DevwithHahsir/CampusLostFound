@@ -13,8 +13,8 @@ const UniversityDetails = {
     description:
       "UMT is a top private university in Pakistan offering programs in management, technology, and sciences.",
     contact: {
-      phone: "+92-42-35212801",
-      email: "info@umt.edu.pk",
+      phone: "042-111-868-868",
+      email: "admissions@umt.edu.pk",
       address: "C-II, Johar Town, Lahore 54770, Pakistan",
     },
     support: {
@@ -53,8 +53,8 @@ const UniversityDetails = {
     ],
     emergencyContact: {
       security: "+92-42-35212801",
-      medical: "+92-42-35212801",
-      transport: "+92-42-35212801",
+      medical: " 042 111-868-862",
+      transport: " +92 42 5212801-10",
     },
   },
 
@@ -73,24 +73,24 @@ const UniversityDetails = {
       "Aga Khan University is an international university with a strong focus on health sciences, education, and research.",
     contact: {
       phone: "+92-21-3493-0051",
-      email: "info@aku.edu",
+      email: "admissions.query@aku.edu",
       address: "Stadium Road, P.O. Box 3500, Karachi 74800, Pakistan",
     },
     support: {
       admissions: {
         phone: "+92-21-3486-4410",
-        email: "admissions.pk@aku.edu",
+        email: "admissions.query@aku.edu",
         website: "https://www.aku.edu/admissions",
       },
       studentServices: {
         phone: "+92-21-3493-0051",
         email: "student.affairs@aku.edu",
-        website: "https://www.aku.edu/student-affairs",
+        website: "https://www.aku.edu/students/Pages/home.aspx",
       },
       helpDesk: {
         phone: "+92-21-3493-0051",
-        email: "helpdesk@aku.edu",
-        website: "https://www.aku.edu/contact",
+        email: "communications@aku.edu",
+        website: "https://www.aku.edu/Pages/contact.aspx",
       },
     },
     socialMedia: {
@@ -105,8 +105,8 @@ const UniversityDetails = {
       { name: "Careers", url: "https://www.aku.edu/careers" },
     ],
     emergencyContact: {
-      security: "+92-21-3493-0051",
-      medical: "+92-21-3493-0051",
+      security: "+92 3486 1900",
+      medical: "+92 21 3486 1090",
       transport: "+92-21-3493-0051",
     },
   },

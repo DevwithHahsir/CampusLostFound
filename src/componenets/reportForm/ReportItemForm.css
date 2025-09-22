@@ -5,7 +5,7 @@
     width: 100vw;
     height: 100vh;
     padding: 0;
-    animation: slideInDown 0.4s ease-out;
+    /* animation: slideInDown 0.4s ease-out; */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -25,7 +25,7 @@
 
     overflow-y: auto;
     box-shadow: 0 20px 60px rgba(59, 116, 213, 0.3);
-    border: 1px solid rgba(59, 116, 213, 0.1);
+    /* border: 1px solid rgba(59, 116, 213, 0.1); */
     animation: slideUp 0.3s ease-out;
     -webkit-animation: slideUp 0.3s ease-out;
     margin: 0 auto;

@@ -36,6 +36,10 @@ import AULogo from "../assets/AIR.png";
 import BULogo from "../assets/BU.png";
 import ISTLogo from "../assets/IST.png";
 import LumsLogo from "../assets/LUMS.png";
+import AllamLogo from "../assets/Allama.png"
+import gcuLogo from "../assets/gcu.png"
+import szabistLogo from "../assets/szabist.png"
+import uafLogo from "../assets/uaf.png"
 // Add more as needed
 
 const logoImports = {
@@ -53,6 +57,13 @@ const logoImports = {
   "BU.png": BULogo,
   "IST.png": ISTLogo,
   "LUMS.png": LumsLogo,
+   "Allama.png" :AllamLogo,
+   "gcu.png":gcuLogo,
+   "szabist.png":szabistLogo,
+   "uaf.png":uafLogo,
+
+
+
   // Add more as needed
 };
 import SEO from "../componenets/seo/SEO";
@@ -140,10 +151,10 @@ const Universities = () => {
         {/* Updated hero section without background colors */}
         <div className="universities-hero">
           <div className="container">
-            <h1 className="page-title heading">
+            <h1 className="campus-hero-title">
               Pakistani Universities Directory
             </h1>
-            <p className="page-subtitle">
+            <p className="hero-description description">
               Comprehensive information about universities across Pakistan with
               official links, contact details, support services, and emergency
               contacts for all major educational institutions
@@ -265,19 +276,19 @@ const Universities = () => {
                         href={university.website}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="action-button primary"
+                        
                       >
                         <FaGlobe /> Visit Website
                       </a>
                       <a
                         href={`tel:${university.contact.phone}`}
-                        className="action-button secondary"
+                        
                       >
                         <FaPhone /> Call
                       </a>
                       <a
                         href={`mailto:${university.contact.email}`}
-                        className="action-button secondary"
+                        
                       >
                         <FaEnvelope /> Email
                       </a>
@@ -285,7 +296,7 @@ const Universities = () => {
 
                     <button
                       onClick={() => openUniversityDetails(university)}
-                      className="details-button"
+                      className="hero-btn hero-btn-primary university-detail-btn"
                     >
                       View Details <FaExternalLinkAlt />
                     </button>

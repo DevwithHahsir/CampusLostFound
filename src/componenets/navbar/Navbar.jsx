@@ -11,6 +11,14 @@ import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import "./Navbar.css";
 
 export default function Navbar() {
+  // Handler for Report Item button
+  const handleReportClick = (e) => {
+    if (!user) {
+      e.preventDefault();
+      window.location.href = "/login";
+    }
+    // else allow navigation to /report
+  };
   const [user, setUser] = useState(null); // store logged in user
   const auth = getAuth();
 
@@ -96,7 +104,10 @@ export default function Navbar() {
                 letterSpacing: 0.5,
                 borderRadius: "8px",
               }}
-              onClick={closeNavbar}
+              onClick={(e) => {
+                handleReportClick(e);
+                closeNavbar();
+              }}
             >
               Report Item
             </Link>

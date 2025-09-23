@@ -5,14 +5,15 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
-// Your config
+// Firebase config from environment variables (Vite)
 const firebaseConfig = {
-  apiKey: "AIzaSyCHkicnfGCo3lSaty1Wsln1uNDgyKCz4ds",
-  authDomain: "campusfoundlost.firebaseapp.com",
-  projectId: "campusfoundlost",
-  storageBucket: "campusfoundlost.firebasestorage.app",
-  messagingSenderId: "362890296785",
-  appId: "1:362890296785:web:40c84b456659cf5ee5f4f0",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
 // Initialize Firebase app first

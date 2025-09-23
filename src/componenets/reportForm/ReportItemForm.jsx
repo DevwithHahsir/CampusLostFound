@@ -4,8 +4,7 @@ import { auth, db } from "../../firebaseConfig/firebaseCore";
 import { onAuthStateChanged } from "firebase/auth";
 import { collection, addDoc } from "firebase/firestore";
 import UniversityData from "../../data/Universities";
-import { testFirebaseStorage } from "../../utils/firebaseTestUtils";
-import Card from "../alert/Card";
+
 import "./ReportItemForm.css";
 
 // Move validation constants outside component to prevent recreation
@@ -101,31 +100,7 @@ const ReportItemForm = React.memo(({ onClose, onSubmit }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [imageInfo, setImageInfo] = useState(null);
-
-  // Alert state management
-  const [alert, setAlert] = useState({
-    isVisible: false,
-    type: "success", // 'success' or 'error'
-    message: "",
-  });
-
-  // Show alert for 3 seconds
-  const showAlert = useCallback((type, message) => {
-    setAlert({
-      isVisible: true,
-      type,
-      message,
-    });
-
-    setTimeout(() => {
-      setAlert((prev) => ({ ...prev, isVisible: false }));
-    }, 3000);
-  }, []);
-
-  // Close alert manually
-  const closeAlert = useCallback(() => {
-    setAlert((prev) => ({ ...prev, isVisible: false }));
-  }, []);
+  const [error, setError] = useState(null); // Error state
 
   // Security validation functions
   const securityValidation = useMemo(
@@ -365,12 +340,12 @@ const ReportItemForm = React.memo(({ onClose, onSubmit }) => {
             });
           }
         } catch (validationError) {
-          showAlert("error", validationError.message);
+          setError(validationError.message);
           return;
         }
       }
     },
-    [showAlert, securityValidation]
+    [setError, securityValidation]
   );
 
   // Phone number validation
@@ -506,7 +481,7 @@ const ReportItemForm = React.memo(({ onClose, onSubmit }) => {
           video.srcObject = newStream;
         } catch (error) {
           console.error("Error switching camera:", error);
-          showAlert("error", "Could not switch camera");
+          setError("Could not switch camera");
         }
       };
 
@@ -565,12 +540,10 @@ const ReportItemForm = React.memo(({ onClose, onSubmit }) => {
                 });
               }
 
-              showAlert("success", "Photo captured successfully!");
-
               // Close camera modal
               closeCameraModal();
             } catch (error) {
-              showAlert("error", "Failed to capture photo: " + error.message);
+              setError("Failed to capture photo: " + error.message);
             }
           },
           "image/jpeg",
@@ -627,7 +600,7 @@ const ReportItemForm = React.memo(({ onClose, onSubmit }) => {
           "Camera not supported on this device. Please use file upload.";
       }
 
-      showAlert("error", errorMessage);
+      setError(errorMessage);
     }
   };
 
@@ -756,13 +729,13 @@ const ReportItemForm = React.memo(({ onClose, onSubmit }) => {
       e.preventDefault();
 
       if (!user) {
-        showAlert("error", "Please sign in to report an item");
+        setError("Please sign in to report an item");
         return;
       }
 
       // Rate limiting check
       if (!securityValidation.checkRateLimit()) {
-        showAlert("error", "Please wait 30 seconds before submitting again");
+        setError("Please wait 30 seconds before submitting again");
         return;
       }
 
@@ -791,11 +764,11 @@ const ReportItemForm = React.memo(({ onClose, onSubmit }) => {
           sanitizedFormData.contactPreference === "both"
         ) {
           if (!sanitizedFormData.email) {
-            showAlert("error", "Please provide an email address");
+            setError("Please provide an email address");
             return;
           }
           if (!securityValidation.validateEmail(sanitizedFormData.email)) {
-            showAlert("error", "Please provide a valid email address");
+            setError("Please provide a valid email address");
             return;
           }
         }
@@ -808,14 +781,14 @@ const ReportItemForm = React.memo(({ onClose, onSubmit }) => {
             !sanitizedFormData.phone ||
             !securityValidation.validatePhoneNumber(sanitizedFormData.phone)
           ) {
-            showAlert("error", "Please provide a valid Pakistani phone number");
+            setError("Please provide a valid Pakistani phone number");
             return;
           }
         }
 
         // Image validation for found items
         if (sanitizedFormData.role === "found" && !formData.image) {
-          showAlert("error", "Image is required when reporting a found item");
+          setError("Image is required when reporting a found item");
           return;
         }
 
@@ -830,7 +803,7 @@ const ReportItemForm = React.memo(({ onClose, onSubmit }) => {
             const uploadResult = await uploadImage(formData.image);
             imageData = uploadResult;
           } catch (uploadError) {
-            showAlert("error", `Image upload failed: ${uploadError.message}`);
+            setError(`Image upload failed: ${uploadError.message}`);
             setIsSubmitting(false);
             return;
           }
@@ -908,17 +881,7 @@ const ReportItemForm = React.memo(({ onClose, onSubmit }) => {
           isDeleted: false,
         };
 
-        // Final validation before submission
-        const validation = testFirebaseStorage.validateItemData(itemData);
-        if (!validation.isValid) {
-          showAlert("error", "Form data validation failed. Please try again.");
-          setIsSubmitting(false);
-          return;
-        }
-
         const docRef = await addDoc(collection(db, "items"), itemData);
-
-        showAlert("success", "Item Reported Successfully!");
 
         // Clear form data from memory (security measure)
         setFormData({
@@ -942,14 +905,14 @@ const ReportItemForm = React.memo(({ onClose, onSubmit }) => {
         }, 3000);
       } catch (error) {
         if (error.message.includes("wait 30 seconds")) {
-          showAlert("error", error.message);
+          setError(error.message);
         } else if (
           error.message.includes("too long") ||
           error.message.includes("required")
         ) {
-          showAlert("error", error.message);
+          setError(error.message);
         } else {
-          showAlert("error", "Failed to submit report. Please try again.");
+          setError("Failed to submit report. Please try again.");
         }
       } finally {
         setIsSubmitting(false);
@@ -963,7 +926,6 @@ const ReportItemForm = React.memo(({ onClose, onSubmit }) => {
       onSubmit,
       onClose,
       getUserUniversityInfo,
-      showAlert,
       securityValidation,
     ]
   );
@@ -1263,16 +1225,15 @@ const ReportItemForm = React.memo(({ onClose, onSubmit }) => {
               `Report ${formData.role || "Item"}`
             )}
           </button>
+
+          {/* Error Message Display */}
+          {error && (
+            <div className="error-message" style={{ color: "red" }}>
+              {error}
+            </div>
+          )}
         </form>
       </div>
-
-      {/* Alert Component */}
-      <Card
-        type={alert.type}
-        message={alert.message}
-        isVisible={alert.isVisible}
-        onClose={closeAlert}
-      />
     </div>
   );
 });

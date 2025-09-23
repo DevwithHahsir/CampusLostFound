@@ -1,154 +1,208 @@
-import React from "react";
-import { useAuth } from "../AuthContext/AuthContext";
-import Navbar from "../componenets/navbar/Navbar";
-import SEO from "../componenets/seo/SEO";
+import React, { useState } from "react";
+import Herosection from "../componenets/herosection/Herosection";
+import styles from "./Dashboard.module.css";
+import { FaChartBar, FaListAlt, FaRegClipboard } from "react-icons/fa";
+import ReportItemForm from "../componenets/reportForm/ReportItemForm";
+import ItemsList from "../componenets/items/ItemsList";
 
-export default function Dashboard() {
-  const { user, isAuthenticated, isEmailVerified } = useAuth();
+const Dashboard = () => {
+  const [activeTab, setActiveTab] = useState("report");
+  const [showForm, setShowForm] = useState(false);
+  const [itemsRefreshKey, setItemsRefreshKey] = useState(0);
 
-  // Redirect if not authenticated
-  if (!isAuthenticated || !isEmailVerified) {
-    window.location.href = "/login";
-    return null;
-  }
+  // When a new item is added, increment the key to force ItemsList remount
+  const handleItemAdded = () => {
+    setItemsRefreshKey((prev) => prev + 1);
+    setShowForm(false);
+  };
 
   return (
     <>
-      <SEO
-        title="Dashboard Campus Lost Found Pakistan | Student Portal | Manage Lost Items Account"
-        description="Access your Campus Lost Found dashboard to manage your lost and found items, view your reports, connect with campus community, and track recovery progress across Pakistani universities."
-        keywords={[
-          "dashboard campus lost found Pakistan",
-          "student portal Pakistan",
-          "lost items dashboard",
-          "manage lost items account",
-          "university student dashboard",
-          "campus lost found portal",
-          "student account management",
-          "lost items tracking Pakistan",
-          "found items management",
-          "campus community dashboard",
-          "university portal Pakistan",
-          "student lost property portal",
-          "campus dashboard Pakistan",
-          "lost found account center",
-          "Pakistani student dashboard",
-        ]}
-        keySentences={[
-          "Comprehensive dashboard provides overview of all your lost and found activities",
-          "Track status of reported lost items with real-time updates",
-          "Manage found items you've reported to help fellow students",
-          "View personal statistics including successful recoveries and community impact",
-          "Access messaging system to communicate with other students safely",
-          "Update profile information and privacy settings as needed",
-          "Browse recent activity from your university and nearby campuses",
-          "Receive notifications about potential matches for your lost items",
-          "Upload additional photos or descriptions to improve item recovery chances",
-          "Mark items as recovered when successfully reunited with belongings",
-          "Access help center and support resources for platform assistance",
-          "View community leaderboard showcasing helpful student contributors",
-          "Download reports of your lost and found activity for personal records",
-          "Quick action buttons enable fast reporting of new lost or found items",
-          "Secure logout protects your account when using shared devices",
-        ]}
-        url="https://campuslostfound.vercel.app/dashboard"
-        image="/src/assets/logo.png"
-        type="website"
-        siteName="Campus Lost Found Pakistan - Dashboard"
-        author="Campus Lost Found Team"
-        links={[
-          {
-            rel: "canonical",
-            href: "https://campuslostfound.vercel.app/dashboard",
-          },
-        ]}
-        customMeta={[
-          { name: "page-type", content: "user-dashboard" },
-          { name: "content-category", content: "account-management" },
-          { name: "audience", content: "authenticated-university-students" },
-          { name: "access-level", content: "authenticated-users-only" },
-          { name: "primary-function", content: "account-management" },
-        ]}
-      />
-      <div>
-      
-        <div className="container mt-5">
-          <div className="row">
-            <div className="col-12">
-              <div className="card">
-                <div className="card-body">
-                  <h1 className="card-title">Welcome to Campus Lost & Found</h1>
-                  <p className="card-text">
-                    Hello, <strong>{user?.displayName || user?.email}</strong>!
-                  </p>
-                  <p className="card-text">
-                    Email Status:{" "}
-                    {isEmailVerified ? "✅ Verified" : "❌ Not Verified"}
-                  </p>
-                  <div className="row mt-4">
-                    <div className="col-md-4">
-                      <div className="card text-center">
-                        <div className="card-body">
-                          <h5 className="card-title">Report Lost Item</h5>
-                          <p className="card-text">
-                            Lost something? Report it here.
-                          </p>
-                          <button className="btn btn-primary">
-                            Report Lost
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-4">
-                      <div className="card text-center">
-                        <div className="card-body">
-                          <h5 className="card-title">Report Found Item</h5>
-                          <p className="card-text">
-                            Found something? Report it here.
-                          </p>
-                          <button className="btn btn-success">
-                            Report Found
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-4">
-                      <div className="card text-center">
-                        <div className="card-body">
-                          <h5 className="card-title">Browse Items</h5>
-                          <p className="card-text">
-                            Search for lost/found items.
-                          </p>
-                          <button className="btn btn-info">Browse</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mt-4">
-                    <h5>User Information:</h5>
-                    <ul className="list-group">
-                      <li className="list-group-item">
-                        <strong>Email:</strong> {user?.email}
-                      </li>
-                      <li className="list-group-item">
-                        <strong>User ID:</strong> {user?.uid}
-                      </li>
-                      <li className="list-group-item">
-                        <strong>Email Verified:</strong>{" "}
-                        {user?.emailVerified ? "Yes" : "No"}
-                      </li>
-                      <li className="list-group-item">
-                        <strong>Account Created:</strong>{" "}
-                        {user?.metadata?.creationTime}
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
+      {/* Hero section at the top */}
+      {/* <Herosection /> */}
+      {/* Filter buttons below hero section */}
+      <div
+        className={styles.dashboardContainer}
+        style={{ background: "none", boxShadow: "none", marginTop: 0 }}
+      >
+        <div
+          style={{
+            display: "flex",
+            gap: 0,
+            margin: "32px 0 40px 0",
+            justifyContent: "center",
+          }}
+        >
+          <button
+            className={
+              activeTab === "overview"
+                ? `${styles.addItemBtn} ${styles.activeTab}`
+                : styles.addItemBtn
+            }
+            style={{
+              borderRadius: "12px 0 0 12px",
+              border: "none",
+              background: activeTab === "overview" ? "#fff" : "#f7faff",
+              color: "#222",
+              fontWeight: 500,
+              boxShadow:
+                activeTab === "overview"
+                  ? "0 2px 8px rgba(67,130,228,0.06)"
+                  : "none",
+              borderRight: "1px solid #e3eafc",
+              minWidth: 120,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 8,
+            }}
+            onClick={() => setActiveTab("overview")}
+          >
+            <FaChartBar style={{ fontSize: 18 }} /> Overview
+          </button>
+          <button
+            className={
+              activeTab === "all"
+                ? `${styles.addItemBtn} ${styles.activeTab}`
+                : styles.addItemBtn
+            }
+            style={{
+              borderRadius: 0,
+              border: "none",
+              background: activeTab === "all" ? "#fff" : "#f7faff",
+              color: "#222",
+              fontWeight: 500,
+              boxShadow:
+                activeTab === "all"
+                  ? "0 2px 8px rgba(67,130,228,0.06)"
+                  : "none",
+              borderRight: "1px solid #e3eafc",
+              minWidth: 120,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 8,
+            }}
+            onClick={() => setActiveTab("all")}
+          >
+            <FaListAlt style={{ fontSize: 18 }} /> All Items
+          </button>
+          <button
+            className={
+              activeTab === "report"
+                ? `${styles.addItemBtn} ${styles.activeTab}`
+                : styles.addItemBtn
+            }
+            style={{
+              borderRadius: "0 12px 12px 0",
+              border: "none",
+              background: activeTab === "report" ? "#fff" : "#f7faff",
+              color: "#222",
+              fontWeight: 500,
+              boxShadow:
+                activeTab === "report"
+                  ? "0 2px 8px rgba(67,130,228,0.06)"
+                  : "none",
+              minWidth: 120,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 8,
+            }}
+            onClick={() => setActiveTab("report")}
+          >
+            <FaRegClipboard style={{ fontSize: 18 }} /> Report
+          </button>
+        </div>
+        {/* Example content for each filter (replace with your logic) */}
+        <div style={{ textAlign: "center", color: "#222", marginTop: 40 }}>
+          {activeTab === "overview" && (
+            <>
+              <h2 style={{ fontWeight: 700, fontSize: 28, marginBottom: 12 }}>
+                Dashboard Overview
+              </h2>
+              <p style={{ color: "#888", fontSize: 17 }}>
+                See a summary of your activity and stats here.
+              </p>
+            </>
+          )}
+          {activeTab === "all" && (
+            <>
+              <h2 style={{ fontWeight: 700, fontSize: 28, marginBottom: 12 }}>
+                All Items
+              </h2>
+              <p style={{ color: "#888", fontSize: 17 }}>
+                Browse all your lost and found items here.
+              </p>
+              <ItemsList key={itemsRefreshKey} />
+            </>
+          )}
+          {activeTab === "report" && (
+            <>
+              <h2 style={{ fontWeight: 700, fontSize: 28, marginBottom: 12 }}>
+                Report a Lost or Found Item
+              </h2>
+              <p style={{ color: "#888", fontSize: 17 }}>
+                Help your fellow students by reporting items you've lost or
+                found on campus. Provide as much detail as possible to help with
+                identification.
+              </p>
+            </>
+          )}
+        </div>
+        {/* Show ReportItemForm as modal when showForm is true */}
+        {showForm && (
+          <div
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              width: "100vw",
+              height: "100vh",
+              background: "rgba(0,0,0,0.25)",
+              zIndex: 1000,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <div
+              style={{
+                background: "#fff",
+                borderRadius: 12,
+                boxShadow: "0 4px 24px rgba(67,130,228,0.12)",
+                padding: 0,
+                minWidth: 340,
+                maxWidth: 480,
+                width: "100%",
+                position: "relative",
+              }}
+            >
+              <ReportItemForm
+                onClose={() => setShowForm(false)}
+                onItemAdded={handleItemAdded}
+              />
+              <button
+                onClick={() => setShowForm(false)}
+                style={{
+                  position: "absolute",
+                  top: 10,
+                  right: 16,
+                  background: "none",
+                  border: "none",
+                  fontSize: 22,
+                  color: "#888",
+                  cursor: "pointer",
+                }}
+              >
+                &times;
+              </button>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </>
   );
-}
+};
+
+export default Dashboard;

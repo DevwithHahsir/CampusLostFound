@@ -17,7 +17,7 @@ import "./Signup.css";
 
 const Signup = React.memo(() => {
   // Forgot Password states
- 
+
   const [universities, setUniversities] = useState([]);
   const [campuses, setCampuses] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -27,6 +27,7 @@ const Signup = React.memo(() => {
   const [formError, setFormError] = useState("");
   const [createdUser, setCreatedUser] = useState(null);
   const [verificationSent, setVerificationSent] = useState(false);
+  const [isVerifying, setIsVerifying] = useState(false); // Prevent rapid clicks on verification
 
   // Use Auth Context
   const { isAuthenticated, isEmailVerified } = useAuth();
@@ -226,6 +227,8 @@ const Signup = React.memo(() => {
       }
     } else if (step === 2) {
       // Step 2: Check email verification status
+      if (isVerifying) return; // Prevent rapid double clicks
+      setIsVerifying(true);
       setSignupLoading(true);
       try {
         const currentUser = auth.currentUser;
@@ -261,6 +264,7 @@ const Signup = React.memo(() => {
         showFormError("Error completing account setup: " + error.message);
       } finally {
         setSignupLoading(false);
+        setIsVerifying(false);
       }
     }
   };
@@ -687,9 +691,9 @@ const Signup = React.memo(() => {
             <button
               type="submit"
               className="signup-btn"
-              disabled={loading || signupLoading}
+              disabled={loading || signupLoading || isVerifying}
             >
-              {signupLoading
+              {signupLoading || isVerifying
                 ? "Processing..."
                 : step === 1
                 ? "Create Account & Send Verification Email"

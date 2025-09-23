@@ -7,6 +7,7 @@ import {
 import { Suspense, lazy, useState, memo } from "react";
 import { useAuth } from "./AuthContext/AuthContext";
 import MinimalLoader from "./componenets/loader/MinimalLoader";
+import ProtectedRoute from "./ProtectedRoute";
 
 // Lazy load essential components that don't affect routing
 const Navbar = lazy(() => import("./componenets/navbar/Navbar"));
@@ -34,6 +35,9 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import ForgotPassword from "./pages/ForgotPassword";
 
+// Import ItemsList component
+import ItemsList from "./componenets/items/ItemsList";
+
 // Optimized conditional navbar component
 const ConditionalNavbar = memo(() => {
   const location = useLocation();
@@ -60,8 +64,10 @@ const ConditionalFooter = memo(() => {
 const AppContent = memo(() => {
   const [showReportForm, setShowReportForm] = useState(false);
   const { loading: authLoading } = useAuth();
+  const [itemsRefreshKey, setItemsRefreshKey] = useState(0);
 
   const handleReportFormSubmit = () => {
+    setItemsRefreshKey((prev) => prev + 1);
     setShowReportForm(false);
   };
 
@@ -163,9 +169,24 @@ const AppContent = memo(() => {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/" element={<Herosection />} />
+        <Route
+          path="/"
+          element={
+            <>
+              <Herosection />
+              <ItemsList key={itemsRefreshKey} />
+            </>
+          }
+        />
 
         {/* New AdSense-ready pages */}
         <Route path="/about" element={<About />} />
@@ -185,7 +206,14 @@ const AppContent = memo(() => {
           path="/found"
           element={<div>Found Items Page - Coming Soon</div>}
         />
-        <Route path="/report" element={<Report />} />
+        <Route
+          path="/report"
+          element={
+            <ProtectedRoute>
+              <Report />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/demo" element={<ReportDemo />} />
         <Route path="*" element={<div>404 - Page Not Found</div>} />
       </Routes>

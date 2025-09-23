@@ -3,14 +3,10 @@ import React, { useState, useEffect } from "react";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../firebaseConfig/firebaseCore";
 import { useAuth } from "../../AuthContext/AuthContext";
-import {
-  CiFileOn,
-  CiLocationOn,
-  CiPhone,
-  CiSearch,
-  CiCircleCheck,
-  CiHashtag,
-} from "react-icons/ci";
+import { CiLocationOn, CiPhone } from "react-icons/ci";
+import { HiOutlineLocationMarker } from "react-icons/hi";
+
+import { TbFileDescription } from "react-icons/tb";
 import "./ItemsList.css";
 
 const ItemsList = () => {
@@ -37,22 +33,8 @@ const ItemsList = () => {
 
     const fetchItems = async () => {
       try {
-        // Debug logging
-        console.log("📦 ItemsList Auth Debug:", {
-          authLoading,
-          isAuthenticated,
-          userEmail: user?.email,
-        });
-
         // If user is not authenticated, show no items
         if (!isAuthenticated || !user?.email) {
-          console.log("🚫 User not authenticated or no email - CLEARING ITEMS");
-          console.log("Debug Auth State:", {
-            isAuthenticated,
-            user,
-            userEmail: user?.email,
-            authLoading,
-          });
           setItems([]);
           setError(
             "Please log in to view lost and found items from your university.\nTry Again"
@@ -65,7 +47,6 @@ const ItemsList = () => {
         setError(null);
 
         const userDomain = getUserUniversityDomain(user.email);
-        console.log("🏫 User domain extracted:", userDomain);
 
         if (!userDomain) {
           setItems([]);
@@ -250,6 +231,9 @@ const ItemsList = () => {
 
               <div className="item-title-container">
                 <h3 className="item-title">{item.title || "Unknown Item"}</h3>
+                <p className="item-category">
+                  {item.category || "Not specified"}
+                </p>
               </div>
               {item.imageUrl || (item.image && item.image.imageUrl) ? (
                 <div className="card-image">
@@ -267,22 +251,22 @@ const ItemsList = () => {
               ) : null}
 
               <div className="card-content">
-                <p className="item-category">
-                  <CiHashtag className="content-icon" />
-                  <strong>Category: </strong> {item.category || "Not specified"}
-                </p>
+                {/* <p className="item-category">
+                  
+                  {item.category || "Not specified"}
+                </p> */}
                 <p className="item-description">
-                  <CiFileOn className="content-icon" />
-                  <strong>Description: </strong>{" "}
+                  <TbFileDescription className="content-icon des-icon" />
+
                   {item.description || "No description provided"}
                 </p>
                 <p className="item-location">
-                  <CiLocationOn className="content-icon" />
-                  <strong>Location: </strong> {item.location || "Not specified"}
+                  <HiOutlineLocationMarker className="content-icon" />
+                  {item.location || "Not specified"}
                 </p>
                 {item.university && (
                   <p className="item-university">
-                    <strong>University: </strong>{" "}
+                    {" "}
                     {item.university.name || item.university}
                   </p>
                 )}

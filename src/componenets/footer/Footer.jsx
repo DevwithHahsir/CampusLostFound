@@ -54,13 +54,25 @@ const Footer = () => {
               found platform.
             </p>
             <div className="footer-social">
-              <a href="https://github.com/DevwithHahsir" className="social-link" aria-label="GitHub">
+              <a
+                href="https://github.com/DevwithHahsir"
+                className="social-link"
+                aria-label="GitHub"
+              >
                 <FaGithub />
               </a>
-              <a href="https://findmyai.org/" className="social-link" aria-label="Twitter">
+              <a
+                href="https://findmyai.org/"
+                className="social-link"
+                aria-label="Twitter"
+              >
                 <CiTwitter />
               </a>
-              <a href="https://www.linkedin.com/in/hashirmehboob/" className="social-link" aria-label="LinkedIn">
+              <a
+                href="https://www.linkedin.com/in/hashirmehboob/"
+                className="social-link"
+                aria-label="LinkedIn"
+              >
                 <CiLinkedin />
               </a>
             </div>
@@ -118,31 +130,26 @@ const Footer = () => {
             <h4 className="footer-heading">Legal</h4>
             <ul className="footer-links">
               <li>
-               
                 <Link to="/privacy-policy" onClick={handleScrollToTop}>
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                
                 <Link to="/terms-of-service" onClick={handleScrollToTop}>
                   Terms of Service
                 </Link>
               </li>
               <li>
-              
                 <Link to="/contact" onClick={handleScrollToTop}>
                   Report Issues
                 </Link>
               </li>
               <li>
-              
                 <Link to="/contact" onClick={handleScrollToTop}>
                   Data Protection
                 </Link>
               </li>
               <li>
-                
                 <Link to="/contact" onClick={handleScrollToTop}>
                   Cookie Policy
                 </Link>
@@ -164,7 +171,7 @@ const Footer = () => {
               </div>
               <div className="contact-item">
                 <CiLocationOn className="contact-icon" />
-                <span>Pakistan Universities Network</span>
+                <span>Lahore, Pakistan</span>
               </div>
             </div>
             <div className="footer-universities">
@@ -193,7 +200,6 @@ const Footer = () => {
               style={{
                 padding: "0.5rem",
                 borderRadius: "6px",
-                border: "1px solid #ccc",
               }}
             />
             <select
@@ -247,15 +253,14 @@ const Footer = () => {
               </p>
             </div>
             <div className="footer-bottom-links">
-            
               <Link to="/privacy-policy" onClick={handleScrollToTop}>
                 Privacy
               </Link>
-            
+
               <Link to="/terms-of-service" onClick={handleScrollToTop}>
                 Terms
               </Link>
-             
+
               <Link to="/contact" onClick={handleScrollToTop}>
                 Support
               </Link>

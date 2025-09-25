@@ -296,7 +296,7 @@ const Universities = () => {
 
                     <button
                       onClick={() => openUniversityDetails(university)}
-                      className="hero-btn hero-btn-primary university-detail-btn"
+                      className="university-detail-btn"
                     >
                       View Details <FaExternalLinkAlt />
                     </button>

@@ -60,7 +60,7 @@
     font-family: "Bebas Neue", sans-serif;
     font-weight: 400;
     font-style: normal;
-    font-size: 4vw;
+    font-size: 5vw !important;
     background: linear-gradient(45deg, #3B74D5, #4382E4, #4E9FC1, #54AE9E, #59B888, #5DC173);
     background-size: 300% 300%;
     -webkit-background-clip: text;
@@ -223,7 +223,72 @@
     box-shadow: 0 8px 25px rgba(59, 116, 213, 0.4);
 }
 
-/* Responsive Button Styles */
+
+
+
+
+
+.search-bar {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.search-bar input {
+    width: 35rem;
+    border: none;
+    outline: none;
+    height: 3rem;
+    padding: 0.3rem 1rem;
+    box-shadow: 0 12px 8px rgba(67, 130, 228, 0.10), 0 1.5px 4px rgba(0, 0, 0, 0.04);
+    border-radius: 9px;
+    background: #fff;
+    position: relative;
+    z-index: 2;
+    font-size: 1.1rem;
+}
+
+/* Animated Gradient Border Wrapper for Search Bar */
+.search-bar-animated-border {
+    position: relative;
+    padding: 4px;
+    /* Thicker border for more color */
+    border-radius: 16px;
+    background: linear-gradient(90deg, #3B74D5, #4382E4, #4E9FC1, #54AE9E, #59B888, #5DC173, #FF6F00, #3B74D5);
+    background-size: 300% 300%;
+    animation: animated-gradient-border 2s linear infinite;
+    display: inline-block;
+}
+
+.search-bar-animated-border input {
+    width: 33rem;
+    border: none;
+    outline: none;
+    height: 2.7rem;
+    padding: 0.3rem 1rem;
+    box-shadow: 0 12px 8px rgba(67, 130, 228, 0.10), 0 1.5px 4px rgba(0, 0, 0, 0.04);
+    border-radius: 12px;
+    background: #fff;
+    position: relative;
+    z-index: 2;
+    font-size: 1.1rem;
+}
+
+@keyframes animated-gradient-border {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
 @media (max-width: 768px) {
     .herosection-btns {
         gap: 1rem;
@@ -241,6 +306,16 @@
 
         padding-right: 1rem;
     }
+    .search-bar input 
+    {
+        width: 20rem;
+    }
+
+    .items-grid
+    {
+        width: 20rem;
+    }
+ 
 
 
 }

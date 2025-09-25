@@ -82,6 +82,7 @@ const universityLogos = [
 
 const Herosection = React.memo(() => {
   const [showReportForm, setShowReportForm] = useState(false);
+  const [searchValue, SetSearchValue] = useState("");
   const { user, isAuthenticated, isEmailVerified } = useAuth();
   const navigate = useNavigate();
 
@@ -226,6 +227,17 @@ const Herosection = React.memo(() => {
             </p>
           </header>
 
+          <section className="search-bar">
+            <div className="search-bar-animated-border">
+              <input
+                type="text"
+                placeholder="Search Items by Title"
+                value={searchValue}
+                onChange={(e) => SetSearchValue(e.target.value)}
+              />
+            </div>
+          </section>
+
           <section className="herosection-status">
             <div className="status1 status">
               <span className="icon icon1">
@@ -302,7 +314,7 @@ const Herosection = React.memo(() => {
       </div>
 
       {/* List Items//////item cards */}
-      <ItemsList />
+      <ItemsList searchQuery={searchValue} />
     </>
   );
 });

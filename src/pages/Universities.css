@@ -222,6 +222,16 @@
     align-items: center;
 }
 
+
+.university-detail-btn
+{
+    border: 1px solid;
+    border-radius: 7px;
+  
+    width: 20rem;
+    margin-left:5rem;
+    height:2.5rem;
+}
 .type-badge {
     padding: 4px 8px;
     border-radius: 6px;

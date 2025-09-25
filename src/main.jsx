@@ -2,6 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
 import { AuthProvider } from "./AuthContext/AuthContext";
+// import { Analytics } from "@vercel/analytics/next"
 import App from "./App.jsx";
 
 // Optimized Bootstrap loading with better performance

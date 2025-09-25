@@ -9,7 +9,7 @@ import { HiOutlineLocationMarker } from "react-icons/hi";
 import { TbFileDescription } from "react-icons/tb";
 import "./ItemsList.css";
 
-const ItemsList = () => {
+const ItemsList = ({ searchQuery = "" }) => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -80,11 +80,9 @@ const ItemsList = () => {
           return dateB - dateA;
         });
 
-        // ...existing code...
         setItems(fetchedItems);
         setError(null);
       } catch (err) {
-        // ...existing code...
         setError("Failed to load items. Please try again later.");
       } finally {
         setLoading(false);
@@ -94,16 +92,19 @@ const ItemsList = () => {
     fetchItems();
   }, [isAuthenticated, user?.email, authLoading]);
 
-  // Filter items based on status
+  // Filter items based on status and search query
   const filteredItems = items.filter((item) => {
     // Only show active, non-deleted items
     if (item.isDeleted || item.status !== "active") return false;
-
-    if (filter === "all") return true;
-    return item.role === filter;
+    if (filter !== "all" && item.role !== filter) return false;
+    if (!searchQuery) return true;
+    const q = searchQuery.toLowerCase();
+    return (
+      (item.title && item.title.toLowerCase().includes(q)) ||
+      (item.description && item.description.toLowerCase().includes(q)) ||
+      (item.location && item.location.toLowerCase().includes(q))
+    );
   });
-
-  // ...existing code...
 
   // Format date
   const formatDate = (timestamp) => {
@@ -274,7 +275,13 @@ const ItemsList = () => {
 
               <div className="card-footer">
                 <button
-                  className="contact-btn"
+                  className={`contact-btn ${
+                    item.role === "found"
+                      ? "found-btn"
+                      : item.role === "lost"
+                      ? "lost-btn"
+                      : ""
+                  }`}
                   onClick={() => handleContactClick(item)}
                 >
                   <CiPhone className="button-icon" />

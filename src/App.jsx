@@ -36,7 +36,6 @@ import TermsOfService from "./pages/TermsOfService";
 import ForgotPassword from "./pages/ForgotPassword";
 
 // Import ItemsList component
-import ItemsList from "./componenets/items/ItemsList";
 
 // Optimized conditional navbar component
 const ConditionalNavbar = memo(() => {
@@ -64,10 +63,8 @@ const ConditionalFooter = memo(() => {
 const AppContent = memo(() => {
   const [showReportForm, setShowReportForm] = useState(false);
   const { loading: authLoading } = useAuth();
-  const [itemsRefreshKey, setItemsRefreshKey] = useState(0);
 
   const handleReportFormSubmit = () => {
-    setItemsRefreshKey((prev) => prev + 1);
     setShowReportForm(false);
   };
 
@@ -182,8 +179,7 @@ const AppContent = memo(() => {
           path="/"
           element={
             <>
-              <Herosection />
-              <ItemsList key={itemsRefreshKey} />
+              <Herosection />              
             </>
           }
         />

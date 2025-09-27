@@ -162,10 +162,11 @@
 .university-card {
     background: white;
     border-radius: 16px;
-    padding: 25px;
+    /* padding: 25px; */
+    /* width: 5rem; */
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     transition: all 0.3s ease;
-    border: 1px solid #e5e7eb;
+ 
 }
 
 .university-card:hover {
@@ -225,7 +226,7 @@
 
 .university-detail-btn
 {
-    border: 1px solid;
+    border: none !important;
     border-radius: 7px;
   
     width: 20rem;
@@ -316,7 +317,7 @@
  }
 
  .quick-links a{
-       border: 1px solid;
+      
        padding: 0.2rem;
        border-radius: 10px;
        -webkit-border-radius: 10px;
@@ -324,6 +325,7 @@
        -ms-border-radius: 10px;
        -o-border-radius: 10px;
        text-decoration:none ;
+       font-size: small;
     
 }
 

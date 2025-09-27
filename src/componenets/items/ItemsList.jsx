@@ -1,75 +1,81 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
+import { MdDelete, MdEdit } from "react-icons/md";
 import { db } from "../../firebaseConfig/firebaseCore";
 import { useAuth } from "../../AuthContext/AuthContext";
 import { CiLocationOn, CiPhone } from "react-icons/ci";
 import { HiOutlineLocationMarker } from "react-icons/hi";
-
+import { LuChartScatter } from "react-icons/lu";
+import { MdCallMissed } from "react-icons/md";
 import { TbFileDescription } from "react-icons/tb";
+import { AiFillProduct } from "react-icons/ai";
+import ReportItemForm from "../reportForm/ReportItemForm";
 import "./ItemsList.css";
 
-const ItemsList = ({ searchQuery = "" }) => {
+const ItemsList = ({
+  searchQuery = "",
+  onlyUserItems = false,
+  filter = "all",
+}) => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [filter, setFilter] = useState("all"); // 'all', 'lost', 'found'
+  // Remove local filter state, use prop instead
   const { user, isAuthenticated, loading: authLoading } = useAuth();
+  const [isOpen, setIsOpen] = useState(false);
+  const [formData, setFormData] = useState(null);
+  const [updateItemId, setUpdateItemId] = useState(null);
 
-  // Extract university domain from user email
   const getUserUniversityDomain = (email) => {
     if (!email) return null;
     const domain = email.split("@")[1];
     return domain;
   };
 
-  // Fetch items from Firebase with university filtering
   useEffect(() => {
-    // Always refetch items when user logs in or auth finishes
     if (authLoading) {
       setLoading(true);
       return;
     }
-
     const fetchItems = async () => {
       try {
-        // If user is not authenticated, show no items
         if (!isAuthenticated || !user?.email) {
           setItems([]);
           setError(
             "Please log in to view lost and found items from your university.\nTry Again"
           );
+          if (!isAuthenticated || !user?.email) {
+            setItems([]);
+            setError(
+              "Please log in to view lost and found items from your university.\nTry Again"
+            );
+            setLoading(false);
+            return;
+          }
+          ("Unable to determine your university from your email address.");
+          setError("Failed to load items. Please try again later.");
           setLoading(false);
           return;
         }
-
-        // Clear any previous errors
-        setError(null);
-
-        const userDomain = getUserUniversityDomain(user.email);
-
-        if (!userDomain) {
-          setItems([]);
-          setError(
-            "Unable to determine your university from your email address."
-          );
-          setLoading(false);
-          return;
-        }
-
         const itemsCollection = collection(db, "items");
+        const userDomain = getUserUniversityDomain(user.email);
         const q = query(
           itemsCollection,
           where("university.domain", "==", userDomain)
         );
         const querySnapshot = await getDocs(q);
-
         const fetchedItems = [];
         querySnapshot.forEach((doc) => {
           fetchedItems.push({ id: doc.id, ...doc.data() });
         });
-
-        // Sort the results by createdAt in JavaScript
         fetchedItems.sort((a, b) => {
           const dateA = a.createdAt?.toDate
             ? a.createdAt.toDate()
@@ -79,24 +85,32 @@ const ItemsList = ({ searchQuery = "" }) => {
             : new Date(b.createdAt);
           return dateB - dateA;
         });
-
         setItems(fetchedItems);
         setError(null);
-      } catch (err) {
+      } catch {
         setError("Failed to load items. Please try again later.");
       } finally {
         setLoading(false);
       }
     };
-
     fetchItems();
   }, [isAuthenticated, user?.email, authLoading]);
 
-  // Filter items based on status and search query
+  // Use filter prop from parent
   const filteredItems = items.filter((item) => {
-    // Only show active, non-deleted items
     if (item.isDeleted || item.status !== "active") return false;
-    if (filter !== "all" && item.role !== filter) return false;
+    // Dashboard: only show user's items
+    if (onlyUserItems) {
+      if (!user || !item.userId || item.userId !== user.uid) return false;
+      if (filter !== "all" && item.role !== filter) {
+        return false;
+      }
+    } else {
+      // Home: show all lost/found items from university
+      if (filter !== "all" && item.role !== filter) {
+        return false;
+      }
+    }
     if (!searchQuery) return true;
     const q = searchQuery.toLowerCase();
     return (
@@ -106,10 +120,8 @@ const ItemsList = ({ searchQuery = "" }) => {
     );
   });
 
-  // Format date
   const formatDate = (timestamp) => {
     if (!timestamp) return "Unknown date";
-
     try {
       const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
       return date.toLocaleDateString("en-US", {
@@ -124,16 +136,49 @@ const ItemsList = ({ searchQuery = "" }) => {
     }
   };
 
-  // Handle contact button click
   const handleContactClick = (item) => {
     const contactInfo = item.contact || {};
     const email = contactInfo.email || "Not provided";
     const phone = contactInfo.phone || "Not provided";
     const preference = contactInfo.preference || "email";
-
     alert(
       `Contact Info:\nEmail: ${email}\nPhone: ${phone}\nPreferred Contact: ${preference}`
     );
+  };
+
+  const handleRemoveItem = async (item) => {
+    if (!item.id) return;
+    try {
+      await updateDoc(doc(db, "items", item.id), { isDeleted: true });
+      alert("Item removed successfully.");
+      setItems((prev) => prev.filter((i) => i.id !== item.id));
+    } catch {
+      alert("Failed to remove item. Please try again.");
+    }
+  };
+
+  // Open ReportItemForm modal with selected item data
+  const handleUpdateItem = (item) => {
+    setUpdateItemId(item.id);
+    setFormData({ ...item });
+    setIsOpen(true);
+  };
+
+  // Submit updated data to Firestore
+  const handleSubmit = async (updatedData) => {
+    if (!updateItemId || !updatedData) return;
+    try {
+      const docRef = doc(db, "items", updateItemId);
+      await updateDoc(docRef, updatedData);
+      alert("Item updated!");
+      setIsOpen(false);
+      setUpdateItemId(null);
+      setItems((prev) =>
+        prev.map((i) => (i.id === updateItemId ? { ...i, ...updatedData } : i))
+      );
+    } catch {
+      alert("Failed to update item. Please try again.");
+    }
   };
 
   if (authLoading || loading) {
@@ -164,6 +209,33 @@ const ItemsList = ({ searchQuery = "" }) => {
 
   return (
     <div className="items-list-container">
+      {/* Update Modal: Show ReportItemForm for editing */}
+      {isOpen && formData && (
+        <div
+          className="update-modal"
+          style={{
+            position: "fixed",
+            top: 50,
+            left: 400,
+
+            width: 500,
+            zIndex: 9999,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <ReportItemForm
+            initialData={formData}
+            onClose={() => {
+              setIsOpen(false);
+              setUpdateItemId(null);
+            }}
+            onSubmit={handleSubmit}
+            isUpdate={true}
+          />
+        </div>
+      )}
       <div className="items-header">
         <h2>
           Lost & Found Items
@@ -175,30 +247,7 @@ const ItemsList = ({ searchQuery = "" }) => {
             </span>
           )}
         </h2>
-        <div className="filter-buttons">
-          <button
-            className={filter === "all" ? "active" : ""}
-            onClick={() => setFilter("all")}
-          >
-            All Items ({items.length})
-          </button>
-          <button
-            className={filter === "lost" ? "active lost-filter" : "lost-filter"}
-            onClick={() => setFilter("lost")}
-          >
-            Lost ({items.filter((item) => item.role === "lost").length})
-          </button>
-          <button
-            className={
-              filter === "found" ? "active found-filter" : "found-filter"
-            }
-            onClick={() => setFilter("found")}
-          >
-            Found ({items.filter((item) => item.role === "found").length})
-          </button>
-        </div>
       </div>
-
       {filteredItems.length === 0 ? (
         <div className="no-items">
           <p>
@@ -229,7 +278,6 @@ const ItemsList = ({ searchQuery = "" }) => {
                 </span>
                 <span className="date">{formatDate(item.createdAt)}</span>
               </div>
-
               <div className="item-title-container">
                 <h3 className="item-title">{item.title || "Unknown Item"}</h3>
                 <p className="item-category">
@@ -250,15 +298,9 @@ const ItemsList = ({ searchQuery = "" }) => {
                   </span>
                 </div>
               ) : null}
-
               <div className="card-content">
-                {/* <p className="item-category">
-                  
-                  {item.category || "Not specified"}
-                </p> */}
                 <p className="item-description">
                   <TbFileDescription className="content-icon des-icon" />
-
                   {item.description || "No description provided"}
                 </p>
                 <p className="item-location">
@@ -267,30 +309,41 @@ const ItemsList = ({ searchQuery = "" }) => {
                 </p>
                 {item.university && (
                   <p className="item-university">
-                    {" "}
                     {item.university.name || item.university}
                   </p>
                 )}
               </div>
-
               <div className="card-footer">
-                <button
-                  className={`contact-btn ${
-                    item.role === "found"
-                      ? "found-btn"
-                      : item.role === "lost"
-                      ? "lost-btn"
-                      : ""
-                  }`}
-                  onClick={() => handleContactClick(item)}
-                >
-                  <CiPhone className="button-icon" />
-                  {item.role === "found"
-                    ? "Hey ! this is mine"
-                    : item.role === "lost"
-                    ? "Ahh ! I lost this"
-                    : "Contact Details"}
-                </button>
+                {onlyUserItems && item.userId === user?.uid ? (
+                  <>
+                    <button
+                      className="remove-item-btn"
+                      onClick={() => handleRemoveItem(item)}
+                    >
+                      <MdDelete className="button-icon" /> Remove Item
+                    </button>
+                    <button
+                      className="update-item-btn"
+                      onClick={() => handleUpdateItem(item)}
+                    >
+                      <MdEdit className="button-icon" /> Update
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    className={`contact-btn ${
+                      item.role === "found"
+                        ? "found-btn"
+                        : item.role === "lost"
+                        ? "lost-btn"
+                        : ""
+                    }`}
+                    onClick={() => handleContactClick(item)}
+                  >
+                    <CiPhone className="button-icon" />
+                    {item.role === "found" ? "Hey ! this is mine" : "Contact"}
+                  </button>
+                )}
               </div>
             </div>
           ))}

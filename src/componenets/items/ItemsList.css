@@ -1,8 +1,51 @@
-.items-list-container
-{
+/* Update and Remove Button Styles */
+.item-card .update-item-btn, .item-card .remove-item-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1.2rem;
+    border-radius: 10px;
+    font-weight: 500;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s;
+    margin: 0.3rem 0.5rem 0.3rem 0;
+}
+
+.item-card .update-item-btn {
+    background: #22c55e;
+    color: #fff;
+    border: 2px solid #22c55e;
+}
+
+.item-card .update-item-btn:hover {
+    background: #16a34a;
+    color: #fff;
+}
+
+.item-card .remove-item-btn {
+    background: #ff8c42;
+    color: #fff;
+    border: 2px solid #ff8c42;
+}
+
+.item-card .remove-item-btn:hover {
+    background: #e76a1a;
+    color: #fff;
+}
+
+/* Icon style for buttons */
+.item-card .update-item-btn .button-icon,
+.item-card .remove-item-btn .button-icon {
+    font-size: 1.2em;
+    margin-right: 0.3em;
+}
+
+.items-list-container {
     /* border: 1px solid; */
-     background: linear-gradient(45deg, #e4fcdb, #f9fff9);
-     width: 100%;
+    /* background: linear-gradient(45deg, #e4fcdb, #f9fff9); */
+    width: 100%;
 }
 
 @media (max-width: 700px) {
@@ -153,14 +196,7 @@
     animation: gradientShift 4s ease-in-out infinite;
 }
 
-.filter-buttons button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(59, 116, 213, 0.3);
-    background: linear-gradient(45deg, #59B888, #5DC173, #54AE9E, #4E9FC1, #4382E4, #3B74D5);
-    background-size: 300% 300%;
-    color: white !important;
-    animation: gradientShift 2s ease-in-out infinite;
-}
+
 
 .filter-buttons button.active {
     background: linear-gradient(45deg, #3B74D5, #4382E4, #4E9FC1, #54AE9E, #59B888, #5DC173);
@@ -301,7 +337,7 @@
 
     border-radius: 15px;
     overflow: hidden;
-    background-color: white;
+    background-color:#F8F9FA;
     transition: all 0.3s ease;
     border: 2px solid transparent;
     position: relative;
@@ -314,7 +350,8 @@
     width: 25rem;
     border: 1px solid;
     border-color: rgb(214, 214, 214);
-    
+    box-shadow: 0 2px 12px 0 rgba(60, 60, 60, 0.10), 0 1.5px 4px 0 rgba(60, 60, 60, 0.08);
+
 }
 
 
@@ -483,7 +520,7 @@
 }
 
 .item-location {
- color: #252525;
+    color: #252525;
     margin: 0 0 0.5rem 0;
     font-size: 0.9rem;
     display: flex;
@@ -492,10 +529,10 @@
 }
 
 .item-university {
-   color: #252525;
+    color: #252525;
     margin: 0;
     font-size: 0.9rem;
-    font-weight:600;
+    font-weight: 600;
 }
 
 /* Card Footer */
@@ -530,7 +567,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    
+
 }
 
 .contact-btn:hover {
@@ -607,6 +644,21 @@
         margin-left: 0.5rem;
     }
 
+    .filter-buttons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 20rem !important;
+        font-size: x-small;
+
+    }
+
+    .filter-buttons .lost-filter, .filter-buttons .found-filter, .filter-buttons .all {
+        font-size: x-small;
+        width: 25%;
+
+        height: 1rem;
+    }
 
 }
 
@@ -614,6 +666,21 @@
     .items-list-container {
         padding: 0.5rem;
     }
+
+    .dashboard-heading h1 {
+        font-size: 8vw !important;
+    }
+
+    .dashboard-heading p {
+        font-size: 4vw !important;
+    }
+
+
+
+
+
+
+
 
     .card-header {
         flex-direction: column;

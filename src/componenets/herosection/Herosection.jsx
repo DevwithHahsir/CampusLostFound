@@ -276,14 +276,6 @@ const Herosection = React.memo(() => {
             </div>
           </section>
         </div>
-
-        {/* Inline Report Form */}
-        {showReportForm && (
-          <ReportItemForm
-            onClose={handleReportFormClose}
-            onSubmit={handleReportFormSubmit}
-          />
-        )}
       </main>
 
       <div className="logo-loop-container">
@@ -312,6 +304,16 @@ const Herosection = React.memo(() => {
           />
         </div>
       </div>
+
+      {/* Show ReportItemForm as a separate section below hero and logo loop */}
+      {showReportForm && (
+        <section className="report-form-section">
+          <ReportItemForm
+            onClose={handleReportFormClose}
+            onSubmit={handleReportFormSubmit}
+          />
+        </section>
+      )}
 
       {/* List Items//////item cards */}
       <ItemsList searchQuery={searchValue} />

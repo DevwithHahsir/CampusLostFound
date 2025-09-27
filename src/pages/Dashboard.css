@@ -1,0 +1,317 @@
+
+
+    .dashboard-main-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 70vh;
+        padding: 2rem 1rem;
+        background: linear-gradient(135deg, rgba(59, 116, 213, 0.05) 0%, rgba(93, 193, 115, 0.05) 100%);
+    }
+
+    .dashboard-img {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        background: linear-gradient(45deg, #3B74D5, #4382E4, #4E9FC1, #54AE9E, #59B888, #5DC173);
+        background-size: 300% 300%;
+        animation: gradientShift 4s ease-in-out infinite;
+        box-shadow: 0 10px 30px rgba(59, 116, 213, 0.3);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    }
+
+    .dashboard-img:hover {
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 0 15px 40px rgba(59, 116, 213, 0.4);
+        animation-duration: 2s;
+    }
+
+    .dashboard-heading {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        /* width: 90vw; */
+        justify-content: center;
+        margin-top: 2rem;
+
+
+    }
+
+    .dashboard-heading h1 {
+        font-family: "Bebas Neue", sans-serif;
+        font-weight: 400;
+        font-size: 4vw;
+        background: linear-gradient(45deg, #3B74D5, #4382E4, #4E9FC1, #54AE9E, #59B888, #5DC173);
+        background-size: 300% 300%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: gradientShift 4s ease-in-out infinite;
+        text-decoration: none !important;
+    }
+
+    .dashboard-heading p {
+        font-size: 1.6rem;
+        line-height: 1.6;
+        color: #1D2530 !important;
+        margin: 0;
+        background: none !important;
+        width: 70vw !important;
+        /* font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; */
+    }
+
+    .reportform-btn-container button {
+        border: none;
+        padding: 0.7rem;
+        border-radius: 10px;
+        font-family: Bebas Neue, sans-serif;
+    }
+
+
+
+
+
+
+
+
+    /* Filter buttons */
+    .dashboard-filterbtn-main-container {
+        display: flex;
+        justify-content: center;
+
+    }
+
+    .dashboard-filter-btns {
+        width: max-content;
+        position: relative;
+        /* left: 35%; */
+        margin: 1rem;
+        background-color: #F0F2F4;
+        width: 25rem;
+        border-radius: 7px;
+        -webkit-border-radius: 7px;
+        -moz-border-radius: 7px;
+        -ms-border-radius: 7px;
+        -o-border-radius: 7px;
+    }
+
+    .dashboard-filter-btns button {
+
+        width: 8rem;
+        border: none;
+        font-weight: 500;
+        padding: 0.6rem;
+        border-radius: 7px;
+        -webkit-border-radius: 7px;
+        -moz-border-radius: 7px;
+        -ms-border-radius: 7px;
+        -o-border-radius: 7px;
+
+    }
+
+    .dashboard-filter-btns .active {
+        background-color: white;
+        height: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 0.4rem;
+        margin: 0.4rem;
+    }
+
+    .dashboard-filter-btns .lost-filter {
+        color: orange;
+
+    }
+
+    .dashboard-filter-btns .found-filter {
+        color: green;
+    }
+
+    .dashboard-filter-btns .active.lost-filter {
+        color: orange;
+    }
+
+    .dashboard-filter-btns .active.found-filter {
+        color: green;
+    }
+
+    /* Item List Filter Buttons - Match Dashboard Filter Buttons */
+    .filter-buttons {
+        width: max-content;
+        position: relative;
+        /* left: 25%; */
+        margin: 1rem;
+        background-color: #F0F2F4;
+        width: 25rem;
+        border-radius: 7px;
+        -webkit-border-radius: 7px;
+        -moz-border-radius: 7px;
+        -ms-border-radius: 7px;
+        -o-border-radius: 7px;
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+    }
+
+    .filter-buttons button {
+        width: 8rem;
+        border: none;
+        font-weight: 500;
+        padding: 0.6rem;
+        border-radius: 7px;
+        -webkit-border-radius: 7px;
+        -moz-border-radius: 7px;
+        -ms-border-radius: 7px;
+        -o-border-radius: 7px;
+        background: none;
+        color: #222;
+        transition: background 0.2s, color 0.2s;
+    }
+
+    .filter-buttons .active {
+        background-color: white;
+        height: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 0.4rem;
+        margin: 0.4rem;
+        color: #4382E4;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(67, 130, 228, 0.06);
+    }
+
+    .filter-buttons .lost-filter {
+        color: orange;
+    }
+
+    .filter-buttons .found-filter {
+        color: green;
+    }
+
+    @keyframes gradientShift {
+        0% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+    /* stats  */
+
+
+
+    .stats-main-container {
+
+        display: flex;
+        justify-content: space-evenly;
+        flex-wrap: wrap;
+        margin: 1rem;
+        
+    }
+
+
+    .stats-container {
+
+        width: 30%;
+        border-radius: 10px;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        -ms-border-radius: 10px;
+        -o-border-radius: 10px;
+        padding: 0.5rem;
+    }
+
+    .title-icon {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-family: Bebas Neue, sans-serif;
+        font-size: 2vw;
+    }
+
+    .stats-count {
+        display: flex;
+        justify-content: flex-start;
+        font-family: Bebas Neue, sans-serif;
+        font-size: 1.5vw;
+    }
+
+    .stat-container1 {
+        background: #eaf6ff;
+        /* Light blue */
+        box-shadow: 0 18px 24px rgba(59, 116, 213, 0.12);
+    }
+
+    .stat-container2 {
+        background: #fffbe6;
+        /* Light yellow */
+        box-shadow: 0 18px 24px rgba(255, 200, 0, 0.199);
+    }
+
+    .stat-container3 {
+        background: #eaffea;
+        /* Light green */
+        box-shadow: 0 18px 24px rgba(93, 193, 115, 0.12);
+    }
+
+
+    /* Filter Container */
+    
+.filter-container
+{
+    /* border: 1px solid; */
+    margin: 4rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+.filter-container input{
+    width: 85%;
+    box-shadow: 0 18px 24px rgba(59, 116, 213, 0.12);
+}
+
+    @media screen and (max-width: 768px) {
+
+        .reportform-btn-container {
+            margin: 1rem;
+        }
+
+        .dashboard-filter-btns {
+
+            width: 20rem;
+        }
+
+        .dashboard-filter-btns {
+            font-size: small;
+        }
+
+        .title-icon {
+            font-size: 3vw;
+        }
+
+        .stats-count {
+            font-size: 3vw;
+
+        }
+    }

@@ -96,21 +96,23 @@ export default function Navbar() {
 
           {/* Right - Search Bar & User Actions */}
           <div className="d-flex align-items-center">
-            <Link
-              to="/report"
-              className="btn btn-primary me-3"
-              style={{
-                fontWeight: 600,
-                letterSpacing: 0.5,
-                borderRadius: "8px",
-              }}
-              onClick={(e) => {
-                handleReportClick(e);
-                closeNavbar();
-              }}
-            >
-              Report Item
-            </Link>
+            {user && (
+              <Link
+                to="/report"
+                className="btn btn-primary me-3 report-btn"
+                style={{
+                  fontWeight: 600,
+                  letterSpacing: 0.5,
+                  borderRadius: "8px",
+                }}
+                onClick={(e) => {
+                  handleReportClick(e);
+                  closeNavbar();
+                }}
+              >
+                Report Item
+              </Link>
+            )}
             {/* Search Bar */}
             {/* <form className="d-flex me-3">
               <input

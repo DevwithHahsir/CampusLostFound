@@ -403,6 +403,12 @@
     .btn {
         width: 200px;
     }
+
+
+    .about-hero .hero-subtitle
+    {
+        font-size: 6vw !important;
+    }
 }
 
 @media (max-width: 480px) {

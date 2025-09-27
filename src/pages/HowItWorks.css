@@ -1,6 +1,7 @@
 /* How It Works Page Styles */
 .how-it-works-container {
     min-height: 100vh;
+    background-color: #F4F9FC;
 }
 
 /* Hero Section */

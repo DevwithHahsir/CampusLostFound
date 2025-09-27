@@ -408,6 +408,8 @@
     background: linear-gradient(45deg, #f8f9fa, #e9ecef);
     color: #4382E4;
     transform: translateX(3px);
+     width: 11rem;
+    /* border: 1px solid; */
 }
 
 /* User dropdown specific styles */
@@ -434,6 +436,7 @@
     background: linear-gradient(45deg, #f8f9fa, #e9ecef);
     color: #4382E4;
     transform: translateX(3px);
+   
 }
 
 .navbar .dropdown-toggle {
@@ -466,7 +469,8 @@
         box-shadow: none;
         border: none;
         padding-left: 1rem;
-        background-color: transparent;
+        /* background-color: transparent; */
+        padding: 1rem;
     }
 
     .navbar .dropdown-item {
@@ -504,6 +508,22 @@
 
     .d-flex.align-items-center form input {
         width: 100% !important;
+    }
+
+
+
+    .navbar-nav a
+    {
+        /* border: 1px solid !important; */
+        display: flex;
+        justify-content: flex-start;
+        width: 8rem;
+        padding: 0.4rem !important;
+    }
+    .navbar .report-btn
+    {
+        /* border: 4px solid; */
+        width: 21rem;
     }
 }
 

@@ -1,4 +1,11 @@
 /* Universities Page Styles */
+
+.universities-hero
+{
+    background-color: #F4F9FC !important;
+}
+
+
 .universities-page {
     min-height: 100vh;
     background: #f8f9fa;

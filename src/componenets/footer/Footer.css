@@ -25,6 +25,13 @@
     max-width: 300px;
 }
 
+
+.footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
 .footer-logo-text {
     font-family: "Bebas Neue", sans-serif;
     font-weight: 400;
@@ -35,7 +42,8 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
     animation: gradientShift 4s ease-in-out infinite;
-    margin-bottom: 1rem;
+    margin-bottom: 0;
+    line-height: 1;
 }
 
 .footer-description {
@@ -100,7 +108,7 @@
     list-style: none;
     padding: 0;
     margin: 0;
-   
+
 }
 
 .footer-links li {
@@ -127,8 +135,7 @@
 }
 
 
-.contact-item 
-{
+.contact-item {
     /* border: 1px solid; */
     display: flex !important;
     /* border: 1px solid; */
@@ -144,21 +151,18 @@
     background-color: transparent;
 }
 
-.footer-social
-a
-{
+.footer-social a {
     /* border: 5px solid; */
     background-color: transparent;
     color: #59B888;
     border: 1px solid;
 }
 
-.footer-social
-a:hover
-{
+.footer-social a:hover {
     background-color: transparent;
     color: #4E9FC1;
 }
+
 .footer-universities {
     padding-top: 1rem;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -259,8 +263,8 @@ a:hover
     .footer-bottom-links {
         justify-content: center;
     }
-    .contact-item
-    {
+
+    .contact-item {
         /* border: 1px solid; */
         display: flex !important;
 

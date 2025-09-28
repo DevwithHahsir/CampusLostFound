@@ -45,8 +45,6 @@ export default function Navbar() {
         <Link className="navbar-brand" to="/">
           Campus<span className="sub-logo">LostFound</span>
         </Link>
-
-        {/* Mobile toggle button */}
         <button
           className="navbar-toggler"
           type="button"

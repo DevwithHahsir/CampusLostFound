@@ -36,10 +36,10 @@ import AULogo from "../assets/AIR.png";
 import BULogo from "../assets/BU.png";
 import ISTLogo from "../assets/IST.png";
 import LumsLogo from "../assets/LUMS.png";
-import AllamLogo from "../assets/Allama.png"
-import gcuLogo from "../assets/gcu.png"
-import szabistLogo from "../assets/szabist.png"
-import uafLogo from "../assets/uaf.png"
+import AllamLogo from "../assets/Allama.png";
+import gcuLogo from "../assets/gcu.png";
+import szabistLogo from "../assets/szabist.png";
+import uafLogo from "../assets/uaf.png";
 // Add more as needed
 
 const logoImports = {
@@ -57,16 +57,15 @@ const logoImports = {
   "BU.png": BULogo,
   "IST.png": ISTLogo,
   "LUMS.png": LumsLogo,
-   "Allama.png" :AllamLogo,
-   "gcu.png":gcuLogo,
-   "szabist.png":szabistLogo,
-   "uaf.png":uafLogo,
-
-
+  "Allama.png": AllamLogo,
+  "gcu.png": gcuLogo,
+  "szabist.png": szabistLogo,
+  "uaf.png": uafLogo,
 
   // Add more as needed
 };
 import SEO from "../componenets/seo/SEO";
+import LazyImage from "../componenets/LazyImage/LazyImage";
 import "./Universities.css";
 
 const Universities = () => {
@@ -230,13 +229,10 @@ const Universities = () => {
                 <div key={university.id} className="university-card">
                   <div className="university-header">
                     <div className="university-logo">
-                      <img
+                      <LazyImage
                         src={logoSrc}
                         alt={university.shortName}
-                        onError={(e) => {
-                          e.target.style.display = "none";
-                          e.target.nextSibling.style.display = "flex";
-                        }}
+                        style={{ maxWidth: "80px" }}
                       />
                       <div
                         className="logo-fallback"
@@ -276,20 +272,13 @@ const Universities = () => {
                         href={university.website}
                         target="_blank"
                         rel="noopener noreferrer"
-                        
                       >
                         <FaGlobe /> Visit Website
                       </a>
-                      <a
-                        href={`tel:${university.contact.phone}`}
-                        
-                      >
+                      <a href={`tel:${university.contact.phone}`}>
                         <FaPhone /> Call
                       </a>
-                      <a
-                        href={`mailto:${university.contact.email}`}
-                        
-                      >
+                      <a href={`mailto:${university.contact.email}`}>
                         <FaEnvelope /> Email
                       </a>
                     </div>
@@ -327,14 +316,11 @@ const Universities = () => {
             >
               <div className="modal-header">
                 <div className="modal-university-info">
-                  <img
+                  <LazyImage
                     src={selectedUniversity.logo}
                     alt={selectedUniversity.shortName}
                     className="modal-logo"
-                    onError={(e) => {
-                      e.target.style.display = "none";
-                      e.target.nextSibling.style.display = "flex";
-                    }}
+                    style={{ maxWidth: "120px" }}
                   />
                   <div
                     className="modal-logo-fallback"

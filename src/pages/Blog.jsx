@@ -102,6 +102,7 @@ import {
 import SEO from "../componenets/seo/SEO";
 import NustImg from "../assets/Nust.png";
 import UmtImg from "../assets/UMT.png";
+import LazyImage from "../componenets/LazyImage/LazyImage";
 import GikiImg from "../assets/giki.png";
 import "./Blog.css";
 
@@ -587,7 +588,7 @@ Being prepared doesn't mean living in fear - it means being ready to handle chal
                   </a>
                 </div>
                 <div className="featured-image">
-                  <img
+                  <LazyImage
                     src={filteredArticles[0].image}
                     alt={filteredArticles[0].title}
                   />
@@ -609,7 +610,7 @@ Being prepared doesn't mean living in fear - it means being ready to handle chal
               {filteredArticles.slice(1).map((article) => (
                 <article key={article.id} className="article-card">
                   <div className="article-image">
-                    <img src={article.image} alt={article.title} />
+                    <LazyImage src={article.image} alt={article.title} />
                     <div className="article-overlay">
                       <button className="bookmark-btn">
                         <CiBookmark />

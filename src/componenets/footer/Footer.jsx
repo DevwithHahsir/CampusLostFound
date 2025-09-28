@@ -9,6 +9,7 @@ import {
 } from "react-icons/ci";
 import { FaGithub } from "react-icons/fa";
 import "./Footer.css";
+import logoIcon from "../../assets/logo (2).png";
 import { saveSubscriber } from "../../services/subscriberService";
 
 const Footer = () => {
@@ -45,7 +46,15 @@ const Footer = () => {
         <div className="footer-content">
           {/* Brand Section */}
           <div className="footer-section footer-brand">
-            <div className="footer-logo">
+            <div
+              className="footer-logo"
+              style={{ display: "flex", alignItems: "center", gap: "8px" }}
+            >
+              <img
+                src={logoIcon}
+                alt="Logo"
+                style={{ height: "32px", verticalAlign: "middle" }}
+              />
               <h3 className="footer-logo-text">Campus Lost Found</h3>
             </div>
             <p className="footer-description">

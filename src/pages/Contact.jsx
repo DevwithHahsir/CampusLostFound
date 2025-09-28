@@ -14,6 +14,7 @@ import {
 } from "react-icons/ci";
 import SEO from "../componenets/seo/SEO";
 import "./Contact.css";
+import logoIcon from "../assets/logo (2).png";
 
 const Contact = () => {
   // Formspree hooks for contact form and partnership form
@@ -176,6 +177,35 @@ const Contact = () => {
               We're here to help you make the most of CampusLostFound. Reach out
               for support, partnerships, or just to say hello!
             </p>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                marginBottom: "2rem",
+              }}
+            >
+              <img
+                src={logoIcon}
+                alt="Campus Lost Found Logo"
+                style={{
+                  height: "25vw",
+                  marginBottom: "1rem",
+                  padding: "1rem",
+                  borderRadius: "20px",
+                }}
+              />
+              <div
+                style={{
+                  maxWidth: "600px",
+                  textAlign: "center",
+                  fontSize: "1.2rem",
+                  color: "#4382E4",
+                }}
+              >
+              
+              </div>
+            </div>
           </div>
         </section>
 

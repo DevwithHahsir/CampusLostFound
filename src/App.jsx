@@ -35,6 +35,8 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import ForgotPassword from "./pages/ForgotPassword";
 
+import UniversityDetail from "./pages/UniversityDetail";
+
 // Import ItemsList component
 
 // Optimized conditional navbar component
@@ -179,7 +181,7 @@ const AppContent = memo(() => {
           path="/"
           element={
             <>
-              <Herosection />              
+              <Herosection />
             </>
           }
         />
@@ -190,6 +192,7 @@ const AppContent = memo(() => {
         <Route path="/blog" element={<Blog />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/universities" element={<Universities />} />
+        <Route path="/universities/:key" element={<UniversityDetail />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-of-service" element={<TermsOfService />} />
 
